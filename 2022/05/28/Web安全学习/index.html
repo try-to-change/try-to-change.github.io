@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"try-to-change.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Web安全学习–（仅用于个人笔记记录和交流学习，欢迎各路大佬指点）– 个人感悟分享： 学会一样东西，最重要特征就是可以把一个知识点的原理弄懂，造成一次成功注入，要注意分析源码当中导致这个漏洞的问题点，又应该如何改进与防御， 不要急于求成，慢即是快，少即是多 学习最忌讳三天打鱼两天晒网，网安重在持之以恒，不断学习，提高自己的技术和实战能力，切忌自满，新手只是学习的时间晚于我们，并非我们有什么骄傲之处">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WEB学习">
+<meta property="og:url" content="https://try-to-change.github.io/2022/05/28/Web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="try-to-change&#39;s blog">
+<meta property="og:description" content="Web安全学习–（仅用于个人笔记记录和交流学习，欢迎各路大佬指点）– 个人感悟分享： 学会一样东西，最重要特征就是可以把一个知识点的原理弄懂，造成一次成功注入，要注意分析源码当中导致这个漏洞的问题点，又应该如何改进与防御， 不要急于求成，慢即是快，少即是多 学习最忌讳三天打鱼两天晒网，网安重在持之以恒，不断学习，提高自己的技术和实战能力，切忌自满，新手只是学习的时间晚于我们，并非我们有什么骄傲之处">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210601210954715.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NfcHJvZ3JhbWo=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg-blog.csdnimg.cn%2F20201009142512180.png%3Fx-oss-process%3Dimage%2Fwatermark%2Ctype_ZmFuZ3poZW5naGVpdGk%2Cshadow_10%2Ctext_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xhZHlfa2lsbGVyOQ%3D%3D%2Csize_16%2Ccolor_FFFFFF%2Ct_70&refer=http%3A%2F%2Fimg-blog.csdnimg.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1656476375&t=82f2380c052f036e8454035070bc6a42">
+<meta property="article:published_time" content="2022-05-28T08:01:29.902Z">
+<meta property="article:modified_time" content="2022-06-21T14:12:03.862Z">
+<meta property="article:author" content="try-to-change">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210601210954715.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NfcHJvZ3JhbWo=,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://try-to-change.github.io/2022/05/28/Web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>WEB学习 | try-to-change's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">try-to-change's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Make progress every day</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://try-to-change.github.io/2022/05/28/Web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="try-to-change">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="try-to-change's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          WEB学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-28 16:01:29" itemprop="dateCreated datePublished" datetime="2022-05-28T16:01:29+08:00">2022-05-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-21 22:12:03" itemprop="dateModified" datetime="2022-06-21T22:12:03+08:00">2022-06-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">网络安全学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Web安全学习"><a href="#Web安全学习" class="headerlink" title="Web安全学习"></a>Web安全学习</h1><p>–（仅用于个人笔记记录和交流学习，欢迎各路大佬指点）–</p>
+<p>个人感悟分享：</p>
+<p><u><code>学会一样东西，最重要特征就是可以把一个知识点的原理弄懂，造成一次成功注入，要注意分析源码当中导致这个漏洞的问题点，又应该如何改进与防御，</code></u></p>
+<p><u><code>不要急于求成，慢即是快，少即是多</code></u></p>
+<p><u><code>学习最忌讳三天打鱼两天晒网，网安重在持之以恒，不断学习，提高自己的技术和实战能力，切忌自满，新手只是学习的时间晚于我们，并非我们有什么骄傲之处，技术能力是用来实现自己的价值，而非犯罪，或者满足个人虚荣心，虚心求学，在任何地方都是重要的</code></u></p>
+<p><strong>好记性不如烂笔头，一些知识点还是要多写几遍来记住，不是简单ctrl+c/+v就学到了，上机自己练习，打靶场，永远是最有效的方法，一定学会文章和实际操作密切结合，<u>坚持做笔记</u>，不是学计算机就不用像文科一样记笔记，<u>因为人的记忆是有限的，有时，我们总会记不清一些东西，与其漫无目的找，不如在笔记中翻找</u><strong>，光看大佬的wp，不仔细想想为什么自己的方向走不通，为什么大佬会选择这个方法，这是在每次打完靶场，看完文章应该考虑的，</strong>每天都要有所收获，有所进步</strong></p>
+<p><strong>学东西就只当学一次，一次学到最好，不要囫囵吞枣，赶进度似的学习，没有任何意义</strong>，<strong>到后面遇到类似问题的时候，又重新学习一遍浪费时间，又没有效率</strong>，<strong>不要求一次完全学透，但基础的，该牢牢记住的</strong>，第一次的时候就该记好，平时没事再反复记忆，不要一直想着后面要用时再记忆，在实战中，没有时间让你回想，老板或者队友也不可能等着你再学一遍</p>
+<h2 id="基础漏洞知识（一）【原理-危害-防御-利用】"><a href="#基础漏洞知识（一）【原理-危害-防御-利用】" class="headerlink" title="基础漏洞知识（一）【原理+危害+防御+利用】"></a>基础漏洞知识（一）【原理+危害+防御+利用】</h2><p>–转载原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/c_programj/article/details/117452836">https://blog.csdn.net/c_programj/article/details/117452836</a></p>
+<p>–部分漏洞介绍取自多个网站，侵改–</p>
+<h3 id="Sql漏洞篇"><a href="#Sql漏洞篇" class="headerlink" title="Sql漏洞篇"></a>Sql漏洞篇</h3><p><a href="#%E4%B8%80%E3%80%81sql">sql漏洞知识点记录</a></p>
+<h4 id="1-sql漏洞原理"><a href="#1-sql漏洞原理" class="headerlink" title="1.sql漏洞原理"></a>1.sql漏洞原理</h4><p>指web应用程序<u><strong>对用户输入的数据合法性没有判断</strong></u>，导致攻击者可以<u><strong>构造不同的sql语句来对数据库数据库的操作</strong></u>。（web应用程序对用户输入的数据没有进行过滤，或者过滤不严，就把sql语句带进数据库中进行查询）。</p>
+<p>Sql注入漏洞的产生需要满足两个条件：<br>①参数用户可控：<u><strong>前端传给后端的参数内容是用户可以控制的</strong></u>。<br>②<u><strong>参数代入数据库查询</strong></u>：传入的参数拼接到sql语句，且带入数据库查询。</p>
+<h4 id="2-危害"><a href="#2-危害" class="headerlink" title="2.危害"></a>2.危害</h4><p>①数据库信息泄漏：数据库中存放的<u><strong>用户的隐私信息的泄露</strong></u>。<br>②网页篡改：通过操作数据库对特定网页进行篡改。<br>③网站被挂马，传播恶意软件：<u><strong>修改数据库一些字段的值，嵌入网马链接</strong></u>，进行挂马攻击。<br>④数据库被恶意操作：数据库服务器被攻击，数据库的系统管理员帐户被窜改。<br>⑤服务器被远程控制，被安装后门。经由数据库服务器提供的操作系统支持，让黑客得以修改或控制操作系统。<br>⑥破坏硬盘数据，瘫痪全系统。</p>
+<h4 id="3-防御"><a href="#3-防御" class="headerlink" title="3.防御"></a>3.防御</h4><p>①<u><strong>过滤危险字符</strong></u>：例如，采用正则表达式匹配union、sleep、load_file等关键字，如果匹配到，则退出程序。<br>②使用预编译语句：使用PDO预编译语句，需要注意，不要将变量直接拼接到PDO语句中，而是使用占位符进行数据库的增加、删除、修改、查询。<br>③特殊字符转义、使用严格的数据类型。</p>
+<h3 id="XSS漏洞篇"><a href="#XSS漏洞篇" class="headerlink" title="XSS漏洞篇"></a>XSS漏洞篇</h3><h4 id="1-XSS漏洞原理"><a href="#1-XSS漏洞原理" class="headerlink" title="1.XSS漏洞原理"></a>1.XSS漏洞原理</h4><p>恶意攻击者<u><strong>往Web页面里嵌入脚本代码</strong></u>（<u><strong>通常是JavaScript编写的恶意代码</strong></u>），当用户浏览该页之时，嵌入其中Web里面的Script代码会被执行，从而达到恶意攻击用户的目的。（恶意攻击者<u><strong>利用网站没有对用户提交数据进行转义处理或者过滤不足的缺点，进而添加一些代码</strong></u>，嵌入到web页面中去。）</p>
+<h4 id="2-危害-1"><a href="#2-危害-1" class="headerlink" title="2.危害"></a>2.危害</h4><p>①盗取用户Cookie。<br>②修改网页内容。<br>③网站挂马。<br>④利用网站重定向。<br>⑤XSS蠕虫。</p>
+<h4 id="3-防御-1"><a href="#3-防御-1" class="headerlink" title="3.防御"></a>3.防御</h4><p>①过滤输入的数据：包括” ’ ”、”&lt;”、“&lt;”、“&gt;”、“on”等非法字符。<br>②对输出到页面的数据进行相应的编码转换，包括html实体编码、javascript编码等。</p>
+<h3 id="CSRF漏洞篇"><a href="#CSRF漏洞篇" class="headerlink" title="CSRF漏洞篇"></a>CSRF漏洞篇</h3><h4 id="1-CSRF漏洞原理"><a href="#1-CSRF漏洞原理" class="headerlink" title="1.CSRF漏洞原理"></a>1.CSRF漏洞原理</h4><p>因为web应用程序在用户进行敏感操作时，如修改账号密码、添加账号、转账等，<u><strong>没有校验表单token或者http请求头中的referer值</strong></u>（如果您<u><strong>在网页1，点击一个链接到网页2</strong></u>，当浏览器<u><strong>请求网页2时，网页1的URL就会包含在 Referer 头信息</strong></u>中），从而<u><strong>导致恶意攻击者利用普通用户的身份（cookie）完成攻击行为</strong></u>。<br>在这里插入图片描述:</p>
+<p><img src="https://img-blog.csdnimg.cn/20210601210954715.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NfcHJvZ3JhbWo=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>Csrf攻击过程两个重点：<br>①目标用户<u><strong>已经登录了网站</strong></u>，<u><strong>能够执行网站的功能</strong></u>。<br>②目标用户<u><strong>访问了攻击者构造的URL</strong></u>。</p>
+<h4 id="2-危害-2"><a href="#2-危害-2" class="headerlink" title="2.危害"></a>2.危害</h4><p>①伪造HTTP请求进行未授权操作。<br>②篡改、盗取目标网站上的重要用户数据。<br>③未经允许执行对用户名誉或者资产有害的操作，比如：散播不良信息、进行消费等。<br>④如果通过使用社工等方式攻击网站管理员、会危害网站本身的安全性。<br>⑤作为其他攻击向量的辅助攻击手法，必须配合XSS<br>⑥传播CSRF蠕虫</p>
+<h4 id="3-防御-2"><a href="#3-防御-2" class="headerlink" title="3.防御"></a>3.防御</h4><p>①验证请求的<u><strong><code>referer</code></strong></u>值，如果referer是以自己的网站开头的域名，则说明该请求来自网站自己，是合法的。<u><strong>如果referer是其他网站域名或空白，就有可能是csrf攻击，那么服务器拒绝该请求</strong></u>，但是此方法存在被绕过的可能【<u><strong>brupsuite可以抓包修改referer从而绕过前端过滤</strong></u>】。<br>②csrf攻击之所以能成功，是因为<u><strong>攻击者伪造用户的请求</strong></u>，所以抵御csrf的关键在于：在<u><strong>请求中放入攻击者不能伪造的请求</strong></u>，例如，可以在HTTP请求中加入一个随机产生的token，并在服务器端<u><strong>验证token</strong></u>【<u><strong>类似于验证码</strong></u>】，如果请求中没有token或者token内容不正确，则认为请求可能是csrf攻击，从而拒绝该请求。</p>
+<h3 id="XXE漏洞篇"><a href="#XXE漏洞篇" class="headerlink" title="XXE漏洞篇"></a>XXE漏洞篇</h3><h4 id="1-XXE漏洞原理"><a href="#1-XXE漏洞原理" class="headerlink" title="1.XXE漏洞原理"></a>1.XXE漏洞原理</h4><p>XXE漏洞（XML 外部实体注入），XML用于标记电子文件使其具有结构性的标记语言，可以用来标记数据、定义数据类型，是一种允许用户对自己的标记语言进行定义的源语言。</p>
+<p>XML文档结构包括<u><strong>XML声明、DTD文档类型定义（可选）、文档元素</strong></u>。</p>
+<h4 id="2-危害-3"><a href="#2-危害-3" class="headerlink" title="2.危害"></a>2.危害</h4><p>①读取任意文件。<br>②执行系统命令。<br>③探测内网端口。<br>④攻击内网网站。</p>
+<h4 id="3-防御-3"><a href="#3-防御-3" class="headerlink" title="3.防御"></a>3.防御</h4><p>①进制使用<u><strong>外部实体</strong></u>，例如：<br>PHP：libxml_disable_entity_loader(true)<br>②过滤用户提交的xml数据，防止出现非法内容。</p>
+<h3 id="SSRF漏洞篇"><a href="#SSRF漏洞篇" class="headerlink" title="SSRF漏洞篇"></a>SSRF漏洞篇</h3><h4 id="1-SSRF漏洞原理"><a href="#1-SSRF漏洞原理" class="headerlink" title="1.SSRF漏洞原理"></a>1.SSRF漏洞原理</h4><p>大都是由于<u><strong>服务器提供了从其他服务器应用获取数据的功能</strong></u>且<u><strong>没有对目标地址做过滤与限制</strong></u><strong>。比如从指定URL地址获取网页文本内容，加载指定地址的图片，下载等等。</strong><u><strong>利用的是服务端的请求伪造</strong></u>。SSRF是利用存在缺陷的web应用作为代理攻击远程和本地的服务器。</p>
+<h4 id="2-危害-4"><a href="#2-危害-4" class="headerlink" title="2.危害"></a>2.危害</h4><p>攻击者就可以<u><strong>利用该漏洞绕过防火墙等访问限制</strong></u>，进而将受感染或存在漏洞的服务器作为代理进行端口扫描，甚至是访问内部系统数据。</p>
+<h4 id="3-防御-4"><a href="#3-防御-4" class="headerlink" title="3.防御"></a>3.防御</h4><p>① 限制请求的端口只能为web端口，只允许访问HTTP和HTTPS请求。<br>② 限制不能访问内网的IP，以防止对内网进行攻击。<br>③ 屏蔽返回的详细信息。<br>④ 限制请求的端口为HTTP常用的端口，比如 80,443,8080,8088等。</p>
+<h3 id="文件上传漏洞篇"><a href="#文件上传漏洞篇" class="headerlink" title="文件上传漏洞篇"></a>文件上传漏洞篇</h3><h4 id="1-文件上传漏洞原理"><a href="#1-文件上传漏洞原理" class="headerlink" title="1.文件上传漏洞原理"></a>1.文件上传漏洞原理</h4><p>就是未对用户上传的文件进行检查和过滤，导致某些别有用心的用户上传了一些恶意代码或文件（asp、php、jsp等），从而控制了网站。（当文件上传时，如果服务端的脚本语言没有对上传的文件进行检查和过滤，那假如，渗透者直接上传恶意代码文件，那么就有可能直接控制整个网站，或者说以此为跳板，直接拿下服务器，这就是文件上传漏洞。）</p>
+<h4 id="2-危害-5"><a href="#2-危害-5" class="headerlink" title="2.危害"></a>2.危害</h4><p><u><strong>非法用户可以利用恶意脚本文件控制整个网站，甚至控制服务器</strong></u>。这个恶意脚本文件，又称为webshell，也可将webshell脚本称为一种网页后门，webshell脚本具有很强大的功能，<u><strong>比如查看服务器目录、服务器中的文件，执行绕过命令等。</strong></u>【<strong>用蚁剑或菜刀连接上传的 php文件，输入文件中的密码</strong>】</p>
+<h4 id="3-防御-5"><a href="#3-防御-5" class="headerlink" title="3.防御"></a>3.防御</h4><p>①通过白名单方式判断文件后缀是否合法。<br>②对上传的文件进行重命名。</p>
+<h3 id="文件包含漏洞篇"><a href="#文件包含漏洞篇" class="headerlink" title="文件包含漏洞篇"></a>文件包含漏洞篇</h3><p><a href="#%E4%B8%83%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB">文件包含漏洞知识点记录</a></p>
+<h4 id="1-文件包含漏洞原理"><a href="#1-文件包含漏洞原理" class="headerlink" title="1.文件包含漏洞原理"></a>1.文件包含漏洞原理</h4><p>开发人员将<u><strong>需要重复调用的函数写入一个文件，对该文件进行包含是产生的操作</strong></u>。这样编写代码能减少代码冗余，降低代码后期维护难度，保证网站整体风格统一：导航栏、底部footer栏等。<u><strong>文件包含函数加载的参数没有经过过滤或严格定义，可以被用户控制，包含其他恶意文件，导致了执行非预期代码</strong></u>。</p>
+<h4 id="2-危害-6"><a href="#2-危害-6" class="headerlink" title="2.危害"></a>2.危害</h4><p>①获取敏感信息<br>②执行任意命令<br>③获取服务器权限</p>
+<h4 id="3-防御-6"><a href="#3-防御-6" class="headerlink" title="3.防御"></a>3.防御</h4><p>①建议白名单。<br>②指定访问一定的路径，再将参数拼接到路径当中。</p>
+<h3 id="逻辑漏洞篇"><a href="#逻辑漏洞篇" class="headerlink" title="逻辑漏洞篇"></a>逻辑漏洞篇</h3><h4 id="1-逻辑漏洞原理"><a href="#1-逻辑漏洞原理" class="headerlink" title="1.逻辑漏洞原理"></a>1.逻辑漏洞原理</h4><p>指攻击者<u><strong>利用业务的设计缺陷，获取敏感信息或破坏业务的完整性</strong></u>。一般出现在<u><strong>密码修改、越权访问、密码找回、交易支付</strong></u>等功能处。</p>
+<h4 id="2-危害-7"><a href="#2-危害-7" class="headerlink" title="2.危害"></a>2.危害</h4><p>任意密码修改、越权访问、密码任意找回、交易支付金额任意修改等</p>
+<h4 id="3-防御-7"><a href="#3-防御-7" class="headerlink" title="3.防御"></a>3.防御</h4><h5 id="1-任意密码修改"><a href="#1-任意密码修改" class="headerlink" title="1.任意密码修改"></a>1.任意密码修改</h5><h5 id="2-越权访问"><a href="#2-越权访问" class="headerlink" title="2.越权访问"></a>2.越权访问</h5><p>越权访问漏洞产生<u><strong>主要原因是没有对用户的身份做判断和控制</strong></u>，防范这种漏洞时，可以通过session来控制。例如，在用户登录时，将username或uid写入到<code>session</code><u><strong>（会话控制，Session对象存储特定用户会话所需的属性及配置信息。这样，当用户在应用程序的Web页之间跳转时，存储在Session对象中的变量将不会丢失，而是在整个用户会话中一直存在下去。）</strong></u>中取出信息，<u><strong>而不是从GET或POST取出username</strong></u>，name此时取到的username就是没有篡改的。</p>
+<h3 id="命令执行漏洞篇"><a href="#命令执行漏洞篇" class="headerlink" title="命令执行漏洞篇"></a>命令执行漏洞篇</h3><h4 id="1-命令执行漏洞原理"><a href="#1-命令执行漏洞原理" class="headerlink" title="1.命令执行漏洞原理"></a>1.命令执行漏洞原理</h4><p>应用未对用户输入做严格的检查过滤，导致用户<u><strong>输入的参数被当成命令来执行</strong></u>。攻击者可以任意执行系统命令，属于高危漏洞之一，也属于代码执行的范畴。</p>
+<h4 id="2-危害-8"><a href="#2-危害-8" class="headerlink" title="2.危害"></a>2.危害</h4><p>①继承web服务程序的权限去执行系统命令或读写文件。<br>②反弹shell，获得目标服务器的权限。<br>③进一步内网渗透。</p>
+<h4 id="3-防御-8"><a href="#3-防御-8" class="headerlink" title="3.防御"></a>3.防御</h4><p>①尽量不要使用命令执行函数。<br>②客户端<u><strong>提交的变量在进入执行命令函数前</strong></u>要做好<u><strong>过滤和检测</strong></u>。<br>③在<u><strong>使用动态函数之前</strong></u>，确保使用函数是<u><strong>指定的函数</strong></u>之一。<u><strong>【防止攻击者引入新函数（非网站使用的函数）执行攻击语句】</strong></u><br>④对<u><strong>php语言</strong></u>而言，<u><strong>不能完全控制的危险函数最好不要使用</strong></u>。</p>
+<h3 id="暴力破解篇"><a href="#暴力破解篇" class="headerlink" title="暴力破解篇"></a>暴力破解篇</h3><h4 id="1-暴力破解原理"><a href="#1-暴力破解原理" class="headerlink" title="1.暴力破解原理"></a>1.暴力破解原理</h4><p>由于服务器端没有做限制，导致攻击者可以通过暴力手段破解所需信息，如用户名、密码、验证码等。暴力破解需要一个强大的字典，如4位数字的验证码，那么暴力破解的范围就是0000~9999，<u><strong>暴力破解的关键在于字典的大小</strong></u>。</p>
+<h4 id="2-危害-9"><a href="#2-危害-9" class="headerlink" title="2.危害"></a>2.危害</h4><p>①用户密码被重置。<br>②敏感目录、参数被枚举。<br>③用户订单被枚举。</p>
+<h4 id="3-防御-9"><a href="#3-防御-9" class="headerlink" title="3.防御"></a>3.防御</h4><p>① 如果<u><strong>用户登录次数超过设置的阈值</strong></u>，则<u><strong>锁定账号</strong></u>。<br>② 如果<u><strong>某个IP登陆次数超过设置的阈值，则锁定IP</strong></u>。但<u><em><strong>存在一个问题</strong></em></u>，如果<u><strong>多个用户使用的是同一个IP，则会造成其他用户也不能登录。</strong></u></p>
+<h3 id="反序列化漏洞篇（PHP）"><a href="#反序列化漏洞篇（PHP）" class="headerlink" title="反序列化漏洞篇（PHP）"></a>反序列化漏洞篇（PHP）</h3><h4 id="1-反序列化漏洞原理"><a href="#1-反序列化漏洞原理" class="headerlink" title="1.反序列化漏洞原理"></a>1.反序列化漏洞原理</h4><p>PHP反序列化漏洞也叫PHP对象注入，是一个非常常见的漏洞，这种类型的漏洞虽然有些难以利用，但一旦利用成功就会造成非常危险的后果。漏洞的形成的<u><strong>根本原因是程序没有对用户输入的反序列化字符串进行检测，导致反序列化过程可以被恶意控制，进而造成代码执行、getshell等一系列不可控的后果</strong></u>。反序列化漏洞并不是PHP特有，<u><strong>也存在于Java、Python等语言</strong></u>之中，但其原理基本相通。</p>
+<p>PHP类都含有几个特定的元素: 类属性、类常量、类方法。每一个类至少都含有以上三个元素，而这三个元素也可以组成最基本的类。那么按照特定的格式将这三个元素表达出来就可以将一个完整的类表示出来并传递。<u><strong>序列化就是将一个类压缩成一个字符串的方法</strong></u></p>
+<h4 id="2-危害-10"><a href="#2-危害-10" class="headerlink" title="2.危害"></a>2.危害</h4><p><u><strong>未对用户输入的序列化字符串进行检测</strong></u>，导致<u><strong>攻击者可以控制反序列化过程</strong></u>，从而<u><strong>导致代码执行，SQL注入，目录遍历等不可控后果</strong></u>。在反序列化的过程中自动触发了某些魔术方法。</p>
+<h4 id="3-防御-10"><a href="#3-防御-10" class="headerlink" title="3.防御"></a>3.防御</h4><h5 id="1-签名与认证"><a href="#1-签名与认证" class="headerlink" title="1)签名与认证"></a>1)签名与认证</h5><p>如果序列化的内容没有用户可控参数，仅仅是服务端存储和应用，则可以通过签名认证，来避免应用接受黑客的异常输入。   </p>
+<h5 id="2-限制序列化与反序列化的类"><a href="#2-限制序列化与反序列化的类" class="headerlink" title="2)限制序列化与反序列化的类"></a>2)限制序列化与反序列化的类</h5><p>增加一层序列化和反序列化接口类。这就相当于允许提供了一个白名单的过滤：只允许某些类可以被反序列化。只要你在反序列化的过程中，避免接受处理任何类型（包括类成员中的接口、泛型等），黑客其实很难控制应用反序列化过程中所使用的类，也就没有办法构造出调用链，自然也就很难利用反序列化漏洞了</p>
+<h5 id="3-RASP检测"><a href="#3-RASP检测" class="headerlink" title="3)RASP检测"></a>3)RASP检测</h5><p>（Runtime Application Self-Protection，实时程序自我保护）。RASP 通过 hook 等方式，在这些关键函数（例如：序列化，反序列化)的调用中，增加一道规则的检测。这个规则会判断应用是否执行了非应用本身的逻辑，能够在不修改代码的情况下对反序列化漏洞攻击实现拦截.</p>
+<h4 id="4-利用"><a href="#4-利用" class="headerlink" title="4.利用"></a>4.利用</h4><h5 id="1-wakeup-绕过"><a href="#1-wakeup-绕过" class="headerlink" title="1)__wakeup( )绕过"></a>1)__wakeup( )绕过</h5><p>(CVE-2016-7124)</p>
+<p>反序列化时，如果表示对象属性个数的值大于真实的属性个数时就会跳过__wakeup( )的执行。</p>
+<h5 id="2-注入对象构造方法"><a href="#2-注入对象构造方法" class="headerlink" title="2)注入对象构造方法"></a>2)注入对象构造方法</h5><p>当目标对象被private、protected修饰时的构造方法。</p>
+<h5 id="3-Session反序列化漏洞"><a href="#3-Session反序列化漏洞" class="headerlink" title="3)Session反序列化漏洞"></a>3)Session反序列化漏洞</h5><p>PHP中的Session经序列化后存储，读取时再进行反序列化。</p>
+<h5 id="4-PHAR利用"><a href="#4-PHAR利用" class="headerlink" title="4)PHAR利用"></a>4)PHAR利用</h5><p>PHAR (“Php ARchive”) 是PHP里类似于JAR的一种打包文件，在PHP 5.3 或更高版本中默认开启，这个特性使得 PHP也可以像 Java 一样方便地实现应用程序打包和组件化。一个应用程序可以打成一个 Phar 包，直接放到 PHP-FPM 中运行。</p>
+<h3 id="RCE漏洞篇"><a href="#RCE漏洞篇" class="headerlink" title="RCE漏洞篇"></a>RCE漏洞篇</h3><h4 id="1-RCE漏洞原理"><a href="#1-RCE漏洞原理" class="headerlink" title="1.RCE漏洞原理"></a>1.RCE漏洞原理</h4><p>一般出现这种漏洞，是因为应用系统<u><strong>从设计上需要给用户提供指定的远程命令操作的接口</strong></u>。比如我们常见的路由器、防火墙、入侵检测等设备的web管理界面上。一般会给用户提供一个ping操作的web界面，用户从web界面输入目标IP，提交后，后台会对该IP地址进行一次ping测试，并返回测试结果。 如果，设计者在完成该功能时，<u><strong>没有做严格的安全控制，则可能会导致攻击者通过该接口提交“意想不到”的命令，从而让后台进行执行，从而控制整个后台服务器</strong></u>。 现在很多的企业都开始实施自动化运维,大量的系统操作会通过”自动化运维平台”进行操作。在这种平台上往往会出现远程系统命令执行的漏洞。 远程代码执行 同样的道理,因为需求设计,后台有时候也会把用户的输入作为代码的一部分进行执行,也就造成了远程代码执行漏洞。 不管是使用了代码执行的函数,还是使用了不安全的反序列化等等。 因此，如果需要给<u><strong>前端用户提供操作类的API接口（一般指应用程序的编程接口，主要目的是提供应用程序与开发人员以访问一组例程的能力，而又无需访问源码，或理解内部工作机制的细节），一定需要对接口输入的内容进行严格的判断</strong></u>，比如实施严格的白名单策略会是一个比较好的方法。</p>
+<h4 id="2-危害-11"><a href="#2-危害-11" class="headerlink" title="2.危害"></a>2.危害</h4><p>RCE漏洞，可以让攻击者直接向后台服务器远程注入<u><strong>操作系统命令或者代码</strong></u>，从而控制后台系统。</p>
+<h4 id="3-防御-11"><a href="#3-防御-11" class="headerlink" title="3.防御"></a>3.防御</h4><p>1)尽量不要使用命令执行函数。</p>
+<p>2)不要让用户控制参数。</p>
+<p>3)执行前做好检测和过滤。</p>
+<h3 id="SSTI漏洞篇"><a href="#SSTI漏洞篇" class="headerlink" title="SSTI漏洞篇"></a>SSTI漏洞篇</h3><h4 id="1-SSTI漏洞原理"><a href="#1-SSTI漏洞原理" class="headerlink" title="1.SSTI漏洞原理"></a>1.SSTI漏洞原理</h4><p>SSTI是一种注入类的漏洞，其<u><strong>成因也可以类比SQL注入</strong></u>。<br>SQL注入是从用户获得一个输入，然后用后端脚本语言进行数据库查询，利用输入来拼接我们想要的SQL语句。SSTI也是获取一个输入，然后在后端的渲染处理上进行语句的拼接执行。但是和SQL注入不同的，SSTI利用的是现有的网站模板引擎，主要针对Python、PHP、JAVA的一些网站处理框架，比如Python的jinja2、mako、tornado、Django，PHP的smarty twig，java的jade velocity。当这些框架对运用渲染函数生成html的时候，在过滤不严情况下，通过构造恶意输入数据，从而达到getshell或其他目的。<br><u><strong>一句话就是服务端在接收用户输入或用户可控参数后，未作处理或未进行严格过滤，直接嵌入模板渲染，导致执行恶意代码</strong></u>。</p>
+<p><strong>模板注入</strong>涉及的是服务端Web应用使用模板引擎<strong>渲染用户请求的过程</strong>，<br> 服务端把<strong>用户输入的内容渲染成模板</strong>就可能造成SSTI(Server-Side Template Injection)</p>
+<p>模板渲染接受的参数需要用两个大括号<code>&#123;&#123;&#125;&#125;</code>括起来</p>
+<h4 id="2-危害-12"><a href="#2-危害-12" class="headerlink" title="2.危害"></a>2.危害</h4><p>攻击者在服务器输入语句，服务端将其<u><strong>作为Web应用模板内容的一部分</strong></u>，在进行<u><strong>目标编译渲染</strong></u>的过程中，<u><strong>进行了语句的拼接，执行了所插入的恶意内容</strong></u>，从而<u><strong>导致信息泄露、代码执行、GetShell等</strong></u>问题</p>
+<h4 id="3-防御-12"><a href="#3-防御-12" class="headerlink" title="3.防御"></a>3.防御</h4><p>1）和其他的注入防御一样，<u><strong>绝对不要让用户对传入模板的内容或者模板本身进行控制</strong></u></p>
+<p>2）<u><strong>减少或者放弃直接使用格式化字符串结合字符串拼接的模板渲染</strong></u>方式，<u><strong>使用正规的模板渲染方法</strong></u></p>
+<h2 id="各漏洞知识记录笔记"><a href="#各漏洞知识记录笔记" class="headerlink" title="各漏洞知识记录笔记"></a>各漏洞知识记录笔记</h2><h3 id="一、sql"><a href="#一、sql" class="headerlink" title="一、sql"></a>一、sql</h3><h4 id="sql注入的分类"><a href="#sql注入的分类" class="headerlink" title="sql注入的分类"></a>sql注入的分类</h4><h5 id="①按照数据提交的方式来分类："><a href="#①按照数据提交的方式来分类：" class="headerlink" title="①按照数据提交的方式来分类："></a>①按照数据提交的方式来分类：</h5><p>  （1）GET 注入：提交数据的方式是 GET , 注入点的位置在 GET 参数部分。比如有这样的一个链接<code>http://xxx.com/news.php?id=1</code> , id 是注入点。</p>
+<p>  （2）POST 注入：使用 POST 方式提交数据，注入点位置在 POST 数据部分，常发生在表单中(输入框)。</p>
+<p>  （3）Cookie 注入：HTTP请求的时候会带上客户端的Cookie, 注入点在Cookie当中的某个字段中。</p>
+<p>  （4）HTTP 头部注入：注入点在 HTTP 请求头部的某个字段中。比如存在 User-Agent 字段中。严格讲的话，Cookie 其实应该也是算头部注入的一种形式。因为在 HTTP 请求的时候，Cookie 是头部的一个字段。</p>
+<h5 id="②按照执行效果来分类："><a href="#②按照执行效果来分类：" class="headerlink" title="②按照执行效果来分类："></a>②按照执行效果来分类：</h5><p>  （1）基于布尔的盲注：即可以根据返回页面判断条件真假的注入。</p>
+<p>  （2）基于时间的盲注：即不能根据页面返回内容判断任何信息，用条件语句查看时间延迟语句是否执行（即页面返回时间是否增加）来判断。</p>
+<p>  （3）基于报错注入：即页面会返回错误信息，或者把注入的语句的结果直接返回在页面中。如：单引号、双引号、基于数字型注入。</p>
+<p>  （4）联合查询注入：可以使用union的情况下的注入。</p>
+<p>  （5）堆查询注入（堆叠注入）：可以同时执行多条语句的执行时的注入。</p>
+<p>  （6）宽字节注入：</p>
+<h5 id="③按照注入点类型来分类："><a href="#③按照注入点类型来分类：" class="headerlink" title="③按照注入点类型来分类："></a>③按照注入点类型来分类：</h5><p>  （1）数字型注入点：许多网页链接有类似的结构 <a target="_blank" rel="noopener" href="http://xxx.com/users.php?id=1">http://xxx.com/users.php?id=1</a> 基于此种形式的注入，其注入点 id 类型为数字若存在注入点，则可以利用网页通过此种结构传递id等信息的原理，构造出类似如下的sql注入语句进行爆破：select * from 表名 where id=1 and 1=1</p>
+<p>  （2）字符型注入点：网页链接有类似的结构 <a target="_blank" rel="noopener" href="http://xxx.com/users.php?name=admin">http://xxx.com/users.php?name=admin</a> 这种形式，其注入点 name 类型为字符类型，若存在注入，我们可以构造出类似与如下的sql注入语句进行爆破：select * from 表名 where name=‘admin’ and 1=1 ’</p>
+<p>  （3）搜索型注入点：这是一类特殊的注入类型。这类注入主要是指在进行数据搜索时没过滤搜索参数，一般在链接地址中有 “keyword=关键字” 有的不显示在的链接地址里面，而是直接通过搜索框表单提交。此类注入点提交的 SQL 语句，其原形大致为：select * from 表名 where 字段 like ‘%关键字%’ 若存在注入，我们可以构造出类似与如下的sql注入语句进行爆破：select * from 表名 where 字段 like ‘%测试%’ and ‘%1%’=’%1%’</p>
+<h5 id="④基于程度和顺序的注入-哪里发生了影响"><a href="#④基于程度和顺序的注入-哪里发生了影响" class="headerlink" title="④基于程度和顺序的注入(哪里发生了影响)"></a>④基于程度和顺序的注入(哪里发生了影响)</h5><p>★一阶注射 </p>
+<p>★二阶注射 </p>
+<p>一阶注射是指输入的注射语句对 WEB 直接产生了影响，出现了结果；</p>
+<p>二阶注入<strong>类似存储型 XSS</strong>，是指输入提交的语句，无法直接对 WEB 应用程序产生影响，通过其它的辅助间接的对 WEB 产生危害，这样的就被称为是二阶注入. </p>
+<h4 id="堆叠注入"><a href="#堆叠注入" class="headerlink" title="堆叠注入"></a>堆叠注入</h4><h5 id="1-堆叠注入定义"><a href="#1-堆叠注入定义" class="headerlink" title="1.堆叠注入定义"></a>1.堆叠注入定义</h5><p>   Stacked  injections(堆叠注入)从名词的含义就可以看到应该是一堆 sql 语句(多条)一起执行。而在真实的运用中也是这样的, 我们知道在  mysql 中, 主要是命令行中, 每一条语句结尾加; 表示语句结束。这样我们就想到了是不是可以多句一起使用。这个叫做 stacked  injection。</p>
+<h5 id="2-堆叠注入原理"><a href="#2-堆叠注入原理" class="headerlink" title="2.堆叠注入原理"></a>2.堆叠注入原理</h5><p>   在SQL中，分号（;）是用来表示一条sql语句的结束。<u>试想一下我们在 ; 结束一个sql语句后继续构造下一条语句，会不会一起执行？因此这个想法也就造就了堆叠注入</u>。而union injection（联合注入）也是将两条语句合并在一起，两者之间有什么区别么？区别就在于<u>union 或者union all执行的语句类型是有限的，可以用来执行查询语句</u>，而<u>堆叠注入可以执行的是任意的语句</u>。例如以下这个例子。用户输入：<code>1; DELETE FROM products</code>服务器端生成的sql语句为：  <code>Select * from products where productid=1;DELETE FROM products</code>当执行查询后，<u><strong>第一条显示查询信息</strong></u>，<u><strong>第二条则将整个表进行删除</strong></u>。</p>
+<h5 id="3-堆叠注入的局限性"><a href="#3-堆叠注入的局限性" class="headerlink" title="3.堆叠注入的局限性"></a>3.堆叠注入的局限性</h5><p>堆叠注入的局限性在于并不是每一个环境下都可以执行，可能受到API或者数据库引擎不支持的限制，当然了权限不足也可以解释为什么攻击者无法修改数据或者调用一些程序。</p>
+<h5 id="下面我以一道题为例解析堆叠注入"><a href="#下面我以一道题为例解析堆叠注入" class="headerlink" title="**下面我以一道题为例解析堆叠注入"></a>**下面我以一道题为例解析堆叠注入</h5><p>该题来自于<a target="_blank" rel="noopener" href="https://buuoj.cn/">buuctf</a> 的[强网杯 2019]随便注</p>
+<h4 id="1-几个常用函数"><a href="#1-几个常用函数" class="headerlink" title="1.几个常用函数"></a>1.几个常用函数</h4><p>1.<code>version()</code>——MySQL 版本 </p>
+<p>2.<code>user()</code>——数据库用户名 </p>
+<p>3.<code>database()</code>——数据库名 </p>
+<p>4.<code>@@datadir</code>——数据库路径 </p>
+<p>5.<code>@@version_compile_os</code>——操作系统版本</p>
+<h4 id="2-一般用于尝试的闭合语句"><a href="#2-一般用于尝试的闭合语句" class="headerlink" title="2.一般用于尝试的闭合语句"></a>2.一般用于尝试的<u>闭合语句</u></h4><p>Ps:<strong>–+可以用#替换，url 提交过程中 Url 编码后的#为%23，–+和#为注释符，把后面语句注释掉，使其无法执行</strong></p>
+<p><code>or 1=1--+</code> </p>
+<p><code>&#39;or 1=1--+</code> </p>
+<p><code>&quot;or 1=1--+</code> </p>
+<p><code>)or 1=1--+</code> </p>
+<p><code>&#39;)or 1=1--+</code> </p>
+<p><code>&quot;) or 1=1--+</code> </p>
+<p><code>&quot;))or 1=1--+</code></p>
+<h4 id="3-sql中逻辑运算【万能密码的原理】"><a href="#3-sql中逻辑运算【万能密码的原理】" class="headerlink" title="3.sql中逻辑运算【万能密码的原理】"></a>3.sql中逻辑运算【万能密码的原理】</h4><p>提出一个问题 <code>Select * from users where id=1 and 1=1</code>;这条语句为什么能够选择出 id=1 的内容，and 1=1 到底起作用了没有？这里就要清楚 sql 语句执行顺序了。 同时这个问题我们在使用万能密码的时候会用到。</p>
+<p><code>Select * from admin where username=’admin’ and password=’admin’</code> </p>
+<p>我们可以用 <code>’or 1=1#</code> 作为密码输入。原因是为什么？ </p>
+<p>这里涉及到一个逻辑运算，当使用上述所谓的万能密码后，构成的 sql 语句为： </p>
+<p><code>Select * from admin where username=’admin’ and password=’’or 1=1#’</code> </p>
+<p>Explain:上面的这个语句执行后，我们在不知道密码的情况下就登录到了 admin 用户了。原 因 是 在 where 子 句 后 ， 我 们 可 以 看 到 三 个 条 件 语 句 <code>username=’admin’ and password=’’or 1=1</code>。三个条件用 and 和 or 进行连接。在 sql 中，我们 <u><strong>and 的运算优先级大于 or 的元算优先级</strong></u>。因此可以看到 <u><strong>第一个条件（用 a 表示）是真的，第二个条件（用 b 表示）是假的，a and b = false</strong></u>,第一个条件和第二个条件执行 and 后是假，再与<u><strong>第三 个条件 or 运算，因为第三个条件 1=1 是恒成立的，所以结果自然就为真了</strong></u>。因此上述的语 句就是恒真了</p>
+<p>ps 逻辑语句的区别</p>
+<p>1.and:两个或多个条件同时满足，才为真（显示一条数据）</p>
+<p>2.or:两个或多个条件满足其中一个即为真（显示一条数据）</p>
+<p>使用and语句注意<code>select * from test where a = 1 and a = 2</code>这样操作肯定不行，<u><strong>后面的一个值会把前面的值给覆盖掉</strong></u>，最后执行的是<code>select * from test where a = 2</code></p>
+<p>而用or语句的话<code>select * from test where a = 1 or a = 2</code>,执行<code>select * from test where a = 1</code>,若<code>a=1</code>为假，则执行<code>select * from test where a = 2</code></p>
+<p>3.union:联合查询，将<u><strong>多个查询结果合并（如果有一个结果为空，不影响其他结果合并）</strong></u>起来时，<u><strong>系统会自动去掉重复元组</strong></u></p>
+<p>请注意，UNION 内部的 SELECT 语句必须拥有相同数量的列。列也必须拥有相似的数据类型。同时，每条 SELECT 语句中的列的顺序必须相同。 </p>
+<h4 id="4-注入的一般流程【按顺序查询注入】"><a href="#4-注入的一般流程【按顺序查询注入】" class="headerlink" title="4.注入的一般流程【按顺序查询注入】"></a>4.注入的一般流程【按顺序查询注入】</h4><h5 id="ps-关键记忆和使用"><a href="#ps-关键记忆和使用" class="headerlink" title="ps.关键记忆和使用"></a>ps.关键记忆和使用</h5><p><code>schema_name</code> 数据库名</p>
+<p><code>information_schema.schemata</code> 全部数据库</p>
+<p><code>table_name</code> 表名</p>
+<p><code>information_schema.tables</code> 全部表</p>
+<p><code>table_schema=’xxxxx’</code> ‘xxxx’为目标表所在的数据库名</p>
+<p><code>column_name</code> 列名</p>
+<p><code>information_schema.columns</code> 全部列名</p>
+<p><code>table_name=’xxxxx’</code> ‘xxxx’想要查询数据所在的表名</p>
+<h5 id="1-注入语句"><a href="#1-注入语句" class="headerlink" title="[1] 注入语句"></a>[1] 注入语句</h5><p>1）猜数据库 【以下语句功能，显示该数据库内所有数据库的名字】</p>
+<p><code>select schema_name from information_schema.schemata</code> </p>
+<p>2）猜某库的数据表 【以下语句功能，显示该数据库内所有数据库的名字】</p>
+<p><code>select table_name from information_schema.tables where table_schema=’xxxxx’</code> </p>
+<p>3）猜某表的所有列【以下语句功能，显示该数据库内所有数据库的名字】</p>
+<p><code>Select column_name from information_schema.columns where table_name=’xxxxx’</code> </p>
+<p>4）获取某列的内容 【以下语句功能，显示该列】</p>
+<p><code>Select 该列的目标数据分类的名称  from   列名</code></p>
+<h5 id="2-注入流程图"><a href="#2-注入流程图" class="headerlink" title="[2] 注入流程图"></a>[2] 注入流程图</h5><p><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg-blog.csdnimg.cn%2F20201009142512180.png%3Fx-oss-process%3Dimage%2Fwatermark%2Ctype_ZmFuZ3poZW5naGVpdGk%2Cshadow_10%2Ctext_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xhZHlfa2lsbGVyOQ%3D%3D%2Csize_16%2Ccolor_FFFFFF%2Ct_70&refer=http%3A%2F%2Fimg-blog.csdnimg.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1656476375&t=82f2380c052f036e8454035070bc6a42" alt="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg-blog.csdnimg.cn%2F20201009142512180.png%3Fx-oss-process%3Dimage%2Fwatermark%2Ctype_ZmFuZ3poZW5naGVpdGk%2Cshadow_10%2Ctext_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xhZHlfa2lsbGVyOQ%3D%3D%2Csize_16%2Ccolor_FFFFFF%2Ct_70&amp;refer=http%3A%2F%2Fimg-blog.csdnimg.cn&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1656476375&amp;t=82f2380c052f036e8454035070bc6a42"></p>
+<h4 id="5-mysql错误分析解决"><a href="#5-mysql错误分析解决" class="headerlink" title="5.mysql错误分析解决"></a>5.mysql错误分析解决</h4><h5 id="1）子查询结果多于一行"><a href="#1）子查询结果多于一行" class="headerlink" title="1）子查询结果多于一行"></a>1）子查询结果多于一行</h5><p><code>Subquery returns more than 1 row</code></p>
+<p>以<code>select * from table1 where table1.colums=(select columns from table2)</code>这个sql语句为例</p>
+<p>1.如果是写入重复，去掉重复数据。然后写入的时候，可以加逻辑判断(php)或者外键(mysql)，防止数据重复写入。（但在实际开发中可能需要重复写入，所以需要慎重考虑）</p>
+<p>2.在子查询条件语句加<code>limit 1</code>,找到一个符合条件的就可以了<br><code>select * from table1 where table1.colums in (select columns from table2 limit 1)</code> </p>
+<p>如果需要继续向后查询，可以用<code>limit 0,1</code>   <code>limit 1,1</code>   <code>limit 2,1</code>   …..  <code>limit n,1</code></p>
+<p>3.在子查询前加any关键字<br><code>select * from table1 where table1.colums=any(select columns from table2)</code></p>
+<h5 id="ps-子查询语句"><a href="#ps-子查询语句" class="headerlink" title="ps. 子查询语句"></a>ps. 子查询语句</h5><p><strong>子查询</strong>是指在<strong>一个select语句中嵌套另一个slecet语句</strong>。</p>
+<p><strong>any、in、some、all</strong>分别是子查询关键词之一。</p>
+<p><strong>any</strong>可以与=、&gt;、&gt;=、&lt;、&lt;=、&lt;&gt;结合起来使用，分别表示等于、大于、大于等于、小于、小于等于、不等于其中的任何一个数据。</p>
+<p>all可以与=、&gt;、&gt;=、&lt;、&lt;=、&lt;&gt;结合是来使用，分别表示等于、大于、大于等于、小于、小于等于、不等于其中的其中的所有数据。</p>
+<p>他们进行子查询的语法如下：</p>
+<p><code>operand comparison_operator any(subquery);</code><br><code>operand in (subquery);</code><br><code>operand coparison_operator some(subquery);</code><br><code>operand coparison_operator all (subquery);</code></p>
+<p><strong>any,all关键词必须与一个比较操作符一起使用</strong></p>
+<p>any关键词可以理解为<strong>对于子查询返回的列中的<u>任意</u>数值，如果比较结果为ture，则返回true</strong><br>例如：</p>
+<p><code>select s1 from t1 where s1 &gt; any (select s1 from t2)</code></p>
+<p>假设表t1中有一行包含（10） ， t2包含（20,12,5），则表达式为true；如果t2包含（20,10），或者表t2位空表，则表达式为false。如果t2包含（null，null），则表达式为unkonwn。</p>
+<p>all关键词<strong>对于子查询返回的列中的<u>所有值</u>，如果比较结果为true，则返回true</strong><br>例如：</p>
+<p><code>select s1 from t1 where s1&gt; all (select s1 from s2)</code></p>
+<p>假设表t1中有一行包含（10）。如果表t2包含（-5,0，+5），则表达式为true，因为10比t2中的查出的所有三个值大。如果表t2包含（12,6，null，-100），则表达式为false，因为t2中有一个值12大于10。如果表t2包含（0，null，1），则表达式为unknown。如果t2为空表，则结果为true。</p>
+<p>not in 是 “&lt;&gt;all”的别名，用法相同。<br>语句in 与“=any”是相同的。<br>例如：</p>
+<p><code>select s1 from t1 where s1 = any (select s1 from t2)</code><br><code>select s1 from t1 where s1 in (select s1 from t2)</code></p>
+<p>语句some是any的别名，用法相同。<br>例如：</p>
+<p><code>select s1 from t1 where s1 &lt;&gt; any (select s1 from t2)</code><br><code>select s1 from t1 where s1 &lt;&gt; some (select s1 from t2)</code></p>
+<h4 id="6-mysql-连接函数，-分组连接函数"><a href="#6-mysql-连接函数，-分组连接函数" class="headerlink" title="6.mysql 连接函数， 分组连接函数"></a>6.mysql 连接函数， 分组连接函数</h4><h5 id="1-concat"><a href="#1-concat" class="headerlink" title="1.concat()"></a>1.concat()</h5><p>concat(str1,str2,…)</p>
+<p>若有一个参数为NULL，返回NULL</p>
+<h5 id="2-concat-ws"><a href="#2-concat-ws" class="headerlink" title="2.concat_ws()"></a>2.concat_ws()</h5><p>concat_ws(‘间隔符号’,str1,str2,…)</p>
+<p><strong>间隔符号可以是空格，不能不写，否则返回为空</strong></p>
+<p> 显示为   <u>str1间隔符号str2间隔符号str3…</u></p>
+<h5 id="3-group-concat"><a href="#3-group-concat" class="headerlink" title="3.group_concat"></a>3.group_concat</h5><p>group_concat([distinct] 字段名 [ order by 排序字段 asc/desc ] [separator “分隔符”])</p>
+<p>多行数据在一行显示函数</p>
+<p>根据group by指定的列进行排序分组，将同一组显示出来，并用分隔符间隔</p>
+<h5 id="ps-组合使用"><a href="#ps-组合使用" class="headerlink" title="ps. 组合使用"></a>ps. 组合使用</h5><p>如果是多字段组合 显示在一行的eg：</p>
+<p>group_concat(concat_ws(‘,’,concat(str1，str2) ) )；</p>
+<p>一个字段的话eg：</p>
+<p>group_concat(concat_ws(‘,’,str1，str2) )； </p>
+<h4 id="7-过滤替换"><a href="#7-过滤替换" class="headerlink" title="7.过滤替换"></a>7.过滤替换</h4><h5 id="1）双写绕过"><a href="#1）双写绕过" class="headerlink" title="1）双写绕过"></a>1）双写绕过</h5><p>(用于把黑名单的字符替换成空)：se<u>select</u>lect,un<u>union</u>ion，oorr等等（替换为空后，剩余语句就是标准的sql语句，不会影响语句的正常执行）</p>
+<p>ps.注意，有的语句命令可能会带有黑名单的字符，也需要双写，如<u>or</u>der,inf<u>or</u>mation.schema_schemata等，当网站在检查时，同样会被替换为空，所以需要写成o<u>or</u>rder,info<u>or</u>rmation.schema_schemata等等</p>
+<h5 id="2）大小写混合"><a href="#2）大小写混合" class="headerlink" title="2）大小写混合"></a>2）大小写混合</h5><p>(用于黑名单中只有小写或大写，并没有对大小写进行区分)</p>
+<p>如sEleCt,unIoN等等</p>
+<h5 id="3）替换"><a href="#3）替换" class="headerlink" title="**3）替换"></a>**3）替换</h5><p>select：</p>
+<p>union：</p>
+<p>空格：%0a</p>
+<p>=：like</p>
+<p>and：&amp;&amp;</p>
+<p>or：||</p>
+<h3 id="二、xss"><a href="#二、xss" class="headerlink" title="二、xss"></a>二、xss</h3><h3 id="三、csrf"><a href="#三、csrf" class="headerlink" title="三、csrf"></a>三、csrf</h3><h3 id="四、xxe"><a href="#四、xxe" class="headerlink" title="四、xxe"></a>四、xxe</h3><h3 id="五、ssrf"><a href="#五、ssrf" class="headerlink" title="五、ssrf"></a>五、ssrf</h3><h3 id="六、文件上传"><a href="#六、文件上传" class="headerlink" title="六、文件上传"></a>六、文件上传</h3><h3 id="七、文件包含"><a href="#七、文件包含" class="headerlink" title="七、文件包含"></a>七、文件包含</h3><h4 id="1-文件包含的四个函数："><a href="#1-文件包含的四个函数：" class="headerlink" title="1.文件包含的四个函数："></a>1.文件包含的四个函数：</h4><p>1.include():将在其被调用的位置处包含一个文件。包含一个文件与在该语句所在位置复制制定文件的数据具有相同内容的效果。使用include()时可以忽略括号。</p>
+<p>2.include_once():在脚本执行期间包含并运行指定文件。此行为和 include() 语句类似，<u><strong>唯一区别是include_once()会先判断一下这个文件在之前是否已经被包含过，如已经包含，则忽略本次包含。</strong></u></p>
+<p>3.replace() :很大程度上与include相同，都是将一个模板文件包含到require调用坐在的位置。</p>
+<p>require和include之间有两点重要的区别:</p>
+<p>1.无论require的位置如何，制定文件都将包含到出现require的脚本中。例如，即使require放在计算结果为假的if语句中，依然会包含指定文件。<br>2.require出错时，脚本将停止运行，而在使用include的情况下，脚本将继续执行。</p>
+<p>4.replace_once():在脚本执行期间包含并运行指定文件。此行为和 require() 语句类似，<u><strong>唯一区别是require_once()会先判断一下这个文件在之前是否已经被包含过，如已经包含，则忽略本次包含</strong></u></p>
+<p><u><strong>下面是一篇关于require_once被使用后不能再使用怎么绕开的文章，本人在2022年5月校内Dest0g3二次招新比赛遇到类似，特此记录</strong></u></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/213235">php源码分析 require_once 绕过不能重复包含文件的限制</a></p>
+<p>下面为该题代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>); </span><br><span class="line"><span class="comment">//find something in flag1.php </span></span><br><span class="line"><span class="variable">$d</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;d&#x27;</span>]; </span><br><span class="line"><span class="variable">$file</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;ctf&#x27;</span>]; </span><br><span class="line"><span class="keyword">if</span> (<span class="title function_ invoke__">filter_var</span>(<span class="variable">$d</span>, FILTER_VALIDATE_URL)) &#123;   </span><br><span class="line">    <span class="variable">$r</span> = <span class="title function_ invoke__">parse_url</span>(<span class="variable">$d</span>);   </span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$file</span>)) &#123;     </span><br><span class="line">        <span class="keyword">if</span> (<span class="title function_ invoke__">strpos</span>(<span class="variable">$file</span>, <span class="string">&quot;lai&quot;</span>) !== <span class="literal">false</span> &amp;&amp;</span><br><span class="line">  <span class="title function_ invoke__">strpos</span>(<span class="variable">$file</span>, <span class="string">&quot;ya&quot;</span>) !== <span class="literal">false</span>)  &#123;       </span><br><span class="line">            @<span class="keyword">include</span>(<span class="variable">$file</span> . <span class="string">&#x27;.php&#x27;</span>);     </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;       </span><br><span class="line">            <span class="keyword">die</span>(<span class="string">&quot;Sorry, you can not pass&quot;</span>);     </span><br><span class="line">        &#125;     </span><br><span class="line">        <span class="keyword">if</span> (<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/labour$/&#x27;</span>, <span class="variable">$r</span>[<span class="string">&#x27;host&#x27;</span>])) &#123;   </span><br><span class="line">                  @<span class="variable">$a</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$d</span>);       </span><br><span class="line">                  <span class="keyword">echo</span> (<span class="variable">$a</span>);     </span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;                                      <span class="keyword">die</span>(<span class="string">&quot;error&quot;</span>);     </span><br><span class="line">                                    &#125;  </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;    </span><br><span class="line">          <span class="keyword">die</span>(<span class="string">&quot;why?&quot;</span>);   </span><br><span class="line">    &#125; </span><br><span class="line">&#125; <span class="keyword">else</span> &#123;   </span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;Invalid URL&quot;</span>; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<p><strong>文章关键：</strong></p>
+<p><u><strong>php的文件包含机制是将已经包含的文件与文件的真实路径放进哈希表中，当已经<code>require_once(&#39;flag.php&#39;)</code>，已经include的文件不可以再require_once。</strong></u></p>
+<p><u><strong>今天就来谈谈，怎么设想如何绕过这个哈希表，让php认为我们传入的文件名不在哈希表中，又可以让php能找到这个文件，读取到内容。</strong></u></p>
+<p><u><strong>在这里有个小知识点，<code>/proc/self</code>指向当前进程的<code>/proc/pid/</code>，<code>/proc/self/root/</code>是指向<code>/</code>的符号链接，想到这里，用伪协议配合多级符号链接的办法进行绕过</strong></u></p>
+<p>payload:</p>
+<p>?d=0://labour/../../../../../flll1ag2.txt&amp;ctf=laiya</p>
+<h4 id="2-php伪协议："><a href="#2-php伪协议：" class="headerlink" title="**2.php伪协议："></a>**2.php伪协议：</h4><p>1.php://filter</p>
+<p>可以获取指定文件的源码，但是当他与包含函数结合是，php://filter流会被当做php文件执行 。所以我们一般对其进行编码，让其不执行。从而导致 任意文件读取</p>
+<p><code>条件：</code><br><code>allow_url_fopen=Off/On</code><br><code>allow_url_include=Off/On</code></p>
+<p><code>POC:</code><br><code>?file=php://filter/read=convert.base64-encode/resource=phpinfo.php</code></p>
+<h3 id="八、逻辑漏洞"><a href="#八、逻辑漏洞" class="headerlink" title="八、逻辑漏洞"></a>八、逻辑漏洞</h3><h3 id="九、命令执行"><a href="#九、命令执行" class="headerlink" title="九、命令执行"></a>九、命令执行</h3><h3 id="十、暴力破解"><a href="#十、暴力破解" class="headerlink" title="十、暴力破解"></a>十、暴力破解</h3><h3 id="十一、反序列化"><a href="#十一、反序列化" class="headerlink" title="十一、反序列化"></a>十一、反序列化</h3><h3 id="十二、ssti"><a href="#十二、ssti" class="headerlink" title="十二、ssti"></a>十二、ssti</h3>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/31/%E6%97%A5%E5%B8%B8%E9%9A%8F%E8%AE%B0/" rel="next" title="WEB日常记录学习">
+      WEB日常记录学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">Web安全学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E%E7%9F%A5%E8%AF%86%EF%BC%88%E4%B8%80%EF%BC%89%E3%80%90%E5%8E%9F%E7%90%86-%E5%8D%B1%E5%AE%B3-%E9%98%B2%E5%BE%A1-%E5%88%A9%E7%94%A8%E3%80%91"><span class="nav-number">1.1.</span> <span class="nav-text">基础漏洞知识（一）【原理+危害+防御+利用】</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Sql%E6%BC%8F%E6%B4%9E%E7%AF%87"><span class="nav-number">1.1.1.</span> <span class="nav-text">Sql漏洞篇</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-sql%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">1.sql漏洞原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%B1%E5%AE%B3"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">2.危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%98%B2%E5%BE%A1"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">3.防御</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XSS%E6%BC%8F%E6%B4%9E%E7%AF%87"><span class="nav-number">1.1.2.</span> <span class="nav-text">XSS漏洞篇</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-XSS%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">1.XSS漏洞原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%B1%E5%AE%B3-1"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">2.危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%98%B2%E5%BE%A1-1"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">3.防御</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSRF%E6%BC%8F%E6%B4%9E%E7%AF%87"><span class="nav-number">1.1.3.</span> <span class="nav-text">CSRF漏洞篇</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-CSRF%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">1.CSRF漏洞原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%B1%E5%AE%B3-2"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">2.危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%98%B2%E5%BE%A1-2"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">3.防御</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XXE%E6%BC%8F%E6%B4%9E%E7%AF%87"><span class="nav-number">1.1.4.</span> <span class="nav-text">XXE漏洞篇</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-XXE%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">1.XXE漏洞原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%B1%E5%AE%B3-3"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">2.危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%98%B2%E5%BE%A1-3"><span class="nav-number">1.1.4.3.</span> <span class="nav-text">3.防御</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSRF%E6%BC%8F%E6%B4%9E%E7%AF%87"><span class="nav-number">1.1.5.</span> <span class="nav-text">SSRF漏洞篇</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-SSRF%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">1.SSRF漏洞原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%B1%E5%AE%B3-4"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">2.危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%98%B2%E5%BE%A1-4"><span class="nav-number">1.1.5.3.</span> <span class="nav-text">3.防御</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E7%AF%87"><span class="nav-number">1.1.6.</span> <span class="nav-text">文件上传漏洞篇</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">1.文件上传漏洞原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%B1%E5%AE%B3-5"><span class="nav-number">1.1.6.2.</span> <span class="nav-text">2.危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%98%B2%E5%BE%A1-5"><span class="nav-number">1.1.6.3.</span> <span class="nav-text">3.防御</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E7%AF%87"><span class="nav-number">1.1.7.</span> <span class="nav-text">文件包含漏洞篇</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.7.1.</span> <span class="nav-text">1.文件包含漏洞原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%B1%E5%AE%B3-6"><span class="nav-number">1.1.7.2.</span> <span class="nav-text">2.危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%98%B2%E5%BE%A1-6"><span class="nav-number">1.1.7.3.</span> <span class="nav-text">3.防御</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%E7%AF%87"><span class="nav-number">1.1.8.</span> <span class="nav-text">逻辑漏洞篇</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.8.1.</span> <span class="nav-text">1.逻辑漏洞原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%B1%E5%AE%B3-7"><span class="nav-number">1.1.8.2.</span> <span class="nav-text">2.危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%98%B2%E5%BE%A1-7"><span class="nav-number">1.1.8.3.</span> <span class="nav-text">3.防御</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E4%BB%BB%E6%84%8F%E5%AF%86%E7%A0%81%E4%BF%AE%E6%94%B9"><span class="nav-number">1.1.8.3.1.</span> <span class="nav-text">1.任意密码修改</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E8%B6%8A%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="nav-number">1.1.8.3.2.</span> <span class="nav-text">2.越权访问</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E7%AF%87"><span class="nav-number">1.1.9.</span> <span class="nav-text">命令执行漏洞篇</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.9.1.</span> <span class="nav-text">1.命令执行漏洞原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%B1%E5%AE%B3-8"><span class="nav-number">1.1.9.2.</span> <span class="nav-text">2.危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%98%B2%E5%BE%A1-8"><span class="nav-number">1.1.9.3.</span> <span class="nav-text">3.防御</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3%E7%AF%87"><span class="nav-number">1.1.10.</span> <span class="nav-text">暴力破解篇</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.10.1.</span> <span class="nav-text">1.暴力破解原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%B1%E5%AE%B3-9"><span class="nav-number">1.1.10.2.</span> <span class="nav-text">2.危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%98%B2%E5%BE%A1-9"><span class="nav-number">1.1.10.3.</span> <span class="nav-text">3.防御</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E7%AF%87%EF%BC%88PHP%EF%BC%89"><span class="nav-number">1.1.11.</span> <span class="nav-text">反序列化漏洞篇（PHP）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.11.1.</span> <span class="nav-text">1.反序列化漏洞原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%B1%E5%AE%B3-10"><span class="nav-number">1.1.11.2.</span> <span class="nav-text">2.危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%98%B2%E5%BE%A1-10"><span class="nav-number">1.1.11.3.</span> <span class="nav-text">3.防御</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E7%AD%BE%E5%90%8D%E4%B8%8E%E8%AE%A4%E8%AF%81"><span class="nav-number">1.1.11.3.1.</span> <span class="nav-text">1)签名与认证</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E9%99%90%E5%88%B6%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E7%B1%BB"><span class="nav-number">1.1.11.3.2.</span> <span class="nav-text">2)限制序列化与反序列化的类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-RASP%E6%A3%80%E6%B5%8B"><span class="nav-number">1.1.11.3.3.</span> <span class="nav-text">3)RASP检测</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E5%88%A9%E7%94%A8"><span class="nav-number">1.1.11.4.</span> <span class="nav-text">4.利用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-wakeup-%E7%BB%95%E8%BF%87"><span class="nav-number">1.1.11.4.1.</span> <span class="nav-text">1)__wakeup( )绕过</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E6%B3%A8%E5%85%A5%E5%AF%B9%E8%B1%A1%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="nav-number">1.1.11.4.2.</span> <span class="nav-text">2)注入对象构造方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-Session%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E"><span class="nav-number">1.1.11.4.3.</span> <span class="nav-text">3)Session反序列化漏洞</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-PHAR%E5%88%A9%E7%94%A8"><span class="nav-number">1.1.11.4.4.</span> <span class="nav-text">4)PHAR利用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RCE%E6%BC%8F%E6%B4%9E%E7%AF%87"><span class="nav-number">1.1.12.</span> <span class="nav-text">RCE漏洞篇</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-RCE%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.12.1.</span> <span class="nav-text">1.RCE漏洞原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%B1%E5%AE%B3-11"><span class="nav-number">1.1.12.2.</span> <span class="nav-text">2.危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%98%B2%E5%BE%A1-11"><span class="nav-number">1.1.12.3.</span> <span class="nav-text">3.防御</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSTI%E6%BC%8F%E6%B4%9E%E7%AF%87"><span class="nav-number">1.1.13.</span> <span class="nav-text">SSTI漏洞篇</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-SSTI%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.13.1.</span> <span class="nav-text">1.SSTI漏洞原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%B1%E5%AE%B3-12"><span class="nav-number">1.1.13.2.</span> <span class="nav-text">2.危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%98%B2%E5%BE%A1-12"><span class="nav-number">1.1.13.3.</span> <span class="nav-text">3.防御</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%84%E6%BC%8F%E6%B4%9E%E7%9F%A5%E8%AF%86%E8%AE%B0%E5%BD%95%E7%AC%94%E8%AE%B0"><span class="nav-number">1.2.</span> <span class="nav-text">各漏洞知识记录笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81sql"><span class="nav-number">1.2.1.</span> <span class="nav-text">一、sql</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sql%E6%B3%A8%E5%85%A5%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">sql注入的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%91%A0%E6%8C%89%E7%85%A7%E6%95%B0%E6%8D%AE%E6%8F%90%E4%BA%A4%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9D%A5%E5%88%86%E7%B1%BB%EF%BC%9A"><span class="nav-number">1.2.1.1.1.</span> <span class="nav-text">①按照数据提交的方式来分类：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%91%A1%E6%8C%89%E7%85%A7%E6%89%A7%E8%A1%8C%E6%95%88%E6%9E%9C%E6%9D%A5%E5%88%86%E7%B1%BB%EF%BC%9A"><span class="nav-number">1.2.1.1.2.</span> <span class="nav-text">②按照执行效果来分类：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%91%A2%E6%8C%89%E7%85%A7%E6%B3%A8%E5%85%A5%E7%82%B9%E7%B1%BB%E5%9E%8B%E6%9D%A5%E5%88%86%E7%B1%BB%EF%BC%9A"><span class="nav-number">1.2.1.1.3.</span> <span class="nav-text">③按照注入点类型来分类：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%91%A3%E5%9F%BA%E4%BA%8E%E7%A8%8B%E5%BA%A6%E5%92%8C%E9%A1%BA%E5%BA%8F%E7%9A%84%E6%B3%A8%E5%85%A5-%E5%93%AA%E9%87%8C%E5%8F%91%E7%94%9F%E4%BA%86%E5%BD%B1%E5%93%8D"><span class="nav-number">1.2.1.1.4.</span> <span class="nav-text">④基于程度和顺序的注入(哪里发生了影响)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">堆叠注入</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5%E5%AE%9A%E4%B9%89"><span class="nav-number">1.2.1.2.1.</span> <span class="nav-text">1.堆叠注入定义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.1.2.2.</span> <span class="nav-text">2.堆叠注入原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">1.2.1.2.3.</span> <span class="nav-text">3.堆叠注入的局限性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%8B%E9%9D%A2%E6%88%91%E4%BB%A5%E4%B8%80%E9%81%93%E9%A2%98%E4%B8%BA%E4%BE%8B%E8%A7%A3%E6%9E%90%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5"><span class="nav-number">1.2.1.2.4.</span> <span class="nav-text">**下面我以一道题为例解析堆叠注入</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">1.几个常用函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E4%B8%80%E8%88%AC%E7%94%A8%E4%BA%8E%E5%B0%9D%E8%AF%95%E7%9A%84%E9%97%AD%E5%90%88%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">2.一般用于尝试的闭合语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-sql%E4%B8%AD%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E3%80%90%E4%B8%87%E8%83%BD%E5%AF%86%E7%A0%81%E7%9A%84%E5%8E%9F%E7%90%86%E3%80%91"><span class="nav-number">1.2.1.5.</span> <span class="nav-text">3.sql中逻辑运算【万能密码的原理】</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E6%B3%A8%E5%85%A5%E7%9A%84%E4%B8%80%E8%88%AC%E6%B5%81%E7%A8%8B%E3%80%90%E6%8C%89%E9%A1%BA%E5%BA%8F%E6%9F%A5%E8%AF%A2%E6%B3%A8%E5%85%A5%E3%80%91"><span class="nav-number">1.2.1.6.</span> <span class="nav-text">4.注入的一般流程【按顺序查询注入】</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ps-%E5%85%B3%E9%94%AE%E8%AE%B0%E5%BF%86%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="nav-number">1.2.1.6.1.</span> <span class="nav-text">ps.关键记忆和使用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E6%B3%A8%E5%85%A5%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.2.1.6.2.</span> <span class="nav-text">[1] 注入语句</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E6%B3%A8%E5%85%A5%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-number">1.2.1.6.3.</span> <span class="nav-text">[2] 注入流程图</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-mysql%E9%94%99%E8%AF%AF%E5%88%86%E6%9E%90%E8%A7%A3%E5%86%B3"><span class="nav-number">1.2.1.7.</span> <span class="nav-text">5.mysql错误分析解决</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1%EF%BC%89%E5%AD%90%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E5%A4%9A%E4%BA%8E%E4%B8%80%E8%A1%8C"><span class="nav-number">1.2.1.7.1.</span> <span class="nav-text">1）子查询结果多于一行</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ps-%E5%AD%90%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.2.1.7.2.</span> <span class="nav-text">ps. 子查询语句</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-mysql-%E8%BF%9E%E6%8E%A5%E5%87%BD%E6%95%B0%EF%BC%8C-%E5%88%86%E7%BB%84%E8%BF%9E%E6%8E%A5%E5%87%BD%E6%95%B0"><span class="nav-number">1.2.1.8.</span> <span class="nav-text">6.mysql 连接函数， 分组连接函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-concat"><span class="nav-number">1.2.1.8.1.</span> <span class="nav-text">1.concat()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-concat-ws"><span class="nav-number">1.2.1.8.2.</span> <span class="nav-text">2.concat_ws()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-group-concat"><span class="nav-number">1.2.1.8.3.</span> <span class="nav-text">3.group_concat</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ps-%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8"><span class="nav-number">1.2.1.8.4.</span> <span class="nav-text">ps. 组合使用</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-%E8%BF%87%E6%BB%A4%E6%9B%BF%E6%8D%A2"><span class="nav-number">1.2.1.9.</span> <span class="nav-text">7.过滤替换</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1%EF%BC%89%E5%8F%8C%E5%86%99%E7%BB%95%E8%BF%87"><span class="nav-number">1.2.1.9.1.</span> <span class="nav-text">1）双写绕过</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2%EF%BC%89%E5%A4%A7%E5%B0%8F%E5%86%99%E6%B7%B7%E5%90%88"><span class="nav-number">1.2.1.9.2.</span> <span class="nav-text">2）大小写混合</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3%EF%BC%89%E6%9B%BF%E6%8D%A2"><span class="nav-number">1.2.1.9.3.</span> <span class="nav-text">**3）替换</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81xss"><span class="nav-number">1.2.2.</span> <span class="nav-text">二、xss</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81csrf"><span class="nav-number">1.2.3.</span> <span class="nav-text">三、csrf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81xxe"><span class="nav-number">1.2.4.</span> <span class="nav-text">四、xxe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E3%80%81ssrf"><span class="nav-number">1.2.5.</span> <span class="nav-text">五、ssrf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="nav-number">1.2.6.</span> <span class="nav-text">六、文件上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="nav-number">1.2.7.</span> <span class="nav-text">七、文件包含</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E7%9A%84%E5%9B%9B%E4%B8%AA%E5%87%BD%E6%95%B0%EF%BC%9A"><span class="nav-number">1.2.7.1.</span> <span class="nav-text">1.文件包含的四个函数：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%EF%BC%9A"><span class="nav-number">1.2.7.2.</span> <span class="nav-text">**2.php伪协议：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E"><span class="nav-number">1.2.8.</span> <span class="nav-text">八、逻辑漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="nav-number">1.2.9.</span> <span class="nav-text">九、命令执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3"><span class="nav-number">1.2.10.</span> <span class="nav-text">十、暴力破解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%81%E4%B8%80%E3%80%81%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="nav-number">1.2.11.</span> <span class="nav-text">十一、反序列化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81ssti"><span class="nav-number">1.2.12.</span> <span class="nav-text">十二、ssti</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">try-to-change</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/try-to-change" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;try-to-change" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/" title="Csdn → https:&#x2F;&#x2F;blog.csdn.net&#x2F;" rel="noopener" target="_blank"><i class=" fa-fw"></i>Csdn</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://baidu.com/" title="Baidu → http:&#x2F;&#x2F;baidu.com" rel="noopener" target="_blank"><i class=" fa-fw"></i>Baidu</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">try-to-change</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+<script>
+    //   自定义邮箱审核规则
+    document.body.addEventListener('click', function(e) {
+        if (e.target.classList.contains('vsubmit')) {
+            const email = document.querySelector('input[type=email]');
+            const nick = document.querySelector('input[name=nick]');
+            const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+            if (!email.value || !nick.value || !reg.test(email.value)) {
+                const str = `<div class="valert text-center"><div class="vtext">请填写正确的昵称和邮箱！</div></div>`;
+                const vmark = document.querySelector('.vmark');
+                vmark.innerHTML = str;
+                vmark.style.display = 'block';
+                setTimeout(function() {
+                    vmark.style.display = 'none';
+                    vmark.innerHTML = '';
+                }, 2500);
+            }
+        }
+    })
+</script>
+
+<!-- 评论框美化 -->
+<style>
+    #comments .veditor{
+        min-height: 10rem;
+        background-image: url(https://gitee.com/wugenqiang/PictureBed/raw/master/CS-Notes/20200425091751.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: right;
+        background-color: rgba(255,255,255,0);
+        resize: none;}
+</style>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+<script type="text/javascript" 
+color="0,0,255" opacity="1000" count="250" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+</script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/unitychan.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":"ture"},"log":false});</script></body>
+</html>
