@@ -191,6 +191,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -242,6 +243,8 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="try-to-change"
+      src="/images/touxiang.png">
   <p class="site-author-name" itemprop="name">try-to-change</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -300,8 +303,6 @@
   </span>
   <span class="author" itemprop="copyrightHolder">try-to-change</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
-  </div>
 
 <script>
     //   自定义邮箱审核规则
@@ -386,6 +387,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '9153f63cdb4dae71592a',
+      clientSecret: '593e9954e7fd5e6e46f57b66481f50e1adc53afb',
+      repo        : 'try-to-change.github.io',
+      owner       : 'try-to-change',
+      admin       : ['try-to-change'],
+      id          : 'f47af1d1eda4d807b02bba32be15120b',
+        language: '',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
   
 <script type="text/javascript" 
