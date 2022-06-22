@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"try-to-change.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="以下的问题，有的已经解决，有的还存在，如果有大佬方便讲解指点，或者我的解决内容不完善或有问题，欢迎评论或私信我，不胜感激 dirsearch的原理，有没有局限？蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？为什么我的.htacess无法发挥作用(把其他文件解读为php)，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？">
+  <meta name="description" content="日常随记网站连接重置清空缓存和Cookie：今天在打buuctf靶场的时候遇到一个问题，就是当页面跳转时，会显示连接重置，导致我的sql注入结果不能显示，然后一搜，发现可能是浏览器缓存太多导致的，于是我把浏览器的缓存和cookie一同全部清空，然后我再刷新sql 注入那道题的界面，解决了，也显示了我的注入结果，我正要交flag的时候，然后，我发现…..，我的buuctf账号下线，我的csdn账号也">
 <meta property="og:type" content="article">
-<meta property="og:title" content="疑问记录">
-<meta property="og:url" content="https://try-to-change.github.io/2022/06/21/%E7%9F%A5%E8%AF%86%E7%82%B9%E7%96%91%E9%97%AE%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:title" content="WEB日常记录学习">
+<meta property="og:url" content="https://try-to-change.github.io/2022/05/31/daily/index.html">
 <meta property="og:site_name" content="try-to-change&#39;s blog">
-<meta property="og:description" content="以下的问题，有的已经解决，有的还存在，如果有大佬方便讲解指点，或者我的解决内容不完善或有问题，欢迎评论或私信我，不胜感激 dirsearch的原理，有没有局限？蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？为什么我的.htacess无法发挥作用(把其他文件解读为php)，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？">
+<meta property="og:description" content="日常随记网站连接重置清空缓存和Cookie：今天在打buuctf靶场的时候遇到一个问题，就是当页面跳转时，会显示连接重置，导致我的sql注入结果不能显示，然后一搜，发现可能是浏览器缓存太多导致的，于是我把浏览器的缓存和cookie一同全部清空，然后我再刷新sql 注入那道题的界面，解决了，也显示了我的注入结果，我正要交flag的时候，然后，我发现…..，我的buuctf账号下线，我的csdn账号也">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-06-21T14:18:30.078Z">
-<meta property="article:modified_time" content="2022-06-21T15:25:59.036Z">
+<meta property="article:published_time" content="2022-05-30T16:15:39.751Z">
+<meta property="article:modified_time" content="2022-05-30T16:20:09.694Z">
 <meta property="article:author" content="try-to-change">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://try-to-change.github.io/2022/06/21/%E7%9F%A5%E8%AF%86%E7%82%B9%E7%96%91%E9%97%AE%E8%AE%B0%E5%BD%95/">
+<link rel="canonical" href="https://try-to-change.github.io/2022/05/31/daily/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>疑问记录 | try-to-change's blog</title>
+  <title>WEB日常记录学习 | try-to-change's blog</title>
   
 
 
@@ -151,7 +151,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://try-to-change.github.io/2022/06/21/%E7%9F%A5%E8%AF%86%E7%82%B9%E7%96%91%E9%97%AE%E8%AE%B0%E5%BD%95/">
+    <link itemprop="mainEntityOfPage" href="https://try-to-change.github.io/2022/05/31/daily/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.png">
@@ -164,7 +164,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          疑问记录
+          WEB日常记录学习
         </h1>
 
         <div class="post-meta">
@@ -175,7 +175,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-06-21 22:18:30 / 修改时间：23:25:59" itemprop="dateCreated datePublished" datetime="2022-06-21T22:18:30+08:00">2022-06-21</time>
+              <time title="创建时间：2022-05-31 00:15:39 / 修改时间：00:20:09" itemprop="dateCreated datePublished" datetime="2022-05-31T00:15:39+08:00">2022-05-31</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -183,7 +183,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">网络安全学习</span></a>
+                  <a href="/categories/%E9%9A%8F%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">随记</span></a>
                 </span>
             </span>
 
@@ -198,8 +198,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><em>以下的问题，有的已经解决，有的还存在，如果有大佬方便讲解指点，或者我的解决内容不完善或有问题，欢迎评论或私信我，不胜感激</em></p>
-<h2 id="dirsearch的原理，有没有局限？"><a href="#dirsearch的原理，有没有局限？" class="headerlink" title="dirsearch的原理，有没有局限？"></a>dirsearch的原理，有没有局限？</h2><h2 id="蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？"><a href="#蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？" class="headerlink" title="蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？"></a>蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？</h2><h2 id="为什么我的-htacess无法发挥作用-把其他文件解读为php-，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？"><a href="#为什么我的-htacess无法发挥作用-把其他文件解读为php-，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？" class="headerlink" title="为什么我的.htacess无法发挥作用(把其他文件解读为php)，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？"></a>为什么我的.htacess无法发挥作用(把其他文件解读为php)，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？</h2>
+        <h1 id="日常随记"><a href="#日常随记" class="headerlink" title="日常随记"></a>日常随记</h1><h2 id="网站连接重置清空缓存和Cookie："><a href="#网站连接重置清空缓存和Cookie：" class="headerlink" title="网站连接重置清空缓存和Cookie："></a>网站连接重置清空缓存和<u><strong>Cookie</strong></u>：</h2><p>今天在打buuctf靶场的时候遇到一个问题，就是当页面跳转时，会显示连接重置，导致我的sql注入结果不能显示，然后一搜，发现可能是浏览器缓存太多导致的，于是我把浏览器的缓存和cookie一同全部清空，然后我再刷新sql 注入那道题的界面，解决了，也显示了我的注入结果，我正要交flag的时候，然后，我发现…..，我的buuctf账号下线，我的csdn账号也下线了</p>
+<p>cookie的作用和重要性就出来了，从这个事情看出，cookie是当我们登录网站的主要身份凭证，当我删除cookie后，我无法证明自己身份时，即网站当前浏览器无该账号当前在该网站的cookie时，网站就会强制下线我的账号</p>
+<p>但是，如果我们在登录网站时（没有退出），点击了其他链接导致自己在该浏览器的该网站的cookie外泄，被有心人获取，那么拥有你的cookie的人，就可以登录你的账号，在你登录的网站上进行修改密码，删除文章，甚至可以转账等等</p>
+<p>所以以后登录了一些重要网站时，比如支付宝，淘宝，博客网站时，别随便点击链接，保证自己的信息安全，不要黑客被黑客黑了，那确实有点难为情了</p>
+<p><code>Cookie实际上是一小段的文本信息。客户端请求服务器，如果服务器需要记录该用户状态，就使用response向客户端浏览器颁发一个Cookie。客户端浏览器会把Cookie保存起来。当浏览器再请求该网站时，浏览器把请求的网址连同该Cookie一同提交给服务器。服务器检查该Cookie，以此来辨认用户状态。服务器还可以根据需要修改Cookie的内容</code></p>
+
     </div>
 
     
@@ -214,10 +218,13 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/06/21/buuctf%E9%9D%B6%E5%9C%BAwp/" rel="prev" title="buuctf靶场wp">
-      <i class="fa fa-chevron-left"></i> buuctf靶场wp
+    <a href="/2022/05/28/Web-study/" rel="prev" title="WEB学习">
+      <i class="fa fa-chevron-left"></i> WEB学习
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/21/underline-learning/" rel="next" title="线下靶场学习记录">
+      线下靶场学习记录 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -277,7 +284,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#dirsearch%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%8C%E6%9C%89%E6%B2%A1%E6%9C%89%E5%B1%80%E9%99%90%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">dirsearch的原理，有没有局限？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%9A%81%E5%89%91%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%8C%E8%BF%9E%E6%8E%A5%E6%96%87%E4%BB%B6%E5%90%8E%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E8%AE%BF%E9%97%AE%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%85%B6%E4%BB%96%E6%96%87%E4%BB%B6%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E7%9A%84-htacess%E6%97%A0%E6%B3%95%E5%8F%91%E6%8C%A5%E4%BD%9C%E7%94%A8-%E6%8A%8A%E5%85%B6%E4%BB%96%E6%96%87%E4%BB%B6%E8%A7%A3%E8%AF%BB%E4%B8%BAphp-%EF%BC%8C%E4%BD%86%E6%98%AF%E8%BF%98%E4%BC%9A%E5%BD%B1%E5%93%8D%E5%AE%83%E6%89%80%E5%9C%A8%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8B%E7%9A%84%E6%96%87%E4%BB%B6%EF%BC%88php%EF%BC%89%E4%B8%8E%E8%9A%81%E5%89%91%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">为什么我的.htacess无法发挥作用(把其他文件解读为php)，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A5%E5%B8%B8%E9%9A%8F%E8%AE%B0"><span class="nav-number">1.</span> <span class="nav-text">日常随记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%AB%99%E8%BF%9E%E6%8E%A5%E9%87%8D%E7%BD%AE%E6%B8%85%E7%A9%BA%E7%BC%93%E5%AD%98%E5%92%8CCookie%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">网站连接重置清空缓存和Cookie：</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -439,7 +446,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'try-to-change.github.io',
       owner       : 'try-to-change',
       admin       : ['try-to-change'],
-      id          : 'c989354f65174c173263711ebb0bde57',
+      id          : 'e93295d69c8c4e823927e57ffae75311',
         language: 'zh-CN',
       distractionFreeMode: true
     });
