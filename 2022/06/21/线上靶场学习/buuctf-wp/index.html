@@ -20,19 +20,17 @@
     var CONFIG = {"hostname":"try-to-change.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="日常随记网站连接重置清空缓存和Cookie：今天在打buuctf靶场的时候遇到一个问题，就是当页面跳转时，会显示连接重置，导致我的sql注入结果不能显示，然后一搜，发现可能是浏览器缓存太多导致的，于是我把浏览器的缓存和cookie一同全部清空，然后我再刷新sql 注入那道题的界面，解决了，也显示了我的注入结果，我正要交flag的时候，然后，我发现…..，我的buuctf账号下线，我的csdn账号也">
-<meta property="og:type" content="article">
-<meta property="og:title" content="WEB日常记录学习">
-<meta property="og:url" content="https://try-to-change.github.io/2022/05/31/daily/index.html">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="buuctf靶场wp">
+<meta property="og:url" content="https://try-to-change.github.io/2022/06/21/%E7%BA%BF%E4%B8%8A%E9%9D%B6%E5%9C%BA%E5%AD%A6%E4%B9%A0/buuctf-wp/index.html">
 <meta property="og:site_name" content="try-to-change&#39;s blog">
-<meta property="og:description" content="日常随记网站连接重置清空缓存和Cookie：今天在打buuctf靶场的时候遇到一个问题，就是当页面跳转时，会显示连接重置，导致我的sql注入结果不能显示，然后一搜，发现可能是浏览器缓存太多导致的，于是我把浏览器的缓存和cookie一同全部清空，然后我再刷新sql 注入那道题的界面，解决了，也显示了我的注入结果，我正要交flag的时候，然后，我发现…..，我的buuctf账号下线，我的csdn账号也">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-05-30T16:15:39.751Z">
-<meta property="article:modified_time" content="2022-05-30T16:20:09.694Z">
+<meta property="article:published_time" content="2022-06-21T14:06:24.391Z">
+<meta property="article:modified_time" content="2022-06-21T15:21:08.239Z">
 <meta property="article:author" content="try-to-change">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://try-to-change.github.io/2022/05/31/daily/">
+<link rel="canonical" href="https://try-to-change.github.io/2022/06/21/%E7%BA%BF%E4%B8%8A%E9%9D%B6%E5%9C%BA%E5%AD%A6%E4%B9%A0/buuctf-wp/">
 
 
 <script id="page-configurations">
@@ -45,7 +43,7 @@
   };
 </script>
 
-  <title>WEB日常记录学习 | try-to-change's blog</title>
+  <title>buuctf靶场wp | try-to-change's blog</title>
   
 
 
@@ -151,7 +149,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://try-to-change.github.io/2022/05/31/daily/">
+    <link itemprop="mainEntityOfPage" href="https://try-to-change.github.io/2022/06/21/%E7%BA%BF%E4%B8%8A%E9%9D%B6%E5%9C%BA%E5%AD%A6%E4%B9%A0/buuctf-wp/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.png">
@@ -164,7 +162,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          WEB日常记录学习
+          buuctf靶场wp
         </h1>
 
         <div class="post-meta">
@@ -175,7 +173,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-05-31 00:15:39 / 修改时间：00:20:09" itemprop="dateCreated datePublished" datetime="2022-05-31T00:15:39+08:00">2022-05-31</time>
+              <time title="创建时间：2022-06-21 22:06:24 / 修改时间：23:21:08" itemprop="dateCreated datePublished" datetime="2022-06-21T22:06:24+08:00">2022-06-21</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -183,7 +181,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%9A%8F%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">随记</span></a>
+                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">网络安全学习</span></a>
                 </span>
             </span>
 
@@ -198,12 +196,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="日常随记"><a href="#日常随记" class="headerlink" title="日常随记"></a>日常随记</h1><h2 id="网站连接重置清空缓存和Cookie："><a href="#网站连接重置清空缓存和Cookie：" class="headerlink" title="网站连接重置清空缓存和Cookie："></a>网站连接重置清空缓存和<u><strong>Cookie</strong></u>：</h2><p>今天在打buuctf靶场的时候遇到一个问题，就是当页面跳转时，会显示连接重置，导致我的sql注入结果不能显示，然后一搜，发现可能是浏览器缓存太多导致的，于是我把浏览器的缓存和cookie一同全部清空，然后我再刷新sql 注入那道题的界面，解决了，也显示了我的注入结果，我正要交flag的时候，然后，我发现…..，我的buuctf账号下线，我的csdn账号也下线了</p>
-<p>cookie的作用和重要性就出来了，从这个事情看出，cookie是当我们登录网站的主要身份凭证，当我删除cookie后，我无法证明自己身份时，即网站当前浏览器无该账号当前在该网站的cookie时，网站就会强制下线我的账号</p>
-<p>但是，如果我们在登录网站时（没有退出），点击了其他链接导致自己在该浏览器的该网站的cookie外泄，被有心人获取，那么拥有你的cookie的人，就可以登录你的账号，在你登录的网站上进行修改密码，删除文章，甚至可以转账等等</p>
-<p>所以以后登录了一些重要网站时，比如支付宝，淘宝，博客网站时，别随便点击链接，保证自己的信息安全，不要黑客被黑客黑了，那确实有点难为情了</p>
-<p><code>Cookie实际上是一小段的文本信息。客户端请求服务器，如果服务器需要记录该用户状态，就使用response向客户端浏览器颁发一个Cookie。客户端浏览器会把Cookie保存起来。当浏览器再请求该网站时，浏览器把请求的网址连同该Cookie一同提交给服务器。服务器检查该Cookie，以此来辨认用户状态。服务器还可以根据需要修改Cookie的内容</code></p>
-
+        
     </div>
 
     
@@ -218,12 +211,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/05/28/Web-study/" rel="prev" title="WEB学习">
-      <i class="fa fa-chevron-left"></i> WEB学习
+    <a href="/2022/05/31/%E7%AC%94%E8%AE%B0&%E7%96%91%E9%97%AE/daily/" rel="prev" title="WEB日常记录学习">
+      <i class="fa fa-chevron-left"></i> WEB日常记录学习
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/06/21/underline-learning/" rel="next" title="线下靶场学习记录">
-      线下靶场学习记录 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/06/21/%E7%BA%BF%E4%B8%8A%E9%9D%B6%E5%9C%BA%E5%AD%A6%E4%B9%A0/Gongfang-wp/" rel="next" title="攻防世界靶场wp">
+      攻防世界靶场wp <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -284,7 +277,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A5%E5%B8%B8%E9%9A%8F%E8%AE%B0"><span class="nav-number">1.</span> <span class="nav-text">日常随记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%AB%99%E8%BF%9E%E6%8E%A5%E9%87%8D%E7%BD%AE%E6%B8%85%E7%A9%BA%E7%BC%93%E5%AD%98%E5%92%8CCookie%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">网站连接重置清空缓存和Cookie：</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -443,7 +435,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'try-to-change.github.io',
       owner       : 'try-to-change',
       admin       : ['try-to-change'],
-      id          : 'e93295d69c8c4e823927e57ffae75311',
+      id          : 'a60b9985b6f77e24a05b109c18e92994',
         language: 'zh-CN',
       distractionFreeMode: true
     });

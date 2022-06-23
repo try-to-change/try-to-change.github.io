@@ -2,16 +2,24 @@
 <search>
   <entry>
     <title>疑问记录</title>
-    <url>/2022/06/21/Qusetion/</url>
-    <content><![CDATA[<p><em>以下的问题，有的已经解决，有的还存在，如果有大佬方便讲解指点，或者我的解决内容不完善或有问题，欢迎评论或私信我，不胜感激</em></p>
-<h2 id="dirsearch的原理，有没有局限？"><a href="#dirsearch的原理，有没有局限？" class="headerlink" title="dirsearch的原理，有没有局限？"></a>dirsearch的原理，有没有局限？</h2><h2 id="蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？"><a href="#蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？" class="headerlink" title="蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？"></a>蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？</h2><h2 id="为什么我的-htacess无法发挥作用-把其他文件解读为php-，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？"><a href="#为什么我的-htacess无法发挥作用-把其他文件解读为php-，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？" class="headerlink" title="为什么我的.htacess无法发挥作用(把其他文件解读为php)，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？"></a>为什么我的.htacess无法发挥作用(把其他文件解读为php)，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？</h2>]]></content>
+    <url>/2022/06/21/%E7%AC%94%E8%AE%B0&amp;%E7%96%91%E9%97%AE/Qusetion/</url>
+    <content><![CDATA[<p><em>以下的问题，有的已经解决，有的还存在，如果有大佬方便讲解指点，或者我的解决内容不完善或有问题，欢迎通过邮箱或QQ私信我，不胜感激</em></p>
+<h2 id="1-dirsearch的原理，有没有局限？"><a href="#1-dirsearch的原理，有没有局限？" class="headerlink" title="1.dirsearch的原理，有没有局限？"></a>1.dirsearch的原理，有没有局限？</h2><h2 id="2-蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？"><a href="#2-蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？" class="headerlink" title="2.蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？"></a>2.蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？</h2><h2 id="3-为什么我的-htacess无法发挥作用-把其他文件解读为php-，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？"><a href="#3-为什么我的-htacess无法发挥作用-把其他文件解读为php-，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？" class="headerlink" title="3.为什么我的.htacess无法发挥作用(把其他文件解读为php)，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？"></a>3.为什么我的.htacess无法发挥作用(把其他文件解读为php)，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？</h2>]]></content>
+      <categories>
+        <category>网络安全学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>线下靶场学习记录</title>
+    <url>/2022/06/21/%E7%BA%BF%E4%B8%8B%E9%9D%B6%E5%9C%BA%E5%AD%A6%E4%B9%A0/underline-learning/</url>
+    <content><![CDATA[]]></content>
       <categories>
         <category>网络安全学习</category>
       </categories>
   </entry>
   <entry>
     <title>攻防世界靶场wp</title>
-    <url>/2022/06/21/Gongfang-wp/</url>
+    <url>/2022/06/21/%E7%BA%BF%E4%B8%8A%E9%9D%B6%E5%9C%BA%E5%AD%A6%E4%B9%A0/Gongfang-wp/</url>
     <content><![CDATA[<h1 id="Web新手"><a href="#Web新手" class="headerlink" title="Web新手"></a>Web新手</h1><h2 id="1-view-source"><a href="#1-view-source" class="headerlink" title="1.view_source"></a>1.view_source</h2><h3 id="1-题目描述"><a href="#1-题目描述" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>X老师让小宁同学查看一个网页的源代码，但小宁同学发现鼠标右键好像不管用了</p>
 <h3 id="2-wp"><a href="#2-wp" class="headerlink" title="2)wp"></a>2)wp</h3><p>右键不好用，直接用F12查看</p>
 <p>得到flag</p>
@@ -20,15 +28,15 @@
 <p><code>robots协议也称爬虫协议、爬虫规则等,是指网站可建立一个robots.txt文件来告诉搜索引擎哪些页面可以抓取,哪些页面不能抓取,而搜索引擎则通过读取robots.txt文件来识别这个页面是否允许被抓取</code></p>
 <p>也就是说网站下有一个robots.txt文件，规定了页面抓取规则，于是我们尝试访问<code>http://111.200.241.244:54251/robots.txt</code></p>
 <p>界面显示如下</p>
-<p><img src="C:\Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220621223828917.png" alt="image-20220621223828917"></p>
+<p><img src="/2022/06/21/%E7%BA%BF%E4%B8%8A%E9%9D%B6%E5%9C%BA%E5%AD%A6%E4%B9%A0/Gongfang-wp/image-20220621223828917.png" alt="image-20220621223828917"></p>
 <p>disallow就是不允许抓取的页面，看到flag，就知道我们就要访问这个文件，于是访问<code>http://111.200.241.244:54251/f1ag_1s_h3re.php</code></p>
 <p>得到flag</p>
 <h2 id="3-backup"><a href="#3-backup" class="headerlink" title="3.backup"></a>3.backup</h2><h3 id="1-题目描述-2"><a href="#1-题目描述-2" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>X老师忘记删除备份文件，他派小宁同学去把备份文件找出来,一起来帮小宁同学吧！</p>
 <h3 id="2-wp-2"><a href="#2-wp-2" class="headerlink" title="2)wp"></a>2)wp</h3><p>看到找文件，首先我就想用dirsearch扫一扫</p>
 <p>打开靶场先看到</p>
-<p><img src="C:\Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220621224315003.png" alt="image-20220621224315003"></p>
+<p><img src="/2022/06/21/%E7%BA%BF%E4%B8%8A%E9%9D%B6%E5%9C%BA%E5%AD%A6%E4%B9%A0/Gongfang-wp/Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220621224315003.png" alt="image-20220621224315003"></p>
 <p>于是我先扫一扫，看一看有没有 index.php文件的文件名</p>
-<p><img src="C:\Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220621224424076.png" alt="image-20220621224424076"></p>
+<p><img src="/2022/06/21/%E7%BA%BF%E4%B8%8A%E9%9D%B6%E5%9C%BA%E5%AD%A6%E4%B9%A0/Gongfang-wp/Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220621224424076.png" alt="image-20220621224424076"></p>
 <p>扫完后发现index.php.bak文件，很明显它就是备份文件，我们尝试直接访问它一下<code>http://111.200.241.244:52824/index.php.bak</code></p>
 <p>自动下载好了index.php.bak，用文本打开</p>
 <p>得到flag</p>
@@ -36,14 +44,14 @@
 <h3 id="2）wp"><a href="#2）wp" class="headerlink" title="2）wp"></a>2）wp</h3><p>我的日常随记第一章大概讲了cookie的作用和含义，该题可以不了解也可以完成</p>
 <p>目前我看cookie的有两个方法，一个是burpsuite抓包看，另一个就是用火狐插件Tamper Data，这里我用brup</p>
 <p>我们先用burpsuite抓一个包看看</p>
-<p><img src="C:\Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220621225826671.png" alt="image-20220621225826671"></p>
+<p><img src="/2022/06/21/%E7%BA%BF%E4%B8%8A%E9%9D%B6%E5%9C%BA%E5%AD%A6%E4%B9%A0/Gongfang-wp/Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220621225826671.png" alt="image-20220621225826671"></p>
 <p>发现cookie处提示有个cookie.php文件，访问<code>http://111.200.241.244:49599/cookie.php</code>看看，如下</p>
-<p><img src="C:\Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220621225920306.png" alt="image-20220621225920306"></p>
+<p><img src="/2022/06/21/%E7%BA%BF%E4%B8%8A%E9%9D%B6%E5%9C%BA%E5%AD%A6%E4%B9%A0/Gongfang-wp/Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220621225920306.png" alt="image-20220621225920306"></p>
 <p>于是我们把抓包数据发到repeater里看看response</p>
 <p>得到flag</p>
 <h2 id="5-disabled-button"><a href="#5-disabled-button" class="headerlink" title="5.disabled_button"></a>5.disabled_button</h2><h3 id="1-题目描述-4"><a href="#1-题目描述-4" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>X老师今天上课讲了前端知识，然后给了大家一个不能按的按钮，小宁惊奇地发现这个按钮按不下去，到底怎么才能按下去呢？</p>
 <h3 id="2-wp-3"><a href="#2-wp-3" class="headerlink" title="2)wp"></a>2)wp</h3><p>该题说按这个按钮不能按，那么为什么不能按，看看源码</p>
-<p><img src="C:\Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220621230709669.png" alt="image-20220621230709669"></p>
+<p><img src="/2022/06/21/%E7%BA%BF%E4%B8%8A%E9%9D%B6%E5%9C%BA%E5%AD%A6%E4%B9%A0/Gongfang-wp/Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220621230709669.png" alt="image-20220621230709669"></p>
 <p>看到有个disabled，就是它使得按钮无法被按，所以删去就可以</p>
 <p>打开开发者工具，在查看器里面，把disabled语句删去</p>
 <p>按钮就可以按了，点击</p>
@@ -54,25 +62,13 @@
       </categories>
   </entry>
   <entry>
-    <title>线下靶场学习记录</title>
-    <url>/2022/06/21/underline-learning/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>网络安全学习</category>
-      </categories>
-  </entry>
-  <entry>
     <title>WEB学习</title>
-    <url>/2022/05/28/Web-study/</url>
-    <content><![CDATA[<h1 id="Web安全学习"><a href="#Web安全学习" class="headerlink" title="Web安全学习"></a>Web安全学习</h1><p>–（仅用于个人笔记记录和交流学习，欢迎各路大佬指点）–</p>
-<p>个人感悟分享：</p>
-<p><u><code>学会一样东西，最重要特征就是可以把一个知识点的原理弄懂，造成一次成功注入，要注意分析源码当中导致这个漏洞的问题点，又应该如何改进与防御，</code></u></p>
+    <url>/2022/05/28/%E7%AC%94%E8%AE%B0&amp;%E7%96%91%E9%97%AE/Web-study/</url>
+    <content><![CDATA[<h1 id="Web安全学习"><a href="#Web安全学习" class="headerlink" title="Web安全学习"></a>Web安全学习</h1><p><u><code>学会一样东西，最重要特征就是可以把一个知识点的原理弄懂，造成一次成功注入，要注意分析源码当中导致这个漏洞的问题点，又应该如何改进与防御，</code></u></p>
 <p><u><code>不要急于求成，慢即是快，少即是多</code></u></p>
-<p><u><code>学习最忌讳三天打鱼两天晒网，网安重在持之以恒，不断学习，提高自己的技术和实战能力，切忌自满，新手只是学习的时间晚于我们，并非我们有什么骄傲之处，技术能力是用来实现自己的价值，而非犯罪，或者满足个人虚荣心，虚心求学，在任何地方都是重要的</code></u></p>
-<p><strong>好记性不如烂笔头，一些知识点还是要多写几遍来记住，不是简单ctrl+c/+v就学到了，上机自己练习，打靶场，永远是最有效的方法，一定学会文章和实际操作密切结合，<u>坚持做笔记</u>，不是学计算机就不用像文科一样记笔记，<u>因为人的记忆是有限的，有时，我们总会记不清一些东西，与其漫无目的找，不如在笔记中翻找</u><strong>，光看大佬的wp，不仔细想想为什么自己的方向走不通，为什么大佬会选择这个方法，这是在每次打完靶场，看完文章应该考虑的，</strong>每天都要有所收获，有所进步</strong></p>
-<p><strong>学东西就只当学一次，一次学到最好，不要囫囵吞枣，赶进度似的学习，没有任何意义</strong>，<strong>到后面遇到类似问题的时候，又重新学习一遍浪费时间，又没有效率</strong>，<strong>不要求一次完全学透，但基础的，该牢牢记住的</strong>，第一次的时候就该记好，平时没事再反复记忆，不要一直想着后面要用时再记忆，在实战中，没有时间让你回想，老板或者队友也不可能等着你再学一遍</p>
+<p><u><code>好记性不如烂笔头，一些知识点还是要多写几遍来记住，不是简单ctrl+c/+v就学到了，上机自己练习，打靶场，永远是最有效的方法，一定学会文章和实际操作密切结合，坚持做笔记</code></u></p>
+<p><u><code>学东西就只当学一次，一次学到最好，不要囫囵吞枣</code></u></p>
 <h2 id="基础漏洞知识（一）【原理-危害-防御-利用】"><a href="#基础漏洞知识（一）【原理-危害-防御-利用】" class="headerlink" title="基础漏洞知识（一）【原理+危害+防御+利用】"></a>基础漏洞知识（一）【原理+危害+防御+利用】</h2><p>–转载原文链接：<a href="https://blog.csdn.net/c_programj/article/details/117452836">https://blog.csdn.net/c_programj/article/details/117452836</a></p>
-<p>–部分漏洞介绍取自多个网站，侵改–</p>
 <h3 id="Sql漏洞篇"><a href="#Sql漏洞篇" class="headerlink" title="Sql漏洞篇"></a>Sql漏洞篇</h3><p><a href="#%E4%B8%80%E3%80%81sql">sql漏洞知识点记录</a></p>
 <h4 id="1-sql漏洞原理"><a href="#1-sql漏洞原理" class="headerlink" title="1.sql漏洞原理"></a>1.sql漏洞原理</h4><p>指web应用程序<u><strong>对用户输入的数据合法性没有判断</strong></u>，导致攻击者可以<u><strong>构造不同的sql语句来对数据库数据库的操作</strong></u>。（web应用程序对用户输入的数据没有进行过滤，或者过滤不严，就把sql语句带进数据库中进行查询）。</p>
 <p>Sql注入漏洞的产生需要满足两个条件：<br>①参数用户可控：<u><strong>前端传给后端的参数内容是用户可以控制的</strong></u>。<br>②<u><strong>参数代入数据库查询</strong></u>：传入的参数拼接到sql语句，且带入数据库查询。</p>
@@ -268,7 +264,7 @@
   </entry>
   <entry>
     <title>buuctf靶场wp</title>
-    <url>/2022/06/21/buuctf-wp/</url>
+    <url>/2022/06/21/%E7%BA%BF%E4%B8%8A%E9%9D%B6%E5%9C%BA%E5%AD%A6%E4%B9%A0/buuctf-wp/</url>
     <content><![CDATA[]]></content>
       <categories>
         <category>网络安全学习</category>
@@ -276,7 +272,7 @@
   </entry>
   <entry>
     <title>WEB日常记录学习</title>
-    <url>/2022/05/31/daily/</url>
+    <url>/2022/05/31/%E7%AC%94%E8%AE%B0&amp;%E7%96%91%E9%97%AE/daily/</url>
     <content><![CDATA[<h1 id="日常随记"><a href="#日常随记" class="headerlink" title="日常随记"></a>日常随记</h1><h2 id="网站连接重置清空缓存和Cookie："><a href="#网站连接重置清空缓存和Cookie：" class="headerlink" title="网站连接重置清空缓存和Cookie："></a>网站连接重置清空缓存和<u><strong>Cookie</strong></u>：</h2><p>今天在打buuctf靶场的时候遇到一个问题，就是当页面跳转时，会显示连接重置，导致我的sql注入结果不能显示，然后一搜，发现可能是浏览器缓存太多导致的，于是我把浏览器的缓存和cookie一同全部清空，然后我再刷新sql 注入那道题的界面，解决了，也显示了我的注入结果，我正要交flag的时候，然后，我发现…..，我的buuctf账号下线，我的csdn账号也下线了</p>
 <p>cookie的作用和重要性就出来了，从这个事情看出，cookie是当我们登录网站的主要身份凭证，当我删除cookie后，我无法证明自己身份时，即网站当前浏览器无该账号当前在该网站的cookie时，网站就会强制下线我的账号</p>
 <p>但是，如果我们在登录网站时（没有退出），点击了其他链接导致自己在该浏览器的该网站的cookie外泄，被有心人获取，那么拥有你的cookie的人，就可以登录你的账号，在你登录的网站上进行修改密码，删除文章，甚至可以转账等等</p>
