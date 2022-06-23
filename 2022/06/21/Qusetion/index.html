@@ -23,7 +23,7 @@
   <meta name="description" content="以下的问题，有的已经解决，有的还存在，如果有大佬方便讲解指点，或者我的解决内容不完善或有问题，欢迎通过邮箱或QQ私信我，不胜感激 1.dirsearch的原理，有没有局限？2.蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？3.为什么我的.htacess无法发挥作用(把其他文件解读为php)，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？">
 <meta property="og:type" content="article">
 <meta property="og:title" content="疑问记录">
-<meta property="og:url" content="https://try-to-change.github.io/2022/06/21/%E7%AC%94%E8%AE%B0&%E7%96%91%E9%97%AE/Qusetion/index.html">
+<meta property="og:url" content="https://try-to-change.github.io/2022/06/21/Qusetion/index.html">
 <meta property="og:site_name" content="try-to-change&#39;s blog">
 <meta property="og:description" content="以下的问题，有的已经解决，有的还存在，如果有大佬方便讲解指点，或者我的解决内容不完善或有问题，欢迎通过邮箱或QQ私信我，不胜感激 1.dirsearch的原理，有没有局限？2.蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？3.为什么我的.htacess无法发挥作用(把其他文件解读为php)，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？">
 <meta property="og:locale" content="zh_CN">
@@ -32,7 +32,7 @@
 <meta property="article:author" content="try-to-change">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://try-to-change.github.io/2022/06/21/%E7%AC%94%E8%AE%B0&%E7%96%91%E9%97%AE/Qusetion/">
+<link rel="canonical" href="https://try-to-change.github.io/2022/06/21/Qusetion/">
 
 
 <script id="page-configurations">
@@ -151,7 +151,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://try-to-change.github.io/2022/06/21/%E7%AC%94%E8%AE%B0&%E7%96%91%E9%97%AE/Qusetion/">
+    <link itemprop="mainEntityOfPage" href="https://try-to-change.github.io/2022/06/21/Qusetion/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.png">
@@ -220,8 +220,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/06/21/%E7%BA%BF%E4%B8%8B%E9%9D%B6%E5%9C%BA%E5%AD%A6%E4%B9%A0/underline-learning/" rel="prev" title="线下靶场学习记录">
-      <i class="fa fa-chevron-left"></i> 线下靶场学习记录
+    <a href="/2022/06/21/Gongfang-wp/" rel="prev" title="攻防世界靶场wp">
+      <i class="fa fa-chevron-left"></i> 攻防世界靶场wp
     </a></div>
       <div class="post-nav-item"></div>
     </div>
@@ -236,6 +236,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -429,6 +430,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '9153f63cdb4dae71592a',
+      clientSecret: '593e9954e7fd5e6e46f57b66481f50e1adc53afb',
+      repo        : 'blog-comment',
+      owner       : 'try-to-change',
+      admin       : ['try-to-change'],
+      id          : '1a21e715010ce007843372ed91f9e690',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
   
 <script type="text/javascript" 
