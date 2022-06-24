@@ -333,7 +333,7 @@
       </categories>
   </entry>
   <entry>
-    <title>WEB日常记录学习</title>
+    <title>WEB学习随笔</title>
     <url>/2022/05/31/daily/</url>
     <content><![CDATA[<h1 id="日常随记"><a href="#日常随记" class="headerlink" title="日常随记"></a>日常随记</h1><h2 id="1-网站连接重置，用清空缓存和Cookie解决："><a href="#1-网站连接重置，用清空缓存和Cookie解决：" class="headerlink" title="1.网站连接重置，用清空缓存和Cookie解决："></a>1.网站连接重置，用清空缓存和<u><strong>Cookie</strong></u>解决：</h2><p>今天在打buuctf靶场的时候遇到一个问题，就是当页面跳转时，会显示连接重置，导致我的sql注入结果不能显示，然后百度了一下，发现可能是浏览器缓存太多导致的，于是我把浏览器的缓存和cookie一同全部清空，然后我再刷新sql 注入那道题的界面，解决了，没有再显示连接重置，也显示了我的注入结果，我正要交flag的时候，然后，我发现…..，我的buuctf账号下线，我的csdn账号也下线了</p>
 <p>cookie的作用和重要性就出来了，从这个事情看出，cookie是当我们登录网站的主要身份凭证，当我删除cookie后，我无法证明自己身份时，即网站当前浏览器无该账号当前在该网站的cookie时，网站就会强制下线我的账号</p>
