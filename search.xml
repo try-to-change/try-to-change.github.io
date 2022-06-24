@@ -85,7 +85,14 @@
 <p>于是payload为</p>
 <p><code>http://111.200.241.244:51156/?a=0A&amp;b=1235B</code></p>
 <p>得到flag</p>
-]]></content>
+<h2 id="8-get-post"><a href="#8-get-post" class="headerlink" title="8.get_post"></a>8.get_post</h2><h3 id="1-题目描述-7"><a href="#1-题目描述-7" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>X老师告诉小宁同学HTTP通常使用两种请求方法，你知道是哪两种吗？</p>
+<h3 id="2）wp-1"><a href="#2）wp-1" class="headerlink" title="2）wp"></a>2）wp</h3><p>Get和Post方式是HTTP通常使用两种请求方法</p>
+<p>Get方式直接在url输入?a=1</p>
+<p><a href="http://111.200.241.244:52081/?a=1">http://111.200.241.244:52081/?a=1</a></p>
+<p>Post方式利用火狐插件HackerBar以post方式run b=2</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220624164728734.png" alt="image-20220624164728734"></p>
+<p>得到flag</p>
+<h2 id="9"><a href="#9" class="headerlink" title="9."></a>9.</h2>]]></content>
       <categories>
         <category>网络安全学习</category>
       </categories>
@@ -315,7 +322,24 @@
 <p>但是，如果我们在登录网站时（没有退出），点击了其他链接导致自己在该浏览器的该网站的cookie外泄，被有心人获取，那么拥有你的cookie的人，就可以登录你的账号，在你登录的网站上进行修改密码，删除文章，甚至可以转账等等</p>
 <p>所以以后登录了一些重要网站时，比如支付宝，淘宝，博客网站时，别随便点击链接，保证自己的信息安全，不要黑客被黑客黑了，那确实有点难为情了</p>
 <p><code>Cookie实际上是一小段的文本信息。客户端请求服务器，如果服务器需要记录该用户状态，就使用response向客户端浏览器颁发一个Cookie。客户端浏览器会把Cookie保存起来。当浏览器再请求该网站时，浏览器把请求的网址连同该Cookie一同提交给服务器。服务器检查该Cookie，以此来辨认用户状态。服务器还可以根据需要修改Cookie的内容</code></p>
-<h2 id="2-Burpsuite密码爆破初次使用"><a href="#2-Burpsuite密码爆破初次使用" class="headerlink" title="2.Burpsuite密码爆破初次使用"></a>2.Burpsuite密码爆破初次使用</h2>]]></content>
+<h2 id="2-Burpsuite密码爆破初次使用"><a href="#2-Burpsuite密码爆破初次使用" class="headerlink" title="2.Burpsuite密码爆破初次使用"></a>2.Burpsuite密码爆破初次使用</h2><p>虽然不知道这个网站是那位大佬总结建立的，但还是很感谢，节省很多时间</p>
+<p><a href="https://www.somd5.com/download/dict/">https://www.somd5.com/download/dict/</a></p>
+<p>之前在学习burpsuite的时候，大部分时间在用proxy和request，一直想用intruder，在做功防世界weak_auth这道题时，需要用字典爆破</p>
+<p>于是我便了解了一下这个功能</p>
+<p>在intruder下，主要看payload</p>
+<p>payload Sets主要用Simple list和Brute forcer</p>
+<p>1.Simple list主要就是讲写好的密码列表挨个进行测试，试出可以正确登录的密码</p>
+<p><img src="/2022/05/31/daily/image-20220624165348786.png" alt="image-20220624165348786"></p>
+<p>2.Brute forcer就比较暴力，可以从下图看到Requset count有8,398,080次，因为他是把下面Character set里的所以字符的排列组合都试了，简单粗暴，也非常耗时间</p>
+<p><img src="/2022/05/31/daily/image-20220624165405777.png" alt="image-20220624165405777"></p>
+<p>这里以一次爆破为例，可以看到下方有两个<code>§ §</code>，这两处就是payload输入点，我们输入爆破数据就不断在这两处上传测试</p>
+<p><img src="/2022/05/31/daily/image-20220624170325792.png" alt="image-20220624170325792"></p>
+<p>如果我们已经知道了一处的数据，比如下方的username为admin，就不用用测试数据爆破，只用在password处爆破</p>
+<p><img src="/2022/05/31/daily/image-20220624170753675.png" alt="image-20220624170753675"></p>
+<p>那么爆破完后，如何分辨哪个才是正确密码呢</p>
+<p>主要分析length，如果出现与大部分length不同的密码，那么大概率就是正确密码，比如此处， 123456就是正确密码</p>
+<p><img src="/2022/05/31/daily/image-20220624170455916.png" alt="image-20220624170455916"></p>
+]]></content>
       <categories>
         <category>随记</category>
       </categories>
