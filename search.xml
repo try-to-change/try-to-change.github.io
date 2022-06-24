@@ -20,7 +20,7 @@
 <p><code>robots协议也称爬虫协议、爬虫规则等,是指网站可建立一个robots.txt文件来告诉搜索引擎哪些页面可以抓取,哪些页面不能抓取,而搜索引擎则通过读取robots.txt文件来识别这个页面是否允许被抓取</code></p>
 <p>也就是说网站下有一个robots.txt文件，规定了页面抓取规则，于是我们尝试访问<code>http://111.200.241.244:54251/robots.txt</code></p>
 <p>界面显示如下</p>
-<p><img src="https://github.com/try-to-change/try-to-change.github.io/tree/main/images/image-20220621223828917.png" alt="image-20220621223828917"></p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220621223828917.png" alt="image-20220621223828917"></p>
 <p>disallow就是不允许抓取的页面，看到flag，就知道我们就要访问这个文件，于是访问<code>http://111.200.241.244:54251/f1ag_1s_h3re.php</code></p>
 <p>得到flag</p>
 <h2 id="3-backup"><a href="#3-backup" class="headerlink" title="3.backup"></a>3.backup</h2><h3 id="1-题目描述-2"><a href="#1-题目描述-2" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>X老师忘记删除备份文件，他派小宁同学去把备份文件找出来,一起来帮小宁同学吧！</p>
