@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>攻防世界靶场wp</title>
-    <url>/2022/06/21/Gongfang-wp/</url>
-    <content><![CDATA[<h1 id="Web新手"><a href="#Web新手" class="headerlink" title="Web新手"></a>Web新手</h1><h2 id="1-view-source"><a href="#1-view-source" class="headerlink" title="1.view_source"></a>1.view_source</h2><h3 id="1-题目描述"><a href="#1-题目描述" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>X老师让小宁同学查看一个网页的源代码，但小宁同学发现鼠标右键好像不管用了</p>
-<h3 id="2-wp"><a href="#2-wp" class="headerlink" title="2)wp"></a>2)wp</h3><p>右键不管用，直接用F12查看</p>
-<p>得到flag</p>
+    <title>疑问记录</title>
+    <url>/2022/06/21/Qusetion/</url>
+    <content><![CDATA[<p><u><code>以下的问题，有的已经解决，有的还存在，如果有大佬方便讲解指点，或者我的解决内容不完善或有问题，欢迎通过邮箱或QQ私信我，不胜感激</code></u></p>
 <span id="more"></span>
 
+<h2 id="1-dirsearch的原理，有没有局限？"><a href="#1-dirsearch的原理，有没有局限？" class="headerlink" title="1.dirsearch的原理，有没有局限？"></a>1.dirsearch的原理，有没有局限？</h2><h2 id="2-蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？"><a href="#2-蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？" class="headerlink" title="2.蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？"></a>2.蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？</h2><h2 id="3-为什么我的-htacess无法发挥作用-把其他文件解读为php-，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？"><a href="#3-为什么我的-htacess无法发挥作用-把其他文件解读为php-，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？" class="headerlink" title="3.为什么我的.htacess无法发挥作用(把其他文件解读为php)，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？"></a>3.为什么我的.htacess无法发挥作用(把其他文件解读为php)，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？</h2><h2 id="4-什么是webshell"><a href="#4-什么是webshell" class="headerlink" title="4.什么是webshell?"></a>4.什么是webshell?</h2><h3 id="1）webshell简介"><a href="#1）webshell简介" class="headerlink" title="1）webshell简介"></a>1）webshell简介</h3><p>Webshell是通过服务器开放的端口获取服务器的某些权限。</p>
+<p>webshell又称脚本木马，一般分为大马、小马、一句话木马。</p>
+<p>大马，体积大、功能齐全、能够管理数据库、文件管理、对站点进行快速的信息收集，甚至能够提权。</p>
+<p>小马，一般而言，我们在上传文件的时候，会被限制上传的文件大小或是拦截的情况，那么我通过小马来上传大马，实现我们想要的功能。</p>
+<p>一句话木马，短小精悍、功能强大、隐蔽性好、使用客户端可以快速管理webshell。</p>
+<h3 id="2）原理"><a href="#2）原理" class="headerlink" title="2）原理"></a>2）原理</h3><p>利用<u>文件上传漏洞、SQL注入漏洞、RCE漏洞</u>等，将<u>恶意文件放到web服务器</u>中，也就是常说的”<strong>后门</strong>”，之后可以<u>进行文件管理、数据库管理、远程命令执行、提权等恶意操作</u>。</p>
+]]></content>
+      <categories>
+        <category>网络安全学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>攻防世界靶场wp</title>
+    <url>/2022/06/21/Gongfang-wp/</url>
+    <content><![CDATA[<p><u><code>这个线上靶场感觉很适合入门，而且难度分布也好，很优秀的线上靶场，非常值得仔细学习研究一下</code></u></p>
+<span id="more"></span>
+
+<h1 id="Web新手"><a href="#Web新手" class="headerlink" title="Web新手"></a>Web新手</h1><h2 id="1-view-source"><a href="#1-view-source" class="headerlink" title="1.view_source"></a>1.view_source</h2><h3 id="1-题目描述"><a href="#1-题目描述" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>X老师让小宁同学查看一个网页的源代码，但小宁同学发现鼠标右键好像不管用了</p>
+<h3 id="2-wp"><a href="#2-wp" class="headerlink" title="2)wp"></a>2)wp</h3><p>右键不管用，直接用F12查看</p>
+<p>得到flag</p>
 <h2 id="2-robots"><a href="#2-robots" class="headerlink" title="2.robots"></a>2.robots</h2><h3 id="1-题目描述-1"><a href="#1-题目描述-1" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>X老师上课讲了Robots协议，小宁同学却上课打了瞌睡，赶紧来教教小宁Robots协议是什么吧</p>
 <h3 id="2-wp-1"><a href="#2-wp-1" class="headerlink" title="2)wp"></a>2)wp</h3><p>不清楚robots协议是什么，于是我百度了一下，</p>
 <p><code>robots协议也称爬虫协议、爬虫规则等,是指网站可建立一个robots.txt文件来告诉搜索引擎哪些页面可以抓取,哪些页面不能抓取,而搜索引擎则通过读取robots.txt文件来识别这个页面是否允许被抓取</code></p>
@@ -103,14 +121,14 @@
 <p>send到response后</p>
 <p>得到 flag</p>
 <h2 id="10-webshell"><a href="#10-webshell" class="headerlink" title="10.webshell"></a>10.webshell</h2><h3 id="1-题目描述-9"><a href="#1-题目描述-9" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>小宁百度了php一句话,觉着很有意思,并且把它放在index.php里</p>
-<h3 id="2-wp-7"><a href="#2-wp-7" class="headerlink" title="2)wp"></a>2)wp</h3><p>看到这句代码我一下想到一句话木马，标题也提示这个木马题，根据描述我们知道这个木马在index.php里</p>
+<h3 id="2-wp-7"><a href="#2-wp-7" class="headerlink" title="2)wp"></a>2)wp</h3><p>看到这句代码我一下想到一句话木马，标题<a href="../../../../2022/06/21/Qusetion/">webshell</a>也提示这个木马题，根据描述我们知道这个木马在index.php里</p>
 <p>不了解的可以看看这篇文章</p>
 <p><a href="https://www.jianshu.com/p/6b815f951db3">php一句话木马</a></p>
 <p><img src="/2022/06/21/Gongfang-wp/image-20220624210259387.png" alt="image-20220624210259387"></p>
 <p>用蚁剑连接即可，这里对蚁剑使用方法不赘述，建议自己操作学习</p>
 <p>得到flag</p>
 <h2 id="11-command-execution"><a href="#11-command-execution" class="headerlink" title="11.command_execution"></a>11.command_execution</h2><h3 id="1-题目描述-10"><a href="#1-题目描述-10" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>小宁写了个ping功能,但没有写waf,X老师告诉她这是非常危险的，你知道为什么吗。</p>
-<h3 id="2-wp-8"><a href="#2-wp-8" class="headerlink" title="2)wp"></a>2)wp</h3><p>根据题目名知道这是命令执行漏洞的题，可以先了解一下<a href="Web-study.md">命令执行</a>的知识</p>
+<h3 id="2-wp-8"><a href="#2-wp-8" class="headerlink" title="2)wp"></a>2)wp</h3><p>根据题目名知道这是命令执行漏洞的题，可以先了解一下<a href="../../../../2022/05/28/Web-study">命令执行</a>的知识</p>
 <p>先用自己的IP试一下</p>
 <p><code>120.0.0.1</code></p>
 <p><img src="/2022/06/21/Gongfang-wp/%5Cimage-20220624213448262.png" alt="image-20220624213448262"></p>
@@ -157,18 +175,12 @@
       </categories>
   </entry>
   <entry>
-    <title>疑问记录</title>
-    <url>/2022/06/21/Qusetion/</url>
-    <content><![CDATA[<p><em>以下的问题，有的已经解决，有的还存在，如果有大佬方便讲解指点，或者我的解决内容不完善或有问题，欢迎通过邮箱或QQ私信我，不胜感激</em></p>
+    <title>线下靶场学习记录</title>
+    <url>/2022/06/21/underline-learning/</url>
+    <content><![CDATA[<p><u><code>为什么学习线下靶场，因为线下靶场相比更加容易理解漏洞入门，而且可以看到网站的源码，从而可以锻炼代码审计能力，找出漏洞的成因，尝试自己提出绕过或者防御的措施，这里只记载线下靶场印象深刻、有价值的部分</code></u></p>
 <span id="more"></span>
 
-<h2 id="1-dirsearch的原理，有没有局限？"><a href="#1-dirsearch的原理，有没有局限？" class="headerlink" title="1.dirsearch的原理，有没有局限？"></a>1.dirsearch的原理，有没有局限？</h2><h2 id="2-蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？"><a href="#2-蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？" class="headerlink" title="2.蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？"></a>2.蚁剑的原理，连接文件后，为什么可以直接访问目录下其他文件？</h2><h2 id="3-为什么我的-htacess无法发挥作用-把其他文件解读为php-，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？"><a href="#3-为什么我的-htacess无法发挥作用-把其他文件解读为php-，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？" class="headerlink" title="3.为什么我的.htacess无法发挥作用(把其他文件解读为php)，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？"></a>3.为什么我的.htacess无法发挥作用(把其他文件解读为php)，但是还会影响它所在文件夹下的文件（php）与蚁剑连接？</h2><h2 id="4-什么是脚本木马"><a href="#4-什么是脚本木马" class="headerlink" title="4.什么是脚本木马"></a>4.什么是脚本木马</h2><h3 id="1）webshell简介"><a href="#1）webshell简介" class="headerlink" title="1）webshell简介"></a>1）webshell简介</h3><p>Webshell是通过服务器开放的端口获取服务器的某些权限。</p>
-<p>webshell又称脚本木马，一般分为大马、小马、一句话木马。</p>
-<p>大马，体积大、功能齐全、能够管理数据库、文件管理、对站点进行快速的信息收集，甚至能够提权。</p>
-<p>小马，一般而言，我们在上传文件的时候，会被限制上传的文件大小或是拦截的情况，那么我通过小马来上传大马，实现我们想要的功能。</p>
-<p>一句话木马，短小精悍、功能强大、隐蔽性好、使用客户端可以快速管理webshell。</p>
-<h3 id="2）原理"><a href="#2）原理" class="headerlink" title="2）原理"></a>2）原理</h3><p>利用<u>文件上传漏洞、SQL注入漏洞、RCE漏洞</u>等，将<u>恶意文件放到web服务器</u>中，也就是常说的”<strong>后门</strong>”，之后可以<u>进行文件管理、数据库管理、远程命令执行、提权等恶意操作</u>。</p>
-]]></content>
+<h1 id="SQL-labs"><a href="#SQL-labs" class="headerlink" title="SQL-labs"></a>SQL-labs</h1>]]></content>
       <categories>
         <category>网络安全学习</category>
       </categories>
@@ -176,13 +188,13 @@
   <entry>
     <title>WEB学习</title>
     <url>/2022/05/28/Web-study/</url>
-    <content><![CDATA[<h1 id="Web安全学习"><a href="#Web安全学习" class="headerlink" title="Web安全学习"></a>Web安全学习</h1><p><u><code>学会一样东西，最重要特征就是可以把一个知识点的原理弄懂，造成一次成功注入，要注意分析源码当中导致这个漏洞的问题点，又应该如何改进与防御，</code></u></p>
+    <content><![CDATA[<p><u><code>学会一样东西，最重要特征就是可以把一个知识点的原理弄懂，造成一次成功注入，要注意分析源码当中导致这个漏洞的问题点，又应该如何改进与防御，</code></u></p>
 <p><u><code>不要急于求成，慢即是快，少即是多</code></u></p>
 <p><u><code>好记性不如烂笔头，一些知识点还是要多写几遍来记住，不是简单ctrl+c/+v就学到了，上机自己练习，打靶场，永远是最有效的方法，一定学会文章和实际操作密切结合，坚持做笔记</code></u></p>
 <p><u><code>学东西就只当学一次，一次学到最好，不要囫囵吞枣</code></u></p>
 <span id="more"></span>
 
-<h2 id="基础漏洞知识（一）【原理-危害-防御-利用】"><a href="#基础漏洞知识（一）【原理-危害-防御-利用】" class="headerlink" title="基础漏洞知识（一）【原理+危害+防御+利用】"></a>基础漏洞知识（一）【原理+危害+防御+利用】</h2><p>–转载原文链接：<a href="https://blog.csdn.net/c_programj/article/details/117452836">https://blog.csdn.net/c_programj/article/details/117452836</a></p>
+<h1 id="Web安全学习"><a href="#Web安全学习" class="headerlink" title="Web安全学习"></a>Web安全学习</h1><h2 id="基础漏洞知识（一）【原理-危害-防御-利用】"><a href="#基础漏洞知识（一）【原理-危害-防御-利用】" class="headerlink" title="基础漏洞知识（一）【原理+危害+防御+利用】"></a>基础漏洞知识（一）【原理+危害+防御+利用】</h2><p>–转载原文链接：<a href="https://blog.csdn.net/c_programj/article/details/117452836">https://blog.csdn.net/c_programj/article/details/117452836</a></p>
 <h3 id="Sql漏洞篇"><a href="#Sql漏洞篇" class="headerlink" title="Sql漏洞篇"></a>Sql漏洞篇</h3><p><a href="#%E4%B8%80%E3%80%81sql">sql漏洞知识点记录</a></p>
 <h4 id="1-sql漏洞原理"><a href="#1-sql漏洞原理" class="headerlink" title="1.sql漏洞原理"></a>1.sql漏洞原理</h4><p>指web应用程序<u><strong>对用户输入的数据合法性没有判断</strong></u>，导致攻击者可以<u><strong>构造不同的sql语句来对数据库数据库的操作</strong></u>。（web应用程序对用户输入的数据没有进行过滤，或者过滤不严，就把sql语句带进数据库中进行查询）。</p>
 <p>Sql注入漏洞的产生需要满足两个条件：<br>①参数用户可控：<u><strong>前端传给后端的参数内容是用户可以控制的</strong></u>。<br>②<u><strong>参数代入数据库查询</strong></u>：传入的参数拼接到sql语句，且带入数据库查询。</p>
@@ -380,9 +392,22 @@
       </categories>
   </entry>
   <entry>
+    <title>buuctf靶场wp</title>
+    <url>/2022/06/21/buuctf-wp/</url>
+    <content><![CDATA[<p><u><code>web各个方面选择了一些题目进行学习，感觉还是得第一次就应该看通彻，不应该留有问题，能够明白原理和代码中哪出造成这个的原因，反复嚼剩饭感觉浪费时间</code></u></p>
+<span id="more"></span>
+]]></content>
+      <categories>
+        <category>网络安全学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>WEB学习随笔</title>
     <url>/2022/05/31/daily/</url>
-    <content><![CDATA[<h1 id="日常随记"><a href="#日常随记" class="headerlink" title="日常随记"></a>日常随记</h1><h2 id="1-网站连接重置，用清空缓存和Cookie解决："><a href="#1-网站连接重置，用清空缓存和Cookie解决：" class="headerlink" title="1.网站连接重置，用清空缓存和Cookie解决："></a>1.网站连接重置，用清空缓存和<u><strong>Cookie</strong></u>解决：</h2><p>今天在打buuctf靶场的时候遇到一个问题，就是当页面跳转时，会显示连接重置，导致我的sql注入结果不能显示，然后百度了一下，发现可能是浏览器缓存太多导致的，于是我把浏览器的缓存和cookie一同全部清空，然后我再刷新sql 注入那道题的界面，解决了，没有再显示连接重置，也显示了我的注入结果，我正要交flag的时候，然后，我发现…..，我的buuctf账号下线，我的csdn账号也下线了</p>
+    <content><![CDATA[<p><u><code>随便记一下，记录学习过程中的学习经验，欢迎指正和补充</code></u></p>
+<span id="more"></span>
+
+<h1 id="学习随记"><a href="#学习随记" class="headerlink" title="学习随记"></a>学习随记</h1><h2 id="1-网站连接重置，用清空缓存和Cookie解决："><a href="#1-网站连接重置，用清空缓存和Cookie解决：" class="headerlink" title="1.网站连接重置，用清空缓存和Cookie解决："></a>1.网站连接重置，用清空缓存和<u><strong>Cookie</strong></u>解决：</h2><p>今天在打buuctf靶场的时候遇到一个问题，就是当页面跳转时，会显示连接重置，导致我的sql注入结果不能显示，然后百度了一下，发现可能是浏览器缓存太多导致的，于是我把浏览器的缓存和cookie一同全部清空，然后我再刷新sql 注入那道题的界面，解决了，没有再显示连接重置，也显示了我的注入结果，我正要交flag的时候，然后，我发现…..，我的buuctf账号下线，我的csdn账号也下线了</p>
 <p>cookie的作用和重要性就出来了，从这个事情看出，cookie是当我们登录网站的主要身份凭证，当我删除cookie后，我无法证明自己身份时，即网站当前浏览器无该账号当前在该网站的cookie时，网站就会强制下线我的账号</p>
 <p>但是，如果我们在登录网站时（没有退出），点击了其他链接导致自己在该浏览器的该网站的cookie外泄，被有心人获取，那么拥有你的cookie的人，就可以登录你的账号，在你登录的网站上进行修改密码，删除文章，甚至可以转账等等</p>
 <p>所以以后登录了一些重要网站时，比如支付宝，淘宝，博客网站时，别随便点击链接，保证自己的信息安全，不要黑客被黑客黑了，那确实有点难为情了</p>
@@ -407,24 +432,6 @@
 ]]></content>
       <categories>
         <category>随记</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>buuctf靶场wp</title>
-    <url>/2022/06/21/buuctf-wp/</url>
-    <content><![CDATA[<h1 id="SQL-labs"><a href="#SQL-labs" class="headerlink" title="SQL-labs"></a>SQL-labs</h1><span id="more"></span>
-]]></content>
-      <categories>
-        <category>网络安全学习</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>线下靶场学习记录</title>
-    <url>/2022/06/21/underline-learning/</url>
-    <content><![CDATA[<h1 id="SQL-labs"><a href="#SQL-labs" class="headerlink" title="SQL-labs"></a>SQL-labs</h1><span id="more"></span>
-]]></content>
-      <categories>
-        <category>网络安全学习</category>
       </categories>
   </entry>
 </search>
