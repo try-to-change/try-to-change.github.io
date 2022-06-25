@@ -114,8 +114,9 @@
 <p><code>X-Forwarded-For： 123.123.123.123</code></p>
 <p><img src="/2022/06/21/Gongfang-wp/image-20220624174546646.png" alt="image-20220624174546646"></p>
 <p>send数据后，发现response里出现以下数据，也就是说还有声明是从谷歌界面过来的</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220624173805175.png" alt="image-20220624173805175"></p>
 <p>也就是还要加上</p>
-<p><code>Referer:  https://www.google.com</code><img src="/2022/06/21/Gongfang-wp/image-20220624173805175.png" alt="image-20220624173805175"></p>
+<p><code>Referer:  https://www.google.com</code></p>
 <p>最后如下</p>
 <p><img src="/2022/06/21/Gongfang-wp/image-20220624174117936.png" alt="image-20220624174117936"></p>
 <p>send到response后</p>
