@@ -3,7 +3,7 @@
   <entry>
     <title>比赛题目wp&amp;感悟记录</title>
     <url>/2022/06/26/Game-wp/</url>
-    <content><![CDATA[<p>以下是本人凑人数参加的各类比赛的题目做题经历，在此记录学习过程，望大佬指点修正</p>
+    <content><![CDATA[<p><u><code>以下是本人凑人数参加的各类比赛的题目做题经历，在此记录学习过程，望大佬指点修正</code></u></p>
 <span id="more"></span>]]></content>
       <categories>
         <category>网络安全学习</category>
@@ -241,8 +241,18 @@
 <p><a href="https://www.freebuf.com/column/187845.html">https://www.freebuf.com/column/187845.html</a></p>
 <p>然后再做这道题</p>
 <h2 id="6-Web-php-unserialize"><a href="#6-Web-php-unserialize" class="headerlink" title="6.Web_php_unserialize"></a>6.Web_php_unserialize</h2><h2 id="7-php-rce"><a href="#7-php-rce" class="headerlink" title="7.php_rce"></a>7.php_rce</h2><h2 id="8-Web-php-include"><a href="#8-Web-php-include" class="headerlink" title="8.Web_php_include"></a>8.Web_php_include</h2><h3 id="1-题目描述-16"><a href="#1-题目描述-16" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
-<h3 id="2-wp-13"><a href="#2-wp-13" class="headerlink" title="2)wp"></a>2)wp</h3><p>这道题先了解一些php伪协议</p>
+<h3 id="2-wp-13"><a href="#2-wp-13" class="headerlink" title="2)wp"></a>2)wp</h3><p>这道题先了解<a href="../../../../2022/05/28/Web-study">php伪协议</a></p>
 <p>看名字很清楚是到文件包含的题目</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">show_source</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$_GET</span>[<span class="string">&#x27;hello&#x27;</span>];</span><br><span class="line"><span class="variable">$page</span>=<span class="variable">$_GET</span>[<span class="string">&#x27;page&#x27;</span>];</span><br><span class="line"><span class="keyword">while</span> (<span class="title function_ invoke__">strstr</span>(<span class="variable">$page</span>, <span class="string">&quot;php://&quot;</span>)) &#123;  <span class="variable">$page</span>=<span class="title function_ invoke__">str_replace</span>(<span class="string">&quot;php://&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="variable">$page</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">include</span>(<span class="variable">$page</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>先分析一下函数</p>
+<p><code>strstr()：</code><br><code>定义和用法：</code><br><code>搜索字符串在另一个字符串中是否存在，如果是，返回字符串及剩余部分，否则返回false。</code><br><code>区分大小写，stristr()函数不区分大小写</code><br><code>语法：</code><br><code>strstr(string,search,before_search)</code><br><code>string:必需，被搜索的字符串</code><br><code>search:必需，要搜索的字符串，若是数字，则搜索对应的ASCII值的字符</code><br><code>before_search：可选，默认为“false”，若为true,将返回search参数第一次出现之前的字符串部分</code></p>
+<p><code>str_replace():</code><br><code>定义和用法：</code><br><code>以其它字符替换字符串中的一些字符（区分大小写）</code><br><code>语法：</code><br><code>str_replace(find,replace,string,count)</code><br><code>find,必需，要查找的值</code><br><code>replace，必需，要替换的值</code><br><code>string，必需，被搜索的字符串</code><br><code>count，可选，替换次数</code></p>
+<p>也就是说，如果page=的内容里有php://就会被替换为空，也就是过滤</p>
+<p>但是看源码我们知道，它只过滤了小写，所以可以用大小写绕过，这里用的php://input</p>
+<p>*这道题好像包括php://input，有5种方法，建议看看这篇文章<a href="https://blog.csdn.net/yingyugo/article/details/109783035?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1-109783035-blog-122854291.pc_relevant_paycolumn_v3&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1-109783035-blog-122854291.pc_relevant_paycolumn_v3&utm_relevant_index=1">Web_php_include总结五种解法大同小异</a></p>
+<p><code>http://111.200.241.244:59492/?page=PHP://input</code></p>
+<p>php://input读取POST数据，</p>
 <h2 id="9"><a href="#9" class="headerlink" title="9."></a>9.</h2>]]></content>
       <categories>
         <category>网络安全学习</category>
@@ -347,7 +357,8 @@
 <h4 id="堆叠注入"><a href="#堆叠注入" class="headerlink" title="堆叠注入"></a>堆叠注入</h4><h5 id="1-堆叠注入定义"><a href="#1-堆叠注入定义" class="headerlink" title="1.堆叠注入定义"></a>1.堆叠注入定义</h5><p>   Stacked  injections(堆叠注入)从名词的含义就可以看到应该是一堆 sql 语句(多条)一起执行。而在真实的运用中也是这样的, 我们知道在  mysql 中, 主要是命令行中, 每一条语句结尾加; 表示语句结束。这样我们就想到了是不是可以多句一起使用。这个叫做 stacked  injection。</p>
 <h5 id="2-堆叠注入原理"><a href="#2-堆叠注入原理" class="headerlink" title="2.堆叠注入原理"></a>2.堆叠注入原理</h5><p>   在SQL中，分号（;）是用来表示一条sql语句的结束。<u>试想一下我们在 ; 结束一个sql语句后继续构造下一条语句，会不会一起执行？因此这个想法也就造就了堆叠注入</u>。而union injection（联合注入）也是将两条语句合并在一起，两者之间有什么区别么？区别就在于<u>union 或者union all执行的语句类型是有限的，可以用来执行查询语句</u>，而<u>堆叠注入可以执行的是任意的语句</u>。例如以下这个例子。用户输入：<code>1; DELETE FROM products</code>服务器端生成的sql语句为：  <code>Select * from products where productid=1;DELETE FROM products</code>当执行查询后，<u><strong>第一条显示查询信息</strong></u>，<u><strong>第二条则将整个表进行删除</strong></u>。</p>
 <h5 id="3-堆叠注入的局限性"><a href="#3-堆叠注入的局限性" class="headerlink" title="3.堆叠注入的局限性"></a>3.堆叠注入的局限性</h5><p>堆叠注入的局限性在于并不是每一个环境下都可以执行，可能受到API或者数据库引擎不支持的限制，当然了权限不足也可以解释为什么攻击者无法修改数据或者调用一些程序。</p>
-<h5 id="下面我以一道题为例解析堆叠注入，该题来自于-buuctf的-强网杯-2019-随便注"><a href="#下面我以一道题为例解析堆叠注入，该题来自于-buuctf的-强网杯-2019-随便注" class="headerlink" title="下面我以一道题为例解析堆叠注入，该题来自于 buuctf的[强网杯 2019]随便注 "></a>下面我以一道题为例解析堆叠注入，该题来自于<a href="../../../../buuctf-wp"> buuctf的[强网杯 2019]随便注 </a></h5><h4 id="1-几个常用函数"><a href="#1-几个常用函数" class="headerlink" title="1.几个常用函数"></a>1.几个常用函数</h4><p>1.<code>version()</code>——MySQL 版本 </p>
+<p><strong>下面我以一道题为例解析堆叠注入，该题来自于<a href="../../../../buuctf-wp"> buuctf的[强网杯 2019]随便注 </a></strong></p>
+<h4 id="1-几个常用函数"><a href="#1-几个常用函数" class="headerlink" title="1.几个常用函数"></a>1.几个常用函数</h4><p>1.<code>version()</code>——MySQL 版本 </p>
 <p>2.<code>user()</code>——数据库用户名 </p>
 <p>3.<code>database()</code>——数据库名 </p>
 <p>4.<code>@@datadir</code>——数据库路径 </p>
