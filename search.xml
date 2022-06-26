@@ -170,7 +170,65 @@
 <p>注：</p>
 <figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">(<span class="number">1</span>)<span class="built_in">split</span>() 方法用于把一个字符串分割成字符串数组</span><br><span class="line">语法：<span class="built_in">string</span>.<span class="built_in">split</span>(separator,<span class="built_in">limit</span>)</span><br><span class="line">参数                 描述</span><br><span class="line">separator        可选。字符串或正则表达式，从该参数指定的地方分割 <span class="built_in">string</span> Object。比如此题以逗号分割成字符串数组</span><br><span class="line"><span class="built_in">limit</span>            可选。该参数可指定返回的数组的最大长度。如果设置了该参数，返回的子串不会多于这个参数指定的数组。如果没有设置该参数，整个字符串都会被分割，不考虑它的长度。</span><br><span class="line">举例：str=<span class="string">&quot;a,b,c,d,e,f,g&quot;</span>;</span><br><span class="line"><span class="built_in">var</span> 1st = str.<span class="built_in">split</span>(<span class="string">&quot;,&quot;</span>,<span class="number">3</span>);   对str以逗号进行分割，分割后的字符串数组内的值最多只能有<span class="number">3</span>个，结果就是1st = [a,b,c]</span><br><span class="line"></span><br><span class="line">(<span class="number">2</span>)<span class="keyword">for</span> 循环的语法如下：</span><br><span class="line"><span class="keyword">for</span> (语句 <span class="number">1</span>; 语句 <span class="number">2</span>; 语句 <span class="number">3</span>) &#123;</span><br><span class="line">     要执行的代码块</span><br><span class="line">&#125;</span><br><span class="line">语句 <span class="number">1</span> 在循环（代码块）开始之前执行。</span><br><span class="line">语句 <span class="number">2</span> 定义运行循环（代码块）的条件。</span><br><span class="line">语句 <span class="number">3</span> 会在循环（代码块）每次被执行后执行。</span><br><span class="line"></span><br><span class="line">(<span class="number">3</span>)fromCharCode() 可接受一个指定的 Unicode 值，然后返回一个字符串。</span><br><span class="line">语法：String.fromCharCode(n1, n2, ..., nX)</span><br><span class="line">参数                 描述</span><br><span class="line">n1, n2, ..., nX     必需。一个或多个 Unicode 值，即要创建的字符串中的字符的 Unicode 编码。</span><br><span class="line"></span><br><span class="line">(<span class="number">4</span>)<span class="built_in">prompt</span>()方法用于显示可提示用户进行输入的对话框。</span><br><span class="line">这个方法返回用户输入的字符串</span><br><span class="line">语法：<span class="built_in">prompt</span>(msg,defaultText)</span><br><span class="line">参数                描述</span><br><span class="line">msg                可选。要在对话框中显示的纯文本（而不是 HTML 格式的文本）就是弹框显示文本。</span><br><span class="line">defaultText        可选。默认的输入文本，你输入什么弹框一开始出现里面的输入框就会默认显示你这个文本。</span><br><span class="line"></span><br><span class="line">(<span class="number">5</span>)<span class="built_in">var</span> i,j,k,l=<span class="number">0</span>,m,n,o,p = <span class="string">&quot;&quot;</span>;</span><br><span class="line">这个表示声明变量i,j,k,l,m,n,o,p，只有l和p两个变量被赋值了，其它的变量都是不带值的，不带有值的变量，它的值将是undefined，后续代码中可以给它赋值。</span><br><span class="line"></span><br><span class="line">(<span class="number">6</span>)<span class="built_in">length</span></span><br><span class="line"><span class="built_in">length</span> 属性可设置或返回数组中元素的数目。</span><br></pre></td></tr></table></figure>
 
-<h1 id="Web进阶"><a href="#Web进阶" class="headerlink" title="Web进阶"></a>Web进阶</h1>]]></content>
+<h1 id="Web进阶"><a href="#Web进阶" class="headerlink" title="Web进阶"></a>Web进阶</h1><h2 id="1-baby-web"><a href="#1-baby-web" class="headerlink" title="1.baby_web"></a>1.baby_web</h2><h3 id="1-题目描述-11"><a href="#1-题目描述-11" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>想想初始页面是哪个</p>
+<h3 id="2-wp-9"><a href="#2-wp-9" class="headerlink" title="2)wp"></a>2)wp</h3><p> 开始界面如下</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220625162533345.png" alt="image-20220625162533345"></p>
+<p>没有头绪，但是描述里有首页，再根据url知道这是个php网站</p>
+<p>php网站首页文件就是index.php</p>
+<p><code>index.php文件是一个php网站首页文件，index是普遍意义上的“首页”，也就是你输入一个域名后会打开一个页面，基本上就是index.xxxx（基本上首页都不会把index.xxxx显示在url里，但也不绝对）</code></p>
+<p>试试<code>111.200.241.244:59074/index.php</code></p>
+<p>结果又会到1.php，url又变成<code>111.200.241.244:59074/1.php</code></p>
+<p>F12打开查看网络</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220625171731934.png" alt="image-20220625171731934"></p>
+<p><code>补充：</code></p>
+<p> <code>index.php的状态是302什么意思？</code></p>
+<p><code>302 Found，原始描述短语为 Moved Temporarily(临时搬家） ，是[HTTP协议](https://baike.baidu.com/item/HTTP协议)中的一个状态码(Status Code)。可以简单的理解为该资源原本确实存在，但已经被**临时**改变了位置；换而言之，就是请求的资源暂时驻留在不同的URI下，故而除非特别指定了缓存头部指示，该状态码不可缓存。</code></p>
+<p>发现确实是跳转到了index.php但为什么又回到1.php</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220625171819943.png" alt="image-20220625171819943"></p>
+<p>可以看到location:1.php，这就是为什么无法直接访问index.php的原因，但flag已经得到</p>
+<p>得到flag</p>
+<hr>
+<p>如果用burpsuite查看<code>111.200.241.244:59074/index.php</code>，只能看到Flag is hidden!，也算是提示</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220625172122211.png" alt="image-20220625172122211"></p>
+<h2 id="2-ics-06"><a href="#2-ics-06" class="headerlink" title="2.ics-06"></a>2.ics-06</h2><h3 id="1-题目描述-12"><a href="#1-题目描述-12" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>云平台报表中心收集了设备管理基础服务的数据，但是数据被删除了，只有一处留下了入侵者的痕迹。</p>
+<h3 id="2-wp-10"><a href="#2-wp-10" class="headerlink" title="2)wp"></a>2)wp</h3><p>打开界面有些吓人</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220626084029917.png" alt="image-20220626084029917"></p>
+<p>但只有报表中心能打开</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220626084102777.png" alt="image-20220626084102777"></p>
+<p>看到url就有思路了，我们可以尝试id爆破</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220626084318243.png" alt="image-20220626084318243"></p>
+<p>利用Numbers方式，从1到5000，发现2333处成功爆破</p>
+<p>得到flag</p>
+<h2 id="3-Training-WWW-Robots"><a href="#3-Training-WWW-Robots" class="headerlink" title="3.Training-WWW-Robots"></a>3.Training-WWW-Robots</h2><h3 id="1-题目描述-13"><a href="#1-题目描述-13" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2）wp-3"><a href="#2）wp-3" class="headerlink" title="2）wp"></a>2）wp</h3><p>这道题和上面新手区的题类似</p>
+<p>先访问<code>http://111.200.241.244:51820/robots.txt</code>得到php文件名</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220626090904204.png" alt="image-20220626090904204"></p>
+<p>于是访问<code>http://111.200.241.244:51820/fl0g.php/robots.txt</code></p>
+<p>得到flag</p>
+<h2 id="4-PHP2"><a href="#4-PHP2" class="headerlink" title="4.PHP2"></a>4.PHP2</h2><h3 id="1-题目描述-14"><a href="#1-题目描述-14" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2-wp-11"><a href="#2-wp-11" class="headerlink" title="2)wp"></a>2)wp</h3><p>这句话的意思是”你能证明这个网站存在吗“</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220626104943938.png" alt="image-20220626104943938"></p>
+<p>没有思路，抓包，和御剑、dirsearch都没又得到想要的结果</p>
+<p>没有办法，搜了一下大佬们的wp</p>
+<p>了解到了一个新的知识点phps</p>
+<p><code>phps即为PHP Source：phps文件就是php的源代码文件，通常用于提供给用户（访问者）查看php代码，因为用户无法直接通过Web浏览器看到php文件的内容，所以需要用phps文件代替。其实，只要不用php等已经在服务器中注册过的MIME类型为文件即可，但为了国际通用，所以才用了phps文件类型。</code></p>
+<p>访问<code>http://111.200.241.244:51703/index.phps</code>，得到源码内容</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220626105416606.png" alt="image-20220626105416606"></p>
+<p>右键查看源码</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(<span class="string">&quot;admin&quot;</span>===<span class="variable">$_GET</span>[id]) &#123;</span><br><span class="line">  <span class="keyword">echo</span>(<span class="string">&quot;&lt;p&gt;not allowed!&lt;/p&gt;&quot;</span>);</span><br><span class="line">  <span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$_GET</span>[id] = <span class="title function_ invoke__">urldecode</span>(<span class="variable">$_GET</span>[id]);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$_GET</span>[id] == <span class="string">&quot;admin&quot;</span>)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&lt;p&gt;Access granted!&lt;/p&gt;&quot;</span>;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;&lt;p&gt;Key: xxxxxxx &lt;/p&gt;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">Can you anthenticate to this website?</span><br></pre></td></tr></table></figure>
+
+<p>根据代码知道，当id=admin，输出not allowed!，但是想要输出flag</p>
+<p>就需要注意这句语句<code>$_GET[id] = urldecode($_GET[id]);</code></p>
+<p><code>urldecode:本函数对字符串进行URL解码。例如通过urlencode编码后的字符串，可通过UrlDecode进行解码。对Url路径加码的函数是UrlEncode  用法相反，和UrlDecode是一致对应的</code></p>
+<p>这里我们就清楚了，需要把admin进行url编码，但是只对其进行一次编码，要知道网站本身对url编码就有解码的能力，也就是在urldecode函数执行之前，网站已经把编码解码为admin，从而只输出not allowed!</p>
+<p>所以，这里需要对admin进行两次编码，第一被网站解码，绕过第一个if，然后在urldecode函数里进行第二次解码，变成admin，从而输出Key(flag)</p>
+<p>于是访问<code>http://111.200.241.244:51703/index.php?id=%25%36%31dmin</code></p>
+<p>这里的%25%36%31是字母a的二次url编码由a第一次编码结果%61再次编码而成</p>
+<p>–为了payload简洁，一般只编码一个字母</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220626110642311.png" alt="image-20220626110642311"></p>
+<p>得到flag</p>
+<p>5.</p>
+]]></content>
       <categories>
         <category>网络安全学习</category>
       </categories>
@@ -419,9 +477,9 @@
 <p>于是我便了解了一下这个功能</p>
 <p>在intruder下，主要看payload</p>
 <p>payload Sets主要用Simple list和Brute forcer</p>
-<p>1.Simple list主要就是讲写好的密码列表挨个进行测试，试出可以正确登录的密码</p>
+<h3 id="1-Simple-list"><a href="#1-Simple-list" class="headerlink" title="1.Simple list"></a>1.Simple list</h3><p>主要就是讲写好的密码列表挨个进行测试，试出可以正确登录的密码</p>
 <p><img src="/2022/05/31/daily/image-20220624165348786.png" alt="image-20220624165348786"></p>
-<p>2.Brute forcer就比较暴力，可以从下图看到Requset count有8,398,080次，因为他是把下面Character set里的所以字符的排列组合都试了，简单粗暴，也非常耗时间</p>
+<h3 id="2-Brute-forcer"><a href="#2-Brute-forcer" class="headerlink" title="2.Brute forcer"></a>2.Brute forcer</h3><p>就比较暴力，可以从下图看到Requset count有8,398,080次，因为他是把下面Character set里的所以字符的排列组合都试了，简单粗暴，也非常耗时间</p>
 <p><img src="/2022/05/31/daily/image-20220624165405777.png" alt="image-20220624165405777"></p>
 <p>这里以一次爆破为例，可以看到下方有两个<code>§ §</code>，这两处就是payload输入点，我们输入爆破数据就不断在这两处上传测试</p>
 <p><img src="/2022/05/31/daily/image-20220624170325792.png" alt="image-20220624170325792"></p>
@@ -430,6 +488,8 @@
 <p>那么爆破完后，如何分辨哪个才是正确密码呢</p>
 <p>主要分析length，如果出现与大部分length不同的密码，那么大概率就是正确密码，比如此处， 123456就是正确密码</p>
 <p><img src="/2022/05/31/daily/image-20220624170455916.png" alt="image-20220624170455916"></p>
+<h3 id="3-补充一个Numbers"><a href="#3-补充一个Numbers" class="headerlink" title="3.补充一个Numbers"></a>3.补充一个Numbers</h3><p><img src="/2022/05/31/daily/image-20220626083426611.png" alt="image-20220626083426611"></p>
+<p>纯数字型爆破，From是开始数字，To是结束数字，Step是间隔多少数字爆破一次</p>
 ]]></content>
       <categories>
         <category>随记</category>
