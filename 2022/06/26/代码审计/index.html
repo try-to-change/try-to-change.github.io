@@ -20,28 +20,32 @@
     var CONFIG = {"hostname":"try-to-change.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="try-to-change&#39;s blog">
-<meta property="og:url" content="https://try-to-change.github.io/index.html">
+  <meta name="description" content="代码审计-常见php威胁函数（上）文章来自成都知道创宇 1.常见php回调函数，可调用其他命令&#x2F;代码执行函数call_user_func() call_user_func_array() create_function() array_walk() array_map() array_filter() usort() ob_start() 可变函数$_GET‘a’ 2.常见php可执行系统命令的函">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代码审计知识点记录">
+<meta property="og:url" content="https://try-to-change.github.io/2022/06/26/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/index.html">
 <meta property="og:site_name" content="try-to-change&#39;s blog">
+<meta property="og:description" content="代码审计-常见php威胁函数（上）文章来自成都知道创宇 1.常见php回调函数，可调用其他命令&#x2F;代码执行函数call_user_func() call_user_func_array() create_function() array_walk() array_map() array_filter() usort() ob_start() 可变函数$_GET‘a’ 2.常见php可执行系统命令的函">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-06-26T14:34:42.604Z">
+<meta property="article:modified_time" content="2022-06-26T15:00:21.532Z">
 <meta property="article:author" content="try-to-change">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://try-to-change.github.io/">
+<link rel="canonical" href="https://try-to-change.github.io/2022/06/26/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>try-to-change's blog</title>
+  <title>代码审计知识点记录 | try-to-change's blog</title>
   
 
 
@@ -140,411 +144,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://try-to-change.github.io/2022/06/26/Game-wp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.png">
-      <meta itemprop="name" content="try-to-change">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="try-to-change's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/06/26/Game-wp/" class="post-title-link" itemprop="url">比赛题目wp&感悟记录</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-06-26 15:05:24 / 修改时间：17:47:09" itemprop="dateCreated datePublished" datetime="2022-06-26T15:05:24+08:00">2022-06-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">网络安全学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
 
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><u><code>以下是本人凑人数参加的各类比赛的题目做题经历，在此记录学习过程，望大佬指点修正</code></u></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/06/26/Game-wp/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://try-to-change.github.io/2022/06/21/Qusetion/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.png">
-      <meta itemprop="name" content="try-to-change">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="try-to-change's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/06/21/Qusetion/" class="post-title-link" itemprop="url">疑问记录</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-06-21 22:18:30" itemprop="dateCreated datePublished" datetime="2022-06-21T22:18:30+08:00">2022-06-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-24 23:37:51" itemprop="dateModified" datetime="2022-06-24T23:37:51+08:00">2022-06-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">网络安全学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><u><code>以下的问题，有的已经解决，有的还存在，如果有大佬方便讲解指点，或者我的解决内容不完善或有问题，欢迎通过邮箱或QQ私信我，不胜感激</code></u></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/06/21/Qusetion/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://try-to-change.github.io/2022/06/21/Gongfang-wp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.png">
-      <meta itemprop="name" content="try-to-change">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="try-to-change's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/06/21/Gongfang-wp/" class="post-title-link" itemprop="url">攻防世界靶场wp</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-06-21 22:06:24" itemprop="dateCreated datePublished" datetime="2022-06-21T22:06:24+08:00">2022-06-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-26 22:34:18" itemprop="dateModified" datetime="2022-06-26T22:34:18+08:00">2022-06-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">网络安全学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><u><code>这个线上靶场感觉很适合入门，而且难度分布也好，很优秀的线上靶场，非常值得仔细学习研究一下</code></u></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/06/21/Gongfang-wp/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://try-to-change.github.io/2022/06/21/underline-learning/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.png">
-      <meta itemprop="name" content="try-to-change">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="try-to-change's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/06/21/underline-learning/" class="post-title-link" itemprop="url">线下靶场学习记录</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-06-21 22:06:24" itemprop="dateCreated datePublished" datetime="2022-06-21T22:06:24+08:00">2022-06-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-24 23:31:56" itemprop="dateModified" datetime="2022-06-24T23:31:56+08:00">2022-06-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">网络安全学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><u><code>为什么学习线下靶场，因为线下靶场相比更加容易理解漏洞入门，而且可以看到网站的源码，从而可以锻炼代码审计能力，找出漏洞的成因，尝试自己提出绕过或者防御的措施，这里只记载线下靶场印象深刻、有价值的部分</code></u></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/06/21/underline-learning/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://try-to-change.github.io/2022/05/28/Web-study/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.png">
-      <meta itemprop="name" content="try-to-change">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="try-to-change's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/28/Web-study/" class="post-title-link" itemprop="url">WEB学习</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-05-28 16:01:29" itemprop="dateCreated datePublished" datetime="2022-05-28T16:01:29+08:00">2022-05-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-26 17:46:33" itemprop="dateModified" datetime="2022-06-26T17:46:33+08:00">2022-06-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">网络安全学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><u><code>学会一样东西，最重要特征就是可以把一个知识点的原理弄懂，造成一次成功注入，要注意分析源码当中导致这个漏洞的问题点，又应该如何改进与防御，</code></u></p>
-<p><u><code>不要急于求成，慢即是快，少即是多</code></u></p>
-<p><u><code>好记性不如烂笔头，一些知识点还是要多写几遍来记住，不是简单ctrl+c/+v就学到了，上机自己练习，打靶场，永远是最有效的方法，一定学会文章和实际操作密切结合，坚持做笔记</code></u></p>
-<p><u><code>学东西就只当学一次，一次学到最好，不要囫囵吞枣</code></u></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/05/28/Web-study/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -560,10 +163,9 @@
       <meta itemprop="name" content="try-to-change's blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/06/26/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="post-title-link" itemprop="url">代码审计知识点记录</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          代码审计知识点记录
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -596,7 +198,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="代码审计-常见php威胁函数（上）"><a href="#代码审计-常见php威胁函数（上）" class="headerlink" title="代码审计-常见php威胁函数（上）"></a>代码审计-常见php威胁函数（上）</h1><p>文章来自<a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1715285716686081123&wfr=spider&for=pc">成都知道创宇</a></p>
+        <h1 id="代码审计-常见php威胁函数（上）"><a href="#代码审计-常见php威胁函数（上）" class="headerlink" title="代码审计-常见php威胁函数（上）"></a>代码审计-常见php威胁函数（上）</h1><p>文章来自<a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1715285716686081123&wfr=spider&for=pc">成都知道创宇</a></p>
 <h2 id="1-常见php回调函数，可调用其他命令-代码执行函数"><a href="#1-常见php回调函数，可调用其他命令-代码执行函数" class="headerlink" title="1.常见php回调函数，可调用其他命令/代码执行函数"></a>1.常见php回调函数，可调用其他命令/代码执行函数</h2><p>call_user_func()</p>
 <p>call_user_func_array()</p>
 <p>create_function()</p>
@@ -667,189 +269,37 @@
 <h2 id="五、php伪协议【web-study已记】"><a href="#五、php伪协议【web-study已记】" class="headerlink" title="五、php伪协议【web-study已记】"></a>五、<a href="../../../../Web-study">php伪协议【web-study已记】</a></h2><h2 id="六、文件操作类威胁函数"><a href="#六、文件操作类威胁函数" class="headerlink" title="六、文件操作类威胁函数"></a>六、文件操作类威胁函数</h2><figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span><span class="selector-class">.file_put_contents</span></span><br><span class="line"></span><br><span class="line"><span class="number">2</span><span class="selector-class">.file_put_contents</span>($file, $string);</span><br><span class="line"></span><br><span class="line"><span class="number">3</span><span class="selector-class">.copy</span> <span class="built_in">highlight_file</span>()</span><br><span class="line"></span><br><span class="line"><span class="number">4</span><span class="selector-class">.fopen</span>()</span><br><span class="line"></span><br><span class="line"><span class="number">5</span><span class="selector-class">.read</span> <span class="built_in">file</span>()</span><br><span class="line"></span><br><span class="line"><span class="number">6</span><span class="selector-class">.fread</span>()</span><br><span class="line"></span><br><span class="line"><span class="number">7</span><span class="selector-class">.fgetss</span>()</span><br><span class="line"></span><br><span class="line"><span class="number">8</span><span class="selector-class">.fgets</span>()</span><br><span class="line"></span><br><span class="line"><span class="number">9</span><span class="selector-class">.parse_ini_file</span>()</span><br><span class="line"></span><br><span class="line"><span class="number">10</span><span class="selector-class">.show_source</span>()</span><br><span class="line"></span><br><span class="line"><span class="number">11</span><span class="selector-class">.file</span>()</span><br></pre></td></tr></table></figure>
 
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://try-to-change.github.io/2022/06/21/buuctf-wp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.png">
-      <meta itemprop="name" content="try-to-change">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="try-to-change's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/06/21/buuctf-wp/" class="post-title-link" itemprop="url">buuctf靶场wp</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-06-21 22:06:24" itemprop="dateCreated datePublished" datetime="2022-06-21T22:06:24+08:00">2022-06-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-24 23:31:29" itemprop="dateModified" datetime="2022-06-24T23:31:29+08:00">2022-06-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">网络安全学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><u><code>web各个方面选择了一些题目进行学习，感觉还是得第一次就应该看通彻，不应该留有问题，能够明白原理和代码中哪出造成这个的原因，反复嚼剩饭感觉浪费时间</code></u></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/06/21/buuctf-wp/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://try-to-change.github.io/2022/05/31/daily/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.png">
-      <meta itemprop="name" content="try-to-change">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="try-to-change's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/31/daily/" class="post-title-link" itemprop="url">WEB学习随笔</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-05-31 00:15:39" itemprop="dateCreated datePublished" datetime="2022-05-31T00:15:39+08:00">2022-05-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-26 08:36:45" itemprop="dateModified" datetime="2022-06-26T08:36:45+08:00">2022-06-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%9A%8F%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">随记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><u><code>随便记一下，记录学习过程中的学习经验，欢迎指正和补充</code></u></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/05/31/daily/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/26/Game-wp/" rel="prev" title="比赛题目wp&感悟记录">
+      <i class="fa fa-chevron-left"></i> 比赛题目wp&感悟记录
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
-  
-
-
   
 
 
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -896,6 +346,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1-%E5%B8%B8%E8%A7%81php%E5%A8%81%E8%83%81%E5%87%BD%E6%95%B0%EF%BC%88%E4%B8%8A%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">代码审计-常见php威胁函数（上）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B8%B8%E8%A7%81php%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%EF%BC%8C%E5%8F%AF%E8%B0%83%E7%94%A8%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4-%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.</span> <span class="nav-text">1.常见php回调函数，可调用其他命令&#x2F;代码执行函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%B8%B8%E8%A7%81php%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4%E7%9A%84%E5%87%BD%E6%95%B0%EF%BC%9A"><span class="nav-number">1.2.</span> <span class="nav-text">2.常见php可执行系统命令的函数：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%B8%B8%E8%A7%81php%E5%8F%AF%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E7%9A%84%E5%87%BD%E6%95%B0%EF%BC%9A"><span class="nav-number">1.3.</span> <span class="nav-text">3.常见php可代码执行的函数：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%A6%81%E7%94%A8%E5%8D%B1%E9%99%A9%E5%87%BD%E6%95%B0%EF%BC%9A"><span class="nav-number">1.4.</span> <span class="nav-text">4.禁用危险函数：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%8F%AF%E6%89%A7%E8%A1%8Cphp%E4%BB%A3%E7%A0%81%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">1.5.</span> <span class="nav-text">一、可执行php代码的函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%B8%B8%E8%A7%81php%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%EF%BC%8C%E5%8F%AF%E8%B0%83%E7%94%A8%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4-%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0%EF%BC%9A"><span class="nav-number">1.6.</span> <span class="nav-text">二、常见php回调函数，可调用其他命令&#x2F;代码执行函数：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-call-user-func"><span class="nav-number">1.6.1.</span> <span class="nav-text">1) call_user_func()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-call-user-func-array"><span class="nav-number">1.6.2.</span> <span class="nav-text">2)call_user_func_array()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-create-function"><span class="nav-number">1.6.3.</span> <span class="nav-text">3)create_function()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-array-walk"><span class="nav-number">1.6.4.</span> <span class="nav-text">4) array_walk()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-array-map"><span class="nav-number">1.6.5.</span> <span class="nav-text">5)array_map()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-array-filter"><span class="nav-number">1.6.6.</span> <span class="nav-text">6) array_filter()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E5%8F%AF%E5%8F%98%E5%87%BD%E6%95%B0-var-args"><span class="nav-number">1.6.7.</span> <span class="nav-text">7) 可变函数$var(args)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-usort"><span class="nav-number">1.6.8.</span> <span class="nav-text">8) usort()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9%EF%BC%89uasort"><span class="nav-number">1.6.9.</span> <span class="nav-text">9）uasort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10%EF%BC%89ob-start"><span class="nav-number">1.6.10.</span> <span class="nav-text">10）ob_start</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%B8%B8%E8%A7%81php%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4%E7%9A%84%E5%87%BD%E6%95%B0%EF%BC%9A"><span class="nav-number">1.7.</span> <span class="nav-text">三、常见php可执行系统命令的函数：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-system"><span class="nav-number">1.7.1.</span> <span class="nav-text">1) system()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-passthru"><span class="nav-number">1.7.2.</span> <span class="nav-text">2) passthru()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-exec"><span class="nav-number">1.7.3.</span> <span class="nav-text">3) exec()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-sell-exec"><span class="nav-number">1.7.4.</span> <span class="nav-text">4) sell_exec()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-pcntl-exec"><span class="nav-number">1.7.5.</span> <span class="nav-text">5) pcntl_exec()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-popen"><span class="nav-number">1.7.6.</span> <span class="nav-text">6) popen()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-proc-open"><span class="nav-number">1.7.7.</span> <span class="nav-text">7) proc_open()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-%E5%8F%8D%E5%8D%95%E5%BC%95%E5%8F%B7"><span class="nav-number">1.7.8.</span> <span class="nav-text">8) 反单引号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="nav-number">1.8.</span> <span class="nav-text">四、文件包含</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E3%80%90web-study%E5%B7%B2%E8%AE%B0%E3%80%91"><span class="nav-number">1.9.</span> <span class="nav-text">五、php伪协议【web-study已记】</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E7%B1%BB%E5%A8%81%E8%83%81%E5%87%BD%E6%95%B0"><span class="nav-number">1.10.</span> <span class="nav-text">六、文件操作类威胁函数</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1043,6 +494,25 @@
 
   
 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '9153f63cdb4dae71592a',
+      clientSecret: '593e9954e7fd5e6e46f57b66481f50e1adc53afb',
+      repo        : 'blog-comment',
+      owner       : 'try-to-change',
+      admin       : ['try-to-change'],
+      id          : '8e7f0b70fe32431c4f901311b7b2c5c1',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
   
 <script type="text/javascript" 
