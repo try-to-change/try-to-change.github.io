@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>比赛题目wp&amp;感悟记录</title>
+    <url>/2022/06/26/Game-wp/</url>
+    <content><![CDATA[<p>以下是本人凑人数参加的各类比赛的题目做题经历，在此记录学习过程，望大佬指点修正</p>
+<span id="more"></span>]]></content>
+      <categories>
+        <category>网络安全学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>疑问记录</title>
     <url>/2022/06/21/Qusetion/</url>
     <content><![CDATA[<p><u><code>以下的问题，有的已经解决，有的还存在，如果有大佬方便讲解指点，或者我的解决内容不完善或有问题，欢迎通过邮箱或QQ私信我，不胜感激</code></u></p>
@@ -200,13 +209,13 @@
 <p>利用Numbers方式，从1到5000，发现2333处成功爆破</p>
 <p>得到flag</p>
 <h2 id="3-Training-WWW-Robots"><a href="#3-Training-WWW-Robots" class="headerlink" title="3.Training-WWW-Robots"></a>3.Training-WWW-Robots</h2><h3 id="1-题目描述-13"><a href="#1-题目描述-13" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
-<h3 id="2）wp-3"><a href="#2）wp-3" class="headerlink" title="2）wp"></a>2）wp</h3><p>这道题和上面新手区的题类似</p>
+<h3 id="2-wp-11"><a href="#2-wp-11" class="headerlink" title="2)wp"></a>2)wp</h3><p>这道题和上面新手区的题类似</p>
 <p>先访问<code>http://111.200.241.244:51820/robots.txt</code>得到php文件名</p>
 <p><img src="/2022/06/21/Gongfang-wp/image-20220626090904204.png" alt="image-20220626090904204"></p>
 <p>于是访问<code>http://111.200.241.244:51820/fl0g.php/robots.txt</code></p>
 <p>得到flag</p>
 <h2 id="4-PHP2"><a href="#4-PHP2" class="headerlink" title="4.PHP2"></a>4.PHP2</h2><h3 id="1-题目描述-14"><a href="#1-题目描述-14" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
-<h3 id="2-wp-11"><a href="#2-wp-11" class="headerlink" title="2)wp"></a>2)wp</h3><p>这句话的意思是”你能证明这个网站存在吗“</p>
+<h3 id="2-wp-12"><a href="#2-wp-12" class="headerlink" title="2)wp"></a>2)wp</h3><p>这句话的意思是”你能证明这个网站存在吗“</p>
 <p><img src="/2022/06/21/Gongfang-wp/image-20220626104943938.png" alt="image-20220626104943938"></p>
 <p>没有思路，抓包，和御剑、dirsearch都没又得到想要的结果</p>
 <p>没有办法，搜了一下大佬们的wp</p>
@@ -227,8 +236,14 @@
 <p>–为了payload简洁，一般只编码一个字母</p>
 <p><img src="/2022/06/21/Gongfang-wp/image-20220626110642311.png" alt="image-20220626110642311"></p>
 <p>得到flag</p>
-<p>5.</p>
-]]></content>
+<h2 id="5-Web-python-template-injection"><a href="#5-Web-python-template-injection" class="headerlink" title="5.Web_python_template_injection"></a>5.Web_python_template_injection</h2><h3 id="1-题目描述-15"><a href="#1-题目描述-15" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2）wp-3"><a href="#2）wp-3" class="headerlink" title="2）wp"></a>2）wp</h3><p>该题属于ssti，建议先了解一些<a href="../../../../2022/05/28/Web-study">ssti</a>的模板注入，和这篇文章</p>
+<p><a href="https://www.freebuf.com/column/187845.html">https://www.freebuf.com/column/187845.html</a></p>
+<p>然后再做这道题</p>
+<h2 id="6-Web-php-unserialize"><a href="#6-Web-php-unserialize" class="headerlink" title="6.Web_php_unserialize"></a>6.Web_php_unserialize</h2><h2 id="7-php-rce"><a href="#7-php-rce" class="headerlink" title="7.php_rce"></a>7.php_rce</h2><h2 id="8-Web-php-include"><a href="#8-Web-php-include" class="headerlink" title="8.Web_php_include"></a>8.Web_php_include</h2><h3 id="1-题目描述-16"><a href="#1-题目描述-16" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2-wp-13"><a href="#2-wp-13" class="headerlink" title="2)wp"></a>2)wp</h3><p>这道题先了解一些php伪协议</p>
+<p>看名字很清楚是到文件包含的题目</p>
+<h2 id="9"><a href="#9" class="headerlink" title="9."></a>9.</h2>]]></content>
       <categories>
         <category>网络安全学习</category>
       </categories>
@@ -332,8 +347,7 @@
 <h4 id="堆叠注入"><a href="#堆叠注入" class="headerlink" title="堆叠注入"></a>堆叠注入</h4><h5 id="1-堆叠注入定义"><a href="#1-堆叠注入定义" class="headerlink" title="1.堆叠注入定义"></a>1.堆叠注入定义</h5><p>   Stacked  injections(堆叠注入)从名词的含义就可以看到应该是一堆 sql 语句(多条)一起执行。而在真实的运用中也是这样的, 我们知道在  mysql 中, 主要是命令行中, 每一条语句结尾加; 表示语句结束。这样我们就想到了是不是可以多句一起使用。这个叫做 stacked  injection。</p>
 <h5 id="2-堆叠注入原理"><a href="#2-堆叠注入原理" class="headerlink" title="2.堆叠注入原理"></a>2.堆叠注入原理</h5><p>   在SQL中，分号（;）是用来表示一条sql语句的结束。<u>试想一下我们在 ; 结束一个sql语句后继续构造下一条语句，会不会一起执行？因此这个想法也就造就了堆叠注入</u>。而union injection（联合注入）也是将两条语句合并在一起，两者之间有什么区别么？区别就在于<u>union 或者union all执行的语句类型是有限的，可以用来执行查询语句</u>，而<u>堆叠注入可以执行的是任意的语句</u>。例如以下这个例子。用户输入：<code>1; DELETE FROM products</code>服务器端生成的sql语句为：  <code>Select * from products where productid=1;DELETE FROM products</code>当执行查询后，<u><strong>第一条显示查询信息</strong></u>，<u><strong>第二条则将整个表进行删除</strong></u>。</p>
 <h5 id="3-堆叠注入的局限性"><a href="#3-堆叠注入的局限性" class="headerlink" title="3.堆叠注入的局限性"></a>3.堆叠注入的局限性</h5><p>堆叠注入的局限性在于并不是每一个环境下都可以执行，可能受到API或者数据库引擎不支持的限制，当然了权限不足也可以解释为什么攻击者无法修改数据或者调用一些程序。</p>
-<h5 id="下面我以一道题为例解析堆叠注入"><a href="#下面我以一道题为例解析堆叠注入" class="headerlink" title="**下面我以一道题为例解析堆叠注入"></a>**下面我以一道题为例解析堆叠注入</h5><p>该题来自于<a href="https://buuoj.cn/">buuctf</a> 的[强网杯 2019]随便注</p>
-<h4 id="1-几个常用函数"><a href="#1-几个常用函数" class="headerlink" title="1.几个常用函数"></a>1.几个常用函数</h4><p>1.<code>version()</code>——MySQL 版本 </p>
+<h5 id="下面我以一道题为例解析堆叠注入，该题来自于-buuctf的-强网杯-2019-随便注"><a href="#下面我以一道题为例解析堆叠注入，该题来自于-buuctf的-强网杯-2019-随便注" class="headerlink" title="下面我以一道题为例解析堆叠注入，该题来自于 buuctf的[强网杯 2019]随便注 "></a>下面我以一道题为例解析堆叠注入，该题来自于<a href="../../../../buuctf-wp"> buuctf的[强网杯 2019]随便注 </a></h5><h4 id="1-几个常用函数"><a href="#1-几个常用函数" class="headerlink" title="1.几个常用函数"></a>1.几个常用函数</h4><p>1.<code>version()</code>——MySQL 版本 </p>
 <p>2.<code>user()</code>——数据库用户名 </p>
 <p>3.<code>database()</code>——数据库名 </p>
 <p>4.<code>@@datadir</code>——数据库路径 </p>
@@ -438,10 +452,52 @@
 <p><u><strong>在这里有个小知识点，<code>/proc/self</code>指向当前进程的<code>/proc/pid/</code>，<code>/proc/self/root/</code>是指向<code>/</code>的符号链接，想到这里，用伪协议配合多级符号链接的办法进行绕过</strong></u></p>
 <p>payload:</p>
 <p>?d=0://labour/../../../../../flll1ag2.txt&amp;ctf=laiya</p>
-<h4 id="2-php伪协议："><a href="#2-php伪协议：" class="headerlink" title="**2.php伪协议："></a>**2.php伪协议：</h4><p>1.php://filter</p>
-<p>可以获取指定文件的源码，但是当他与包含函数结合是，php://filter流会被当做php文件执行 。所以我们一般对其进行编码，让其不执行。从而导致 任意文件读取</p>
-<p><code>条件：</code><br><code>allow_url_fopen=Off/On</code><br><code>allow_url_include=Off/On</code></p>
-<p><code>POC:</code><br><code>?file=php://filter/read=convert.base64-encode/resource=phpinfo.php</code></p>
+<h4 id="2-php伪协议："><a href="#2-php伪协议：" class="headerlink" title="2.php伪协议："></a>2.php伪协议：</h4><p>内容来自于<a href="https://blog.csdn.net/qz362228/article/details/124359070">https://blog.csdn.net/qz362228/article/details/124359070</a></p>
+<p><img src="https://img-blog.csdnimg.cn/92c9df98952f41669db5d8b8b2ffaead.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5LmU5rK7Nzc3,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"></p>
+<h5 id="1-php-协议"><a href="#1-php-协议" class="headerlink" title="1.php://协议"></a>1.php://协议</h5><p>​    <strong>·条件：</strong></p>
+<p><code>allow_url_fopen:off/on</code><br><code>allow_url_include</code> :仅<code>php://input</code> <code>php://stdin</code> <code>php://memory</code> <code>php://temp</code> 需要<code>on</code></p>
+<p><strong>·作用：</strong></p>
+<p><code>php://</code> 访问各个输入/输出流（I/O streams），在CTF中经常使用的是<code>php://filter</code>和<code>php://input</code>，<code>php://filter</code>用于<strong>读取源码</strong>，<code>php://input</code>用于<strong>执行php代码</strong>。</p>
+<p>  <strong>·说明</strong>：</p>
+<p>PHP 提供了一些杂项输入/输出（IO）流，允许访问 PHP 的输入输出流、标准输入输出和错误描述符，<br>内存中、磁盘备份的临时文件流以及可以操作其他读取写入文件资源的过滤器。</p>
+<h5 id="2-php-filter伪协议"><a href="#2-php-filter伪协议" class="headerlink" title="2.php://filter伪协议"></a>2.php://filter伪协议</h5><p>   <strong>·条件</strong></p>
+<p><code>allow_url_fopen=on/off</code><br><code>allow_url_include=on/off</code></p>
+<p>只是<code>读取</code>，需要开启 allow_url_fopen，不需要开启 allow_url_include</p>
+<p>​    <strong>·说明：</strong><br>元封装器，设计用于”数据流打开”时的”筛选过滤”应用，对本地磁盘文件进行读写<br>①输出进行<code>base64</code>加密后的信息</p>
+<p><code>?file=php://filter/convert.base64-encode/resource=xx.php</code><br><code>或</code><br><code>?file=php://filter/read=convert.base64-encode/resource=xx.php</code></p>
+<p>②获得将base64加密后的信息后，再将其解密，得出原信息</p>
+<h5 id="3-php-input（读取POST数据）"><a href="#3-php-input（读取POST数据）" class="headerlink" title="3.php://input（读取POST数据）"></a>3.php://input（读取POST数据）</h5><p>   <strong>·条件</strong></p>
+<p><code>allow_url_fopen=on/off</code><br><code>allow_url_include=on</code></p>
+<p>   <strong>·说明</strong><br>可以访问请求的原始数据的只读流。即可以<u>直接读取到POST上</u>没有经过解析的原始数据。 <strong>enctype=”multipart/form-data”</strong> 的时候 php://input 是<strong>无效</strong>的</p>
+<p><code>注</code> ：查看当前运行的是哪个php.ini<br>2,3需要将php可执行加入环境变量, 如果没有加,那么请使用php可执行文件所在位置的完整路径代替</p>
+<p>1.打印出phpinfo();，找到Loaded Configuration File那一行</p>
+<p><img src="https://img-blog.csdnimg.cn/09dde2a7f84145e291c34a1b2f19e26e.png" alt="https://img-blog.csdnimg.cn/09dde2a7f84145e291c34a1b2f19e26e.png"></p>
+<p>2.命令行输入<code>php -i |grep php.ini</code>（<code>php -i</code>其实就是输出phpinfo();)</p>
+<p>3.<code>php -r “phpinfo();” |grep php.ini</code></p>
+<h5 id="4-file-伪协议（读取文件内容）"><a href="#4-file-伪协议（读取文件内容）" class="headerlink" title="4.file://伪协议（读取文件内容）"></a>4.file://伪协议（读取文件内容）</h5><p>   <strong>·条件</strong></p>
+<p><code>allow_url_fopen=on/off</code><br><code>allow_url_include=on/off</code> （均不受影响）</p>
+<p>打ctf中常用于读取本地文件</p>
+<p><code>?file=file://C:\Windows\System32\drivers\etc\hosts</code></p>
+<p><img src="https://img-blog.csdnimg.cn/1f9a0a4e11564da38bf19a9e83d3fb44.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5LmU5rK7Nzc3,size_20,color_FFFFFF,t_70,g_se,x_16" alt="https://img-blog.csdnimg.cn/1f9a0a4e11564da38bf19a9e83d3fb44.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5LmU5rK7Nzc3,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
+<h5 id="5-phar-伪协议-读取压缩包文件内容"><a href="#5-phar-伪协议-读取压缩包文件内容" class="headerlink" title="5.phar://伪协议(读取压缩包文件内容)"></a>5.phar://伪协议(读取压缩包文件内容)</h5><p>   <strong>·条件</strong></p>
+<p><code>allow_url_fopen: off/on</code><br><code>allow_url_include: off/on (均不受影响)</code></p>
+<p><code>注</code>：php 版本大于等于<code>5.3.0</code>，压缩包需要是<code>zip</code>协议压缩，<code>rar</code>不行，将木马文件压缩后，改为其他任意格式的文件都可以正常使用。</p>
+<p>  <strong>·格式</strong></p>
+<p><code>?file=phar://压缩包名/内部文件名</code><br><code>例：phar://x.zip/x.php</code></p>
+<h5 id="6-zip-伪协议"><a href="#6-zip-伪协议" class="headerlink" title="6.zip://伪协议"></a>6.zip://伪协议</h5><p>zip伪协议和phar协议类似，但是用法不一样（url不同）</p>
+<p>​    <strong>·条件</strong></p>
+<p><code>allow_url_fopen: off/on</code><br><code>allow_url_include: off/on (均不受影响)</code></p>
+<p>   <strong>·格式</strong></p>
+<p><code>?file=zip://[压缩文件绝对路径]#[压缩文件内的子文件名]</code>   </p>
+<p><code>例： zip://D:\phpstudy\WWW\x.zip%23shell.php       #-&gt;%23</code></p>
+<h5 id="7-data-伪协议-读取文件"><a href="#7-data-伪协议-读取文件" class="headerlink" title="7.data://伪协议(读取文件)"></a>7.data://伪协议(读取文件)</h5><p>（可以直接达到执行php代码的效果）<br>和<code>php://input</code>很像，<code>php://input</code>以<code>post</code>提交数据那样提交数据，<br><code>data://</code>是以<code>get</code>方式提交数据，也是可以执行提交的脚本</p>
+<p>​     <strong>·格式</strong></p>
+<p><code>?file=data://text/plain,&lt;?php%20phpinfo()?&gt;</code></p>
+<p>如果对特殊字符进行了过滤，可以通过base64编码后再输入</p>
+<p><code>data://text/plain;base64,base64加密的代码</code></p>
+<p>可配合<a href="https://www.cnblogs.com/xiaozi/p/7831529.html">php命令执行漏洞</a>，实现对一些数据的获取<br>如：<code>&lt;?php system(&quot;ls&quot;)?&gt;</code></p>
+<h5 id="8-总结"><a href="#8-总结" class="headerlink" title="8.总结"></a>8.总结</h5><p><a href="https://blog.csdn.net/dreamthe/article/details/121765876">参考实例1</a></p>
+<p><a href="https://blog.csdn.net/qq_41617034/article/details/106658417">参考实例2</a></p>
 <h3 id="八、逻辑漏洞"><a href="#八、逻辑漏洞" class="headerlink" title="八、逻辑漏洞"></a>八、逻辑漏洞</h3><h3 id="九、命令执行"><a href="#九、命令执行" class="headerlink" title="九、命令执行"></a>九、命令执行</h3><h4 id="1-有关命令执行的知识（windows-或-linux-下）"><a href="#1-有关命令执行的知识（windows-或-linux-下）" class="headerlink" title="1.有关命令执行的知识（windows 或 linux 下）:"></a>1.有关命令执行的知识（windows 或 linux 下）:</h4><p>command1 ; command2 先执行 command2 后执行 command1<br>command1 &amp;&amp; command2 先执行 command1，如果为真，再执行 command2<br>command1 | command2 只执行 command2<br>command1 &amp; command2 先执行 command2 后执行 command1<br>command1 || command2 先执行 command1，如果为假，再执行 command2<br>命令执行漏洞（| || &amp; &amp;&amp; 称为 管道符）</p>
 <p>eg:</p>
 <p>find  / -name “flag* “<br>在当前目录及其子目录下查找文件名中包含flag的文件<br>find  / -name “ *.txt”<br>在当前目录及其子目录下查找后缀为txt的文件</p>
