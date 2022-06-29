@@ -610,7 +610,10 @@
   <entry>
     <title>代码审计知识点记录</title>
     <url>/2022/06/26/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</url>
-    <content><![CDATA[<h1 id="代码审计-常见php威胁函数（上）"><a href="#代码审计-常见php威胁函数（上）" class="headerlink" title="代码审计-常见php威胁函数（上）"></a>代码审计-常见php威胁函数（上）</h1><p>文章来自<a href="https://baijiahao.baidu.com/s?id=1715285716686081123&wfr=spider&for=pc">成都知道创宇</a></p>
+    <content><![CDATA[<p><u><code>代码审计学习的一些笔记</code></u></p>
+<span id="more"></span>
+
+<h1 id="代码审计-常见php威胁函数（上）"><a href="#代码审计-常见php威胁函数（上）" class="headerlink" title="代码审计-常见php威胁函数（上）"></a>代码审计-常见php威胁函数（上）</h1><p>文章来自<a href="https://baijiahao.baidu.com/s?id=1715285716686081123&wfr=spider&for=pc">成都知道创宇</a></p>
 <h2 id="1-常见php回调函数，可调用其他命令-代码执行函数"><a href="#1-常见php回调函数，可调用其他命令-代码执行函数" class="headerlink" title="1.常见php回调函数，可调用其他命令/代码执行函数"></a>1.常见php回调函数，可调用其他命令/代码执行函数</h2><p>call_user_func()</p>
 <p>call_user_func_array()</p>
 <p>create_function()</p>
