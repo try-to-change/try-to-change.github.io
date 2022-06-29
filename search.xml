@@ -255,14 +255,30 @@
 
 <p><a href="https://tool.lu/coderunner/">运行PHP代码</a></p>
 <p>得到<code>O:4:&quot;Demo&quot;:1:&#123;s:10:&quot;Demofile&quot;;s:8:&quot;fl4g.php&quot;;&#125;</code></p>
+<p>这里看到有一个__wakeup，所以还要改一下属性值1为2</p>
+<p>–&gt;</p>
+<p><code>O:4:&quot;Demo&quot;:2:&#123;s:10:&quot;Demofile&quot;;s:8:&quot;fl4g.php&quot;;&#125;</code></p>
 <p><strong>注意：</strong>这里有一个大坑让我卡了好久</p>
 <p>先看下面这个图理解一下上面的语句</p>
 <p><img src="https://img-blog.csdnimg.cn/740796b022bc4fb3a141a1f116467daf.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5aSn54Gs55m9,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
 <p>属性值为10，但是”Demofile”只有8个字符，很明显缺了两个字符，但是却被省略了，猜测确了两个空字符</p>
-<p><img src="/2022/06/21/Gongfang-wp/Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220628213218629.png" alt="image-20220628213218629"></p>
-<p><img src="/2022/06/21/Gongfang-wp/Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220628114552444.png" alt="image-20220628114552444"></p>
-<h2 id="7-php-rce"><a href="#7-php-rce" class="headerlink" title="7.php_rce"></a>7.php_rce</h2><h2 id="8-Web-php-include"><a href="#8-Web-php-include" class="headerlink" title="8.Web_php_include"></a>8.Web_php_include</h2><h3 id="1-题目描述-17"><a href="#1-题目描述-17" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
-<h3 id="2-wp-14"><a href="#2-wp-14" class="headerlink" title="2)wp"></a>2)wp</h3><p>这道题先了解<a href="../../../../2022/05/28/Web-study">php伪协议</a></p>
+<p>这里我一直卡住的<u>原因就是把空字符当作了空格</u></p>
+<p>所以开始我是直接在D和f前加上空格，但是底下的base64编码提交url没有反应</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220628214059503.png" alt="image-20220628214059503"></p>
+<p>然后把decoder换成hex，发现空格是20（44是D，66是f）</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220628233504338.png" alt="image-20220628233504338"></p>
+<p>然后看了下面这个表，明白00才是空字符，空格和空字符不是同一个东西</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220628213218629.png" alt="image-20220628213218629"></p>
+<p>但是空字符无法复制，在复制时，空字符后的字符串会被截断，只复制了空字符前面的字符串</p>
+<p>所以这里可以在hex里直接改，把20改成00</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220628233851825.png" alt="image-20220628233851825"></p>
+<p>然后下方的base64编码就可以了</p>
+<p>访问</p>
+<p><code>http://111.200.241.244:50547/?var=TzorNDoiRGVtbyI6Mjp7czoxMDoiAERlbW8AZmlsZSI7czo4OiJmbDRnLnBocCI7fQ==</code></p>
+<p>得到flag</p>
+<h2 id="7-php-rce"><a href="#7-php-rce" class="headerlink" title="7.php_rce"></a>7.php_rce</h2><h3 id="1-题目描述-17"><a href="#1-题目描述-17" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2-wp-14"><a href="#2-wp-14" class="headerlink" title="2)wp"></a>2)wp</h3><h2 id="8-Web-php-include"><a href="#8-Web-php-include" class="headerlink" title="8.Web_php_include"></a>8.Web_php_include</h2><h3 id="1-题目描述-18"><a href="#1-题目描述-18" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2-wp-15"><a href="#2-wp-15" class="headerlink" title="2)wp"></a>2)wp</h3><p>这道题先了解<a href="../../../../2022/05/28/Web-study">php伪协议</a></p>
 <p>看名字很清楚是到文件包含的题目</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">show_source</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$_GET</span>[<span class="string">&#x27;hello&#x27;</span>];</span><br><span class="line"><span class="variable">$page</span>=<span class="variable">$_GET</span>[<span class="string">&#x27;page&#x27;</span>];</span><br><span class="line"><span class="keyword">while</span> (<span class="title function_ invoke__">strstr</span>(<span class="variable">$page</span>, <span class="string">&quot;php://&quot;</span>)) &#123;  <span class="variable">$page</span>=<span class="title function_ invoke__">str_replace</span>(<span class="string">&quot;php://&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="variable">$page</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">include</span>(<span class="variable">$page</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
@@ -282,12 +298,12 @@
 <p>显示fl4gisisish3r3.php内容</p>
 <p><img src="/2022/06/21/Gongfang-wp/image-20220626223253399.png" alt="image-20220626223253399"></p>
 <p>得到flag</p>
-<p>9.</p>
-<p>10.</p>
-<p>11.</p>
-<p>12.</p>
-<h2 id="13-unserialize3"><a href="#13-unserialize3" class="headerlink" title="13.unserialize3"></a>13.unserialize3</h2><h3 id="1-题目描述-18"><a href="#1-题目描述-18" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
-<h3 id="2）wp-4"><a href="#2）wp-4" class="headerlink" title="2）wp"></a>2）wp</h3><p>这道题需要了解<a href="../../../../2022/05/28/Web-study">php反序列化</a>中__wakeup漏洞的利用,还有<a href="../../../../2022/05/28/Web-study">php魔术方法</a></p>
+<h2 id="9-supersqli"><a href="#9-supersqli" class="headerlink" title="9.supersqli"></a>9.supersqli</h2><h3 id="1-题目描述-19"><a href="#1-题目描述-19" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2）wp-4"><a href="#2）wp-4" class="headerlink" title="2）wp"></a>2）wp</h3><h2 id="10-warmup"><a href="#10-warmup" class="headerlink" title="10.warmup"></a>10.warmup</h2><h3 id="1-题目描述-20"><a href="#1-题目描述-20" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2）wp-5"><a href="#2）wp-5" class="headerlink" title="2）wp"></a>2）wp</h3><h2 id="11-NewsCenter"><a href="#11-NewsCenter" class="headerlink" title="11.NewsCenter"></a>11.NewsCenter</h2><h3 id="1-题目描述-21"><a href="#1-题目描述-21" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2）wp-6"><a href="#2）wp-6" class="headerlink" title="2）wp"></a>2）wp</h3><h2 id="12-NaNaNaNNaN-Batman"><a href="#12-NaNaNaNNaN-Batman" class="headerlink" title="12.NaNaNaNNaN-Batman"></a>12.NaNaNaNNaN-Batman</h2><h3 id="1-题目描述-22"><a href="#1-题目描述-22" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2）wp-7"><a href="#2）wp-7" class="headerlink" title="2）wp"></a>2）wp</h3><h2 id="13-unserialize3"><a href="#13-unserialize3" class="headerlink" title="13.unserialize3"></a>13.unserialize3</h2><h3 id="1-题目描述-23"><a href="#1-题目描述-23" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2）wp-8"><a href="#2）wp-8" class="headerlink" title="2）wp"></a>2）wp</h3><p>这道题需要了解<a href="../../../../2022/05/28/Web-study">php反序列化</a>中__wakeup漏洞的利用,还有<a href="../../../../2022/05/28/Web-study">php魔术方法</a></p>
 <p><code>__wakeup()函数漏洞原理：当序列化字符串表示对象属性个数的值大于真实个数的属性时就会跳过__wakeup的执行。</code></p>
 <p>开始的代码不完整，是一段残缺的PHP代码，根据题目名字知道这是给反序列化的题目，?code=可能是提醒需要在url利用以GET方式提交code值</p>
 <p><img src="https://img-blog.csdnimg.cn/669297deb27d4dce9bbdac477d78c6b7.png" alt="在这里插入图片描述"></p>
