@@ -319,7 +319,7 @@
 <p><img src="/2022/06/21/Gongfang-wp/image-20220626223253399.png" alt="image-20220626223253399"></p>
 <p>得到flag</p>
 <h2 id="9-supersqli"><a href="#9-supersqli" class="headerlink" title="9.supersqli"></a>9.supersqli</h2><h3 id="1-题目描述-19"><a href="#1-题目描述-19" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
-<h3 id="2）wp-4"><a href="#2）wp-4" class="headerlink" title="2）wp"></a>2）wp</h3><p>这道题之前在buuctf上做过，考察堆叠注入，wp可以在<a href="../../../../buuctf-wp">buuctf-wp</a>看一下</p>
+<h3 id="2）wp-4"><a href="#2）wp-4" class="headerlink" title="2）wp"></a>2）wp</h3><p>这道题之前在buuctf上做过，考察堆叠注入，wp可以在<a href="../../../../2022/6/21/buuctf-wp">buuctf-wp</a>看一下</p>
 <h2 id="10-warmup"><a href="#10-warmup" class="headerlink" title="10.warmup"></a>10.warmup</h2><h3 id="1-题目描述-20"><a href="#1-题目描述-20" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
 <h3 id="2）wp-5"><a href="#2）wp-5" class="headerlink" title="2）wp"></a>2）wp</h3><h2 id="11-NewsCenter"><a href="#11-NewsCenter" class="headerlink" title="11.NewsCenter"></a>11.NewsCenter</h2><h3 id="1-题目描述-21"><a href="#1-题目描述-21" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
 <h3 id="2）wp-6"><a href="#2）wp-6" class="headerlink" title="2）wp"></a>2）wp</h3><h2 id="12-NaNaNaNNaN-Batman"><a href="#12-NaNaNaNNaN-Batman" class="headerlink" title="12.NaNaNaNNaN-Batman"></a>12.NaNaNaNNaN-Batman</h2><h3 id="1-题目描述-22"><a href="#1-题目描述-22" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
@@ -454,7 +454,7 @@
 <h4 id="堆叠注入"><a href="#堆叠注入" class="headerlink" title="堆叠注入"></a>堆叠注入</h4><h5 id="1-堆叠注入定义"><a href="#1-堆叠注入定义" class="headerlink" title="1.堆叠注入定义"></a>1.堆叠注入定义</h5><p>   Stacked  injections(堆叠注入)从名词的含义就可以看到应该是一堆 sql 语句(多条)一起执行。而在真实的运用中也是这样的, 我们知道在  mysql 中, 主要是命令行中, 每一条语句结尾加; 表示语句结束。这样我们就想到了是不是可以多句一起使用。这个叫做 stacked  injection。</p>
 <h5 id="2-堆叠注入原理"><a href="#2-堆叠注入原理" class="headerlink" title="2.堆叠注入原理"></a>2.堆叠注入原理</h5><p>   在SQL中，分号（;）是用来表示一条sql语句的结束。<u>试想一下我们在 ; 结束一个sql语句后继续构造下一条语句，会不会一起执行？因此这个想法也就造就了堆叠注入</u>。而union injection（联合注入）也是将两条语句合并在一起，两者之间有什么区别么？区别就在于<u>union 或者union all执行的语句类型是有限的，可以用来执行查询语句</u>，而<u>堆叠注入可以执行的是任意的语句</u>。例如以下这个例子。用户输入：<code>1; DELETE FROM products</code>服务器端生成的sql语句为：  <code>Select * from products where productid=1;DELETE FROM products</code>当执行查询后，<u><strong>第一条显示查询信息</strong></u>，<u><strong>第二条则将整个表进行删除</strong></u>。</p>
 <h5 id="3-堆叠注入的局限性"><a href="#3-堆叠注入的局限性" class="headerlink" title="3.堆叠注入的局限性"></a>3.堆叠注入的局限性</h5><p>堆叠注入的局限性在于并不是每一个环境下都可以执行，可能受到API或者数据库引擎不支持的限制，当然了权限不足也可以解释为什么攻击者无法修改数据或者调用一些程序。</p>
-<p><strong>下面我以一道题为例解析堆叠注入，该题来自于<a href="../../../../buuctf-wp"> buuctf的[强网杯 2019]随便注 </a></strong></p>
+<p><strong>下面我以一道题为例解析堆叠注入，该题来自于<a href="../../../../2022/6/21/buuctf-wp"> buuctf的[强网杯 2019]随便注 </a></strong></p>
 <h4 id="1-几个常用函数"><a href="#1-几个常用函数" class="headerlink" title="1.几个常用函数"></a>1.几个常用函数</h4><p>1.<code>version()</code>——MySQL 版本 </p>
 <p>2.<code>user()</code>——数据库用户名 </p>
 <p>3.<code>database()</code>——数据库名 </p>
