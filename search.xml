@@ -141,7 +141,7 @@
 <h3 id="2-wp-8"><a href="#2-wp-8" class="headerlink" title="2)wp"></a>2)wp</h3><p>根据题目名知道这是命令执行漏洞的题，可以先了解一下<a href="../../../../2022/05/28/Web-study">命令执行</a>的知识</p>
 <p>先用自己的IP试一下</p>
 <p><code>120.0.0.1</code></p>
-<p><img src="/2022/06/21/Gongfang-wp/%5Cimage-20220624213448262.png" alt="image-20220624213448262"></p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220624213448262.png" alt="image-20220624213448262"></p>
 <p>得到以下数据，由此可知我们上传的命令是<code>ping -c 3 + 输入的语句</code>，所以需要用到管道符</p>
 <p>此处不止可以用 |，了解了其他管道符的作用，也可以达到相同的效果</p>
 <p><img src="/2022/06/21/Gongfang-wp/image-20220624215127339.png" alt="image-20220624215127339"></p>
@@ -724,7 +724,7 @@
 <p>然后试试显示所有数据，感觉看不到什么意思，后面一步步分析</p>
 <figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">1</span>&#x27; or <span class="number">1</span>=<span class="number">1</span>;#</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2022/06/21/buuctf-wp/Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220702105520465.png" alt="image-20220702105520465"></p>
+<p><img src="/2022/06/21/buuctf-wp/image-20220702105520465.png" alt="image-20220702105520465"></p>
 <p>然后判断字段</p>
 <p><img src="/2022/06/21/buuctf-wp/image-20220701113210998.png" alt="image-20220701113210998"></p>
 <p><img src="/2022/06/21/buuctf-wp/image-20220701113228972.png" alt="image-20220701113228972"></p>
