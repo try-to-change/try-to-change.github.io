@@ -467,6 +467,21 @@ eval函数，这是执行函数；这里执行了_变量中的内容也就是&#3
 <p>补充：</p>
 <figure class="highlight coffeescript"><table><tr><td class="code"><pre><span class="line">php实例化：是指在面向对象的编程中，把用类创建对象的过程称为实例化，是将一个抽象的概念类，具体到该类实物的过程，实例化过程中一般由【类名 对象名 = <span class="keyword">new</span> 类名（参数<span class="number">1</span>，参数<span class="number">2.</span>..参数n）】构成。</span><br><span class="line"></span><br><span class="line">php类对象是什么意思？</span><br><span class="line">类 − 定义了一件事物的抽象特点。类的定义包含了数据的形式以及对数据的操作。</span><br><span class="line">对象 − 是类的实例。</span><br><span class="line">在面向对象的程序设计（英语：<span class="built_in">Object</span>-oriented programming，缩写：OOP）中，对象是一个由信息及对信息进行处理的描述所组成的整体，是对现实世界的抽象。在现实世界里我们所面对的事情都是对象，如计算机、电视机、自行车等。</span><br></pre></td></tr></table></figure>
 
+<h2 id="14-upload1"><a href="#14-upload1" class="headerlink" title="14.upload1"></a>14.upload1</h2><h3 id="1-题目描述-24"><a href="#1-题目描述-24" class="headerlink" title="1)题目描述"></a>1)题目描述</h3><p>无</p>
+<h3 id="2-wp-16"><a href="#2-wp-16" class="headerlink" title="2)wp"></a>2)wp</h3><p>典型的文件上传漏洞，可以先把upload-labs线下靶场学习一下</p>
+<p>先直接上传php文件，发现被拦截</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220704104557362.png" alt="image-20220704104557362"></p>
+<p>于是构造一个图片木马上传，然后burp修改后缀，看看是不是前端验证</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220704104752019.png" alt="image-20220704104752019"></p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220704104814064.png" alt="image-20220704104814064"></p>
+<p>发现上传成功</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220704104830480.png" alt="image-20220704104830480"></p>
+<p>用蚁剑试着连一下</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220704105115729.png" alt="image-20220704105115729"></p>
+<p>发现连接成功，打开看看，在html下发现flag.php</p>
+<p><img src="/2022/06/21/Gongfang-wp/image-20220704105139801.png" alt="image-20220704105139801"></p>
+<p>打开文件</p>
+<p>得到flag</p>
 ]]></content>
       <categories>
         <category>网络安全学习</category>
