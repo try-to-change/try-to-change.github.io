@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/1f9a0a4e11564da38bf19a9e83d3fb44.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5LmU5rK7Nzc3,size_20,color_FFFFFF,t_70,g_se,x_16">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/740796b022bc4fb3a141a1f116467daf.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5aSn54Gs55m9,size_20,color_FFFFFF,t_70,g_se,x_16">
 <meta property="article:published_time" content="2022-05-28T08:01:29.902Z">
-<meta property="article:modified_time" content="2022-07-12T15:36:41.000Z">
+<meta property="article:modified_time" content="2022-07-21T06:41:38.163Z">
 <meta property="article:author" content="Tt@c">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210601210954715.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NfcHJvZ3JhbWo=,size_16,color_FFFFFF,t_70">
@@ -188,7 +188,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-07-12 23:36:41" itemprop="dateModified" datetime="2022-07-12T23:36:41+08:00">2022-07-12</time>
+                <time title="修改时间：2022-07-21 14:41:38" itemprop="dateModified" datetime="2022-07-21T14:41:38+08:00">2022-07-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -226,7 +226,7 @@
 <h3 id="XSS漏洞篇"><a href="#XSS漏洞篇" class="headerlink" title="XSS漏洞篇"></a>XSS漏洞篇</h3><h4 id="1-XSS漏洞原理"><a href="#1-XSS漏洞原理" class="headerlink" title="1.XSS漏洞原理"></a>1.XSS漏洞原理</h4><p>恶意攻击者<u><strong>往Web页面里嵌入脚本代码</strong></u>（<u><strong>通常是JavaScript编写的恶意代码</strong></u>），当用户浏览该页之时，嵌入其中Web里面的Script代码会被执行，从而达到恶意攻击用户的目的。（恶意攻击者<u><strong>利用网站没有对用户提交数据进行转义处理或者过滤不足的缺点，进而添加一些代码</strong></u>，嵌入到web页面中去。）</p>
 <h4 id="2-危害-1"><a href="#2-危害-1" class="headerlink" title="2.危害"></a>2.危害</h4><p>①盗取用户Cookie。<br>②修改网页内容。<br>③网站挂马。<br>④利用网站重定向。<br>⑤XSS蠕虫。</p>
 <h4 id="3-防御-1"><a href="#3-防御-1" class="headerlink" title="3.防御"></a>3.防御</h4><p>①过滤输入的数据：包括” ’ ”、”&lt;”、“&lt;”、“&gt;”、“on”等非法字符。<br>②对输出到页面的数据进行相应的编码转换，包括html实体编码、javascript编码等。</p>
-<h3 id="CSRF漏洞篇"><a href="#CSRF漏洞篇" class="headerlink" title="CSRF漏洞篇"></a>CSRF漏洞篇</h3><h4 id="1-CSRF漏洞原理"><a href="#1-CSRF漏洞原理" class="headerlink" title="1.CSRF漏洞原理"></a>1.CSRF漏洞原理</h4><p>因为web应用程序在用户进行敏感操作时，如修改账号密码、添加账号、转账等，<u><strong>没有校验表单token或者http请求头中的referer值</strong></u>（如果您<u><strong>在网页1，点击一个链接到网页2</strong></u>，当浏览器<u><strong>请求网页2时，网页1的URL就会包含在 Referer 头信息</strong></u>中），从而<u><strong>导致恶意攻击者利用普通用户的身份（cookie）完成攻击行为</strong></u>。<br>在这里插入图片描述:</p>
+<h3 id="CSRF漏洞篇"><a href="#CSRF漏洞篇" class="headerlink" title="CSRF漏洞篇"></a>CSRF漏洞篇</h3><h4 id="1-CSRF漏洞原理"><a href="#1-CSRF漏洞原理" class="headerlink" title="1.CSRF漏洞原理"></a>1.CSRF漏洞原理</h4><p>因为web应用程序在用户进行敏感操作时，如修改账号密码、添加账号、转账等，<u><strong>没有校验表单token或者http请求头中的referer值</strong></u>（如果您<u><strong>在网页1，点击一个链接到网页2</strong></u>，当浏览器<u><strong>请求网页2时，网页1的URL就会包含在 Referer 头信息</strong></u>中），从而<u><strong>导致恶意攻击者利用普通用户的身份（cookie）完成攻击行为</strong></u>。</p>
 <p><img src="https://img-blog.csdnimg.cn/20210601210954715.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NfcHJvZ3JhbWo=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <p>Csrf攻击过程两个重点：<br>①目标用户<u><strong>已经登录了网站</strong></u>，<u><strong>能够执行网站的功能</strong></u>。<br>②目标用户<u><strong>访问了攻击者构造的URL</strong></u>。</p>
 <h4 id="2-危害-2"><a href="#2-危害-2" class="headerlink" title="2.危害"></a>2.危害</h4><p>①伪造HTTP请求进行未授权操作。<br>②篡改、盗取目标网站上的重要用户数据。<br>③未经允许执行对用户名誉或者资产有害的操作，比如：散播不良信息、进行消费等。<br>④如果通过使用社工等方式攻击网站管理员、会危害网站本身的安全性。<br>⑤作为其他攻击向量的辅助攻击手法，必须配合XSS<br>⑥传播CSRF蠕虫</p>
@@ -568,7 +568,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
