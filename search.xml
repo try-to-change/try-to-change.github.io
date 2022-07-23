@@ -3,17 +3,17 @@
   <entry>
     <title>小迪web视频学习记录</title>
     <url>/2022/07/21/xiaodi/</url>
-    <content><![CDATA[<p>看看小迪师傅的视频，把一些知识点补充深入学习一下，做做笔记</p>
+    <content><![CDATA[<p>看看小迪师傅的视频，把一些知识点补充以及深入学习一下，做做笔记</p>
 <span id="more"></span>
 
-<p>一些概念，这里记录一些</p>
-<p><strong>1.DNS</strong>：一般指域名系统，可以将IP和域名相互转化，比如访问baidu.com，DNS就会查出它的IP例如120.0.0.1，进行访问，从而人们不用输入复杂的IP</p>
+<hr>
+<p><code>时间不是按小迪师傅视频来的，是看我当天的时间，尽量每天能看个一两个吧</code></p>
+<h2 id="DAY1"><a href="#DAY1" class="headerlink" title="DAY1"></a>DAY1</h2><p><strong>1.DNS</strong>：一般指域名系统，可以将IP和域名相互转化，比如访问baidu.com，DNS就会查出它的IP例如120.0.0.1，进行访问，从而人们不用输入复杂的IP</p>
 <p>我们有时<u>打开一些网站或者下载东西时卡顿</u>，我们百度往往会得到一个方法修改<strong>hosts</strong>文件</p>
 <p><strong>hosts</strong>文件负责解析域名并优先于DNS服务，通常很多恶意软件会恶意更改该文件来达到劫持网站的目地，也就是DNS攻击</p>
 <p>比如下图，当在<strong>hosts</strong>文件里加上时，当我们在浏览器访问<code>www.baidu.com</code>的时候就会访问<strong>IP:14.215.177.38</strong>，而这个<strong>IP</strong>可能是百度的网站，也可能是钓鱼网站的IP，这个时候我们光看浏览器网站域名就根本分不清楚（如果钓鱼网站页面和我们的目标网站界面一致）</p>
 <p><img src="/2022/07/21/xiaodi/image-20220721145608355.png" alt="image-20220721145608355"></p>
-<hr>
-<p>下面这张图很好的解释了<strong>proxy</strong>的作用，它是浏览器和服务器之间的，是两者数据交互的中间桥梁，利用<strong>proxy</strong>就可以实现修改浏览器发送的请求和服务器发回的数据包，或者拦截获取</p>
+<h2 id="DAY2"><a href="#DAY2" class="headerlink" title="DAY2"></a>DAY2</h2><p>下面这张图很好的解释了<strong>proxy</strong>的作用，它是浏览器和服务器之间的，是两者数据交互的中间桥梁，利用<strong>proxy</strong>就可以实现修改浏览器发送的请求和服务器发回的数据包，或者拦截获取</p>
 <p><img src="/2022/07/21/xiaodi/image-20220721144031544.png" alt="image-20220721144031544"></p>
 <p><strong>https</strong>相对<strong>http</strong>更安全的原因在于<strong>SSL or TLS</strong>的存在，它不在像<strong>http</strong>一样把信息以明文的形式呈现出来，比如利用<strong>burp</strong>抓包，http的信息（比如账号密码）就会显现出来，而<strong>SSL or TLS</strong>会对其信息进行加密<strong>（需要私钥才解的开）</strong>，那就算被抓包，也只能得到一串加密数据</p>
 <p><u>这里推荐可以买本<strong>《图解http》</strong>看看</u></p>
