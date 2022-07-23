@@ -3,7 +3,7 @@
   <entry>
     <title>小迪web视频学习记录</title>
     <url>/2022/07/21/xiaodi/</url>
-    <content><![CDATA[<p>看看小迪师傅的视频，把一些知识点补充以及深入学习一下，做做笔记</p>
+    <content><![CDATA[<p><u><code>看看小迪师傅的视频，把一些知识点补充以及深入学习一下，做做笔记</code></u></p>
 <span id="more"></span>
 
 <hr>
@@ -865,7 +865,6 @@ eval函数，这是执行函数；这里执行了_变量中的内容也就是&#3
     <content><![CDATA[<p><a href="https://blog.51cto.com/u_15274949/2931589">原文链接</a></p>
 <span id="more"></span>
 
-<p><a href="https://blog.51cto.com/u_15274949/2931589">原文链接</a></p>
 <h2 id="1、MD5——示例"><a href="#1、MD5——示例" class="headerlink" title="1、MD5——示例"></a>1、MD5——示例</h2><p><u><strong>21232F297A57A5A743894A0E4A801FC3</strong></u></p>
 <p>一般MD5值是<u>32位</u>由数字<code>0-9</code>和字母<code>a-f</code>所组成的字符串，如图。<u>如果出现这个范围以外的字符说明这可能是个错误的md5值</u>，就没必要再拿去解密了。16位值是取的是8~24位。</p>
 <p><img src="/2022/07/21/%E5%8A%A0%E5%AF%86%E7%BC%96%E7%A0%81%E7%B1%BB%E5%9E%8B/image-20220721175149372.png" alt="image-20220721175149372"></p>
